@@ -19,7 +19,7 @@ function Input({
               "aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive",
               className,
             )
-          : `shadow-md flex w-full items-center rounded border border-muted-foreground/50 bg-transparent px-3 py-1.5 text-base transition-colors placeholder:text-muted-foreground hover:border-muted-foreground/80 focus:border-muted-foreground focus:outline-none ${className}`
+          : `shadow-md flex w-full items-center rounded-md border border-muted-foreground/50 bg-transparent px-3 py-1.5 text-base transition-colors placeholder:text-muted-foreground hover:border-muted-foreground/80 focus:border-muted-foreground focus:outline-none ${className}`
       }
       {...props}
     />
