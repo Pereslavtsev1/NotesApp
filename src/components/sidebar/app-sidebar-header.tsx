@@ -1,4 +1,8 @@
+import { getToken } from "@/lib/auth-server";
+import { preloadQuery } from "convex/nextjs";
 import { SearchIcon } from "lucide-react";
+import { api } from "../../../convex/_generated/api";
+import { Button } from "../ui/button";
 import {
   SidebarGroup,
   SidebarHeader,
@@ -6,13 +10,23 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "../ui/sidebar";
-import { Button } from "../ui/button";
+import AppSidebarNavUser from "./app-sidbar-nav-user";
 
-export default function AppSidebarHeader() {
+export default async function AppSidebarHeader() {
+  const token = await getToken();
+
+  const preloadedUserQuery = await preloadQuery(
+    api.user.getCurrentUser,
+    {},
+    { token },
+  );
   return (
     <SidebarHeader>
       <SidebarGroup>
         <SidebarMenu>
+          <SidebarMenuItem>
+            <AppSidebarNavUser preloadedUserQuery={preloadedUserQuery} />
+          </SidebarMenuItem>
           <SidebarMenuItem>
             <SidebarMenuButton asChild>
               <Button
