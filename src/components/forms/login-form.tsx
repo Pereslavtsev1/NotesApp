@@ -50,7 +50,7 @@ export default function LoginForm({ className }: LoginFormProps) {
         },
 
         onSuccess: () => {
-          router.push("/");
+          router.push("/notes");
         },
       },
     );

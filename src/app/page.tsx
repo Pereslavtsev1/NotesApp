@@ -1,3 +1,10 @@
+"use client";
+import { Authenticated } from "convex/react";
+
 export default function Home() {
-  return <div>Home</div>;
+  return (
+    <>
+      <Authenticated>Authenticated</Authenticated>
+    </>
+  );
 }
