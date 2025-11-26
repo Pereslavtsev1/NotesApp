@@ -1,30 +1,31 @@
+"use server";
+import { getToken } from "@/lib/auth-server";
+import { fetchMutation } from "convex/nextjs";
 import { PlusIcon } from "lucide-react";
+import { api } from "../../../convex/_generated/api";
 import {
   SidebarContent,
   SidebarGroup,
-  SidebarGroupAction,
   SidebarGroupContent,
   SidebarGroupLabel,
 } from "../ui/sidebar";
-import AppSidebarNotesSection from "./app-sidebar-notes-section";
-import { fetchMutation } from "convex/nextjs";
-import { api } from "../../../convex/_generated/api";
-import { getToken } from "@/lib/auth-server";
 import AppSidebarWorkspacesSection from "./app-sidebar-workspaces-section";
 
-async function handleClick() {
-  "use server";
-  const token = await getToken();
-  console.log("Here");
-  const res = await fetchMutation(
-    api.notes.createNote,
-    { title: "Untitled" },
-    { token },
-  );
+export default async function AppSidebarContent() {
+  async function handleCreate() {
+    "use server";
+    const token = await getToken();
+    console.log("Here");
+    const res = await fetchMutation(
+      api.notes.createNote,
+      {
+        title: "Untitled",
+      },
+      { token },
+    );
 
-  console.log(res);
-}
-export default function AppSidebarContent() {
+    console.log(res);
+  }
   return (
     <SidebarContent>
       <SidebarGroup>
@@ -35,16 +36,16 @@ export default function AppSidebarContent() {
       </SidebarGroup>
 
       <SidebarGroup>
-        <SidebarGroupLabel className="font-semibold">
-          Workspaces
+        <SidebarGroupLabel className="relative items-center font-semibold">
+          <span>Workspaces</span>
+          <button
+            type="button"
+            className="absolute right-2 flex items-center justify-center rounded p-1 hover:bg-sidebar-accent"
+            onClick={handleCreate}
+          >
+            <PlusIcon className="size-4" />
+          </button>
         </SidebarGroupLabel>
-        <SidebarGroupAction
-          className="text-muted-foreground"
-          onClick={handleClick}
-        >
-          <PlusIcon />
-        </SidebarGroupAction>
-
         <SidebarGroupContent>
           <AppSidebarWorkspacesSection />
         </SidebarGroupContent>

@@ -59,7 +59,7 @@ export default function LoginForm({ className }: LoginFormProps) {
   const signInWithGoogle = async () => {
     await authClient.signIn.social({
       provider: "google",
-      callbackURL: "/",
+      callbackURL: "/notes",
     });
   };
   return (

@@ -8,7 +8,7 @@ export default async function SecuredLayout({
 }>) {
   const token = await getToken();
   if (!token) {
-    redirect("/");
+    redirect("/login");
   }
   return <>{children}</>;
 }

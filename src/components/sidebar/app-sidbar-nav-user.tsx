@@ -9,7 +9,6 @@ import {
   DropdownMenuContent,
   DropdownMenuSeparator,
 } from "../ui/dropdown-menu";
-import { SidebarMenuButton } from "../ui/sidebar";
 import UserItem from "../user-item/user-item";
 
 export default function AppSidebarNavUser({
@@ -21,8 +20,9 @@ export default function AppSidebarNavUser({
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <SidebarMenuButton
-          className="relative flex w-full items-center gap-x-2 font-semibold text-muted-foreground"
+        <Button
+          className="relative flex w-full items-center justify-start gap-x-2 px-2 font-semibold text-muted-foreground"
+          variant="ghost"
           size="lg"
         >
           <UserItem
@@ -34,10 +34,10 @@ export default function AppSidebarNavUser({
               {user.name}
             </span>
           </div>
-          <div className="absolute right-2">
+          <div className="absolute right-1">
             <ChevronsDown className="size-4" />
           </div>
-        </SidebarMenuButton>
+        </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent
         className={`w-72 p-2`}
