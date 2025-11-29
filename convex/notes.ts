@@ -38,11 +38,12 @@ export const createNote = mutation({
     });
   },
 });
-export const findAllCurrentUserNotes = query({
+export const findAllUserWorkspaces = query({
   args: {
     parentNote: v.optional(v.id("notes")),
   },
   handler: async (ctx, args) => {
+    console.log("parentNote", args.parentNote);
     const userId = await getUser(ctx);
     const notes = await ctx.db
       .query("notes")
@@ -53,6 +54,23 @@ export const findAllCurrentUserNotes = query({
       .order("desc")
       .collect();
     return notes;
+  },
+});
+
+export const findNote = query({
+  args: {
+    id: v.id("notes"),
+  },
+  handler: async (ctx, args) => {
+    const note = await ctx.db.get(args.id);
+    const userId = await getUser(ctx);
+    if (!note) {
+      throw new Error("Note not found");
+    }
+    if (note.userId !== userId) {
+      throw new Error("You do not have permission to view this note");
+    }
+    return note;
   },
 });
 
@@ -125,5 +143,15 @@ export const duplicate = mutation({
       ...safeFields,
       parentNote: undefined,
     });
+  },
+});
+
+export const findRootNotes = query({
+  args: {},
+  handler: async (ctx) => {
+    return await ctx.db
+      .query("notes")
+      .filter((q) => q.eq(q.field("parentNote"), undefined))
+      .collect();
   },
 });

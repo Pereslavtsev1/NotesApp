@@ -6,7 +6,7 @@ import AppSidebarNotesSection from "./app-sidebar-notes-section";
 export default async function AppSidebarWorkspacesSection() {
   const token = await getToken();
   const notes = await preloadQuery(
-    api.notes.findAllCurrentUserNotes,
+    api.notes.findAllUserWorkspaces,
     {},
     {
       token,

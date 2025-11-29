@@ -1,31 +1,15 @@
 "use server";
-import { getToken } from "@/lib/auth-server";
-import { fetchMutation } from "convex/nextjs";
 import { PlusIcon } from "lucide-react";
-import { api } from "../../../convex/_generated/api";
 import {
   SidebarContent,
   SidebarGroup,
   SidebarGroupContent,
   SidebarGroupLabel,
 } from "../ui/sidebar";
+import { handleCreate } from "./actions";
 import AppSidebarWorkspacesSection from "./app-sidebar-workspaces-section";
 
 export default async function AppSidebarContent() {
-  async function handleCreate() {
-    "use server";
-    const token = await getToken();
-    console.log("Here");
-    const res = await fetchMutation(
-      api.notes.createNote,
-      {
-        title: "Untitled",
-      },
-      { token },
-    );
-
-    console.log(res);
-  }
   return (
     <SidebarContent>
       <SidebarGroup>

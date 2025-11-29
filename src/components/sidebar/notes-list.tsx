@@ -1,21 +1,18 @@
 "use client";
 
-import { Preloaded, usePreloadedQuery } from "convex/react";
+import { useQuery } from "convex/react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { api } from "../../../convex/_generated/api";
-import type { Doc } from "../../../convex/_generated/dataModel";
-import { Skeleton } from "../ui/skeleton";
+import type { Doc, Id } from "../../../convex/_generated/dataModel";
 import NoteButton from "./note-button";
-import NoteNode from "./notes-list";
 
-export default function AppSidebarNotesSection({
-  preloadedQuery,
-}: {
-  preloadedQuery: Preloaded<typeof api.notes.findAllUserWorkspaces>;
-}) {
-  const notes = usePreloadedQuery(preloadedQuery);
+type NotesListProps = {
+  parentNote?: Id<"notes">;
+  level?: number;
+};
 
+const NoteNode = ({ parentNote, level = 0 }: NotesListProps) => {
   const router = useRouter();
   const [expanded, setExpanded] = useState<Record<string, boolean>>({});
 
@@ -26,26 +23,32 @@ export default function AppSidebarNotesSection({
     }));
   };
 
+  const notes = useQuery(api.notes.findAllUserWorkspaces, { parentNote });
+
   const handleClick = (note: Doc<"notes">) => {
     router.push(`/notes/${note._id}`);
   };
 
-  if (!notes) return <Skeleton className="size-9 w-full" />;
+  if (!notes) return <></>;
 
   return (
-    <>
+    <div>
       {notes.map((note) => (
         <div key={note._id}>
           <NoteButton
-            key={note._id}
             note={note}
             expanded={expanded[note._id]}
             onClick={() => handleClick(note)}
             onExpand={() => onExpand(note._id)}
+            style={{ paddingLeft: level ? `${level * 12 + 12}px` : "" }}
           />
-          {expanded[note._id] && <NoteNode parentNote={note._id} level={1} />}
+          {expanded[note._id] && (
+            <NoteNode parentNote={note._id} level={level + 1} />
+          )}
         </div>
       ))}
-    </>
+    </div>
   );
-}
+};
+
+export default NoteNode;

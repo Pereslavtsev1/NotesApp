@@ -42,3 +42,32 @@ export async function handleDuplicate(id: Id<"notes">) {
 
   return await fetchMutation(api.notes.duplicate, { id }, { token });
 }
+
+export async function handleCreate() {
+  const token = await getToken();
+  console.log("Here");
+  const res = await fetchMutation(
+    api.notes.createNote,
+    {
+      title: "Untitled",
+    },
+    { token },
+  );
+
+  console.log(res);
+}
+
+export async function handleAddChildren(parentNoteId: Id<"notes">) {
+  const token = await getToken();
+  console.log("Here");
+  const res = await fetchMutation(
+    api.notes.createNote,
+    {
+      parentNote: parentNoteId,
+      title: "Untitled",
+    },
+    { token },
+  );
+
+  console.log(res);
+}
