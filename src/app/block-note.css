@@ -1,0 +1,40 @@
+.bn-container[data-theming-css-demo] .bn-editor {
+  background: transparent;
+  @media screen and (max-width: 400) {
+    padding: 2.5rem;
+  }
+}
+
+.bn-container[data-theming-css-demo] h1 {
+  font-size: 1.2rem;
+}
+.bn-container[data-theming-css-demo] h2 {
+  font-size: 1rem;
+}
+.bn-container[data-theming-css-demo] h3 {
+  font-size: 0.8rem;
+}
+
+@media (min-width: 600px) {
+  .bn-container[data-theming-css-demo] h1 {
+    font-size: 1.3rem;
+  }
+  .bn-container[data-theming-css-demo] h2 {
+    font-size: 1.1rem;
+  }
+  .bn-container[data-theming-css-demo] h3 {
+    font-size: 0.9rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .bn-container[data-theming-css-demo] h1 {
+    font-size: 1.3rem;
+  }
+  .bn-container[data-theming-css-demo] h2 {
+    font-size: 1.15rem;
+  }
+  .bn-container[data-theming-css-demo] h3 {
+    font-size: 1.05rem;
+  }
+}

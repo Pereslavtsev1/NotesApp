@@ -1,8 +1,9 @@
 "use client";
-import { usePreloadedQuery, useQuery } from "convex/react";
-import Link from "next/link";
-import { api } from "../../../convex/_generated/api";
-import type { Id } from "../../../convex/_generated/dataModel";
+
+import { useQuery } from "convex/react";
+import { useRouter } from "next/navigation";
+import { api } from "../../../../convex/_generated/api";
+import type { Doc, Id } from "../../../../convex/_generated/dataModel";
 import {
   Breadcrumb,
   BreadcrumbEllipsis,
@@ -11,20 +12,13 @@ import {
   BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator,
-} from "../ui/breadcrumb";
-import { Skeleton } from "../ui/skeleton";
+} from "../../ui/breadcrumb";
+import { Skeleton } from "../../ui/skeleton";
+import { Button } from "../../ui/button";
 
-import { Preloaded } from "convex/react";
-
-export default function NotePageNav({
-  preloadedQuery,
-}: {
-  preloadedQuery: Preloaded<typeof api.notes.findNote>;
-}) {
-  const note = usePreloadedQuery(preloadedQuery);
-
+export default function NotePageNav({ note }: { note: Doc<"notes"> }) {
   return (
-    <Breadcrumb className="py-2">
+    <Breadcrumb>
       <BreadcrumbList>
         {note.parentNote && (
           <ParentBreadcrumbItem parentNoteId={note.parentNote} />
@@ -44,7 +38,9 @@ const ParentBreadcrumbItem = ({
 }: {
   parentNoteId: Id<"notes">;
 }) => {
+  const router = useRouter();
   const parentNote = useQuery(api.notes.findNote, { id: parentNoteId });
+
   if (parentNote === undefined)
     return (
       <>
@@ -59,6 +55,10 @@ const ParentBreadcrumbItem = ({
     return null;
   }
 
+  const handleClick = () => {
+    router.push(`/notes/${parentNoteId}`);
+  };
+
   return (
     <>
       {parentNote.parentNote && (
@@ -71,7 +71,9 @@ const ParentBreadcrumbItem = ({
         className="max-w-36 truncate font-semibold text-muted-foreground"
         asChild
       >
-        <Link href={`/notes/${parentNoteId}`}>{parentNote.title}</Link>
+        <Button onClick={handleClick} variant="ghost" className="px-2 py-1">
+          {parentNote.title}
+        </Button>
       </BreadcrumbLink>
       <BreadcrumbSeparator />
     </>

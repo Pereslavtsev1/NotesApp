@@ -74,7 +74,7 @@ export const findNote = query({
   },
 });
 
-export const update = mutation({
+export const updateNote = mutation({
   args: {
     id: v.id("notes"),
     content: v.optional(v.string()),
