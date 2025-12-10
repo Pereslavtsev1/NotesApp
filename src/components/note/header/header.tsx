@@ -23,6 +23,7 @@ import {
 import { cn } from "@/lib/utils";
 import { api } from "../../../../convex/_generated/api";
 import { handleDelete, handleFavorite } from "@/lib/actions";
+import { useCoverImage } from "@/hooks/use-cover-image";
 
 export default function Header({
   preloadedQuery,
@@ -30,13 +31,14 @@ export default function Header({
   preloadedQuery: Preloaded<typeof api.notes.findNote>;
 }) {
   const note = usePreloadedQuery(preloadedQuery);
+  const { toggle } = useCoverImage();
 
   const menuItems = [
     {
       icon: <ImageIcon />,
       label: note.coverImageKey ? "Remove cover" : "Add cover",
       className: "",
-      onClick: () => {},
+      onClick: () => toggle(),
     },
     {
       icon: note.isDeleted ? <RotateCcw /> : <Trash2 />,
