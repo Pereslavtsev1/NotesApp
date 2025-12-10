@@ -1,15 +1,31 @@
 "use server";
 
 import { getToken } from "@/lib/auth-server";
-import { fetchMutation } from "convex/nextjs";
-import { api } from "../../../convex/_generated/api";
-import { Id } from "../../../convex/_generated/dataModel";
+import { fetchMutation, fetchQuery } from "convex/nextjs";
+import { api } from "../../convex/_generated/api";
+import { Id } from "../../convex/_generated/dataModel";
+
+export default async function findNoteAction({
+  noteId,
+}: {
+  noteId: Id<"notes">;
+}) {
+  const token = await getToken();
+  const note = await fetchQuery(
+    api.notes.findNote,
+    {
+      id: noteId,
+    },
+    { token },
+  );
+  return note;
+}
 
 export async function handleDelete(id: Id<"notes">) {
   const token = await getToken();
 
   return await fetchMutation(
-    api.notes.update,
+    api.notes.updateNote,
     {
       id: id,
       isDeleted: true,
@@ -28,7 +44,7 @@ export async function handleFavorite({
   const token = await getToken();
 
   return await fetchMutation(
-    api.notes.update,
+    api.notes.updateNote,
     {
       id: id,
       isFavorite: !isFavorite,

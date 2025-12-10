@@ -1,9 +1,11 @@
 "use client";
+
 import { Button } from "@/components/ui/button";
-import { Preloaded, usePreloadedQuery } from "convex/react";
+import { Preloaded, useMutation, usePreloadedQuery } from "convex/react";
 import { X } from "lucide-react";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import TextareaAutosize from "react-textarea-autosize";
+import { useDebounce } from "use-debounce";
 import { api } from "../../../../convex/_generated/api";
 
 export default function Toolbar({
@@ -12,34 +14,52 @@ export default function Toolbar({
   preloadedQuery: Preloaded<typeof api.notes.findNote>;
 }) {
   const note = usePreloadedQuery(preloadedQuery);
+
   const inputRef = useRef<HTMLTextAreaElement | null>(null);
-  const [value, setValue] = useState<string>(note.title);
-  const [isEditing, setIsEditing] = useState<boolean>(false);
+  const [value, setValue] = useState(note.title);
+  const [isEditing, setIsEditing] = useState(false);
+
+  const debouncedValue = useDebounce(value, 350);
+
+  const updateNote = useMutation(api.notes.updateNote);
+
+  useEffect(() => {
+    if (!isEditing) return;
+
+    updateNote({
+      id: note._id,
+      title: debouncedValue[0].trim() || "Untitled",
+    });
+  }, [debouncedValue, isEditing, note._id, updateNote]);
+
   const enableInput = () => {
     setIsEditing(true);
-    setTimeout(() => {
-      setValue(note.title);
+
+    requestAnimationFrame(() => {
       if (inputRef.current) {
         inputRef.current.focus();
-        const length = note.title.length;
+        const length = value.length;
         inputRef.current.setSelectionRange(length, length);
       }
-    }, 0);
+    });
   };
 
   const disableInput = () => {
     setIsEditing(false);
   };
+
   return (
     <div className="group relative mb-4 py-4">
-      <div className="flex items-center gap-x-1 py-4 pl-8 opacity-0 transition-opacity duration-300 group-hover:opacity-100 sm:pl-14"></div>
+      <div className="flex items-center gap-x-1 py-4 pl-8 opacity-0 transition-opacity duration-300 group-hover:opacity-100 sm:pl-14" />
+
       <div className="flex items-start gap-x-4">
-        {!!note.icon && (
+        {note.icon && (
           <div className="absolute">
             <div className="relative">
               <span className="text-xl sm:text-2xl md:text-3xl">
                 {note.icon}
               </span>
+
               <Button
                 variant="ghost"
                 size="icon"
@@ -50,12 +70,14 @@ export default function Toolbar({
             </div>
           </div>
         )}
+
         <div className="min-w-0 flex-1 pl-8 sm:pl-14">
           {isEditing ? (
             <TextareaAutosize
               ref={inputRef}
               onBlur={disableInput}
               value={value}
+              onChange={(e) => setValue(e.target.value)}
               className="w-full resize-none bg-transparent text-xl font-bold wrap-break-word outline-none sm:text-2xl md:text-3xl"
             />
           ) : (

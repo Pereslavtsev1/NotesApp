@@ -34,7 +34,7 @@ export default function AppSidebarNavUser({
               {user.name}
             </span>
           </div>
-          <div className="absolute right-1">
+          <div className="absolute right-3">
             <ChevronsDown className="size-4" />
           </div>
         </Button>

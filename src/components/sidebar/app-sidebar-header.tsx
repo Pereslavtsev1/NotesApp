@@ -22,7 +22,7 @@ export default async function AppSidebarHeader() {
   );
   return (
     <SidebarHeader>
-      <SidebarGroup>
+      <SidebarGroup className="px-0">
         <SidebarMenu>
           <SidebarMenuItem>
             <AppSidebarNavUser preloadedUserQuery={preloadedUserQuery} />

@@ -22,6 +22,7 @@ import {
 
 import { cn } from "@/lib/utils";
 import { api } from "../../../../convex/_generated/api";
+import { handleDelete, handleFavorite } from "@/lib/actions";
 
 export default function Header({
   preloadedQuery,
@@ -35,11 +36,13 @@ export default function Header({
       icon: <ImageIcon />,
       label: note.coverImageKey ? "Remove cover" : "Add cover",
       className: "",
+      onClick: () => {},
     },
     {
       icon: note.isDeleted ? <RotateCcw /> : <Trash2 />,
       label: note.isDeleted ? "Restore" : "Delete",
       className: !note.isDeleted ? "hover:text-red-500" : "",
+      onClick: () => handleDelete(note._id),
     },
   ];
 
@@ -49,7 +52,16 @@ export default function Header({
         <SidebarTrigger />
         <NotePageNav note={note} />
         <div className="ml-auto flex gap-x-2">
-          <Button variant="ghost" size="icon">
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() =>
+              handleFavorite({
+                id: note._id,
+                isFavorite: note.isFavorite,
+              })
+            }
+          >
             <Star
               className={cn(
                 note.isFavorite
@@ -75,6 +87,7 @@ export default function Header({
                       "w-full justify-start gap-x-4 font-semibold text-muted-foreground hover:bg-accent",
                       item.className,
                     )}
+                    onClick={item.onClick}
                   >
                     {item.icon}
                     {item.label}

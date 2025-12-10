@@ -1,5 +1,11 @@
 "use client";
 
+import {
+  handleAddChildren,
+  handleDelete,
+  handleDuplicate,
+  handleFavorite,
+} from "@/lib/actions";
 import { cn } from "@/lib/utils";
 import {
   ChevronRight,
@@ -17,12 +23,6 @@ import {
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
-import {
-  handleAddChildren,
-  handleDelete,
-  handleDuplicate,
-  handleFavorite,
-} from "./actions";
 
 type NoteButtonProps = {
   note: Doc<"notes">;
