@@ -1,5 +1,6 @@
 "use client";
-import { Button } from "@/components/ui/button";
+
+import { DropzoneProvider } from "@/components/dropzone/dropzone";
 import {
   Dialog,
   DialogContent,
@@ -8,41 +9,27 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import {
-  Empty,
-  EmptyContent,
-  EmptyDescription,
-  EmptyHeader,
-  EmptyTitle,
-} from "@/components/ui/empty";
 import { useCoverImage } from "@/hooks/use-cover-image";
+import SelectedFilePreview from "./selected-files-preview";
+import CoverImageDropzone from "./cover-image-dropzone";
+
 export default function CoverImageModal() {
   const { open, toggle } = useCoverImage();
 
   return (
     <Dialog open={open} onOpenChange={toggle}>
-      <DialogContent className="space-y-5">
+      <DialogContent className="md:space-y-5">
         <DialogHeader>
           <DialogTitle>Upload Image</DialogTitle>
-          <DialogDescription>
-            Choose an image file to upload. Drag and drop or click to select.
-          </DialogDescription>
+          <DialogDescription>Choose an image file to upload.</DialogDescription>
         </DialogHeader>
-        <DialogFooter>
-          <Empty className="border border-dashed">
-            <EmptyHeader className="space-y-2">
-              <EmptyTitle>Click to upload or drag and drop</EmptyTitle>
-              <EmptyDescription>
-                PNG, JPG, GIF up to 10MB (only one file)
-              </EmptyDescription>
-            </EmptyHeader>
-            <EmptyContent>
-              <Button variant="outline" size="sm">
-                Upload File
-              </Button>
-            </EmptyContent>
-          </Empty>
-        </DialogFooter>
+
+        <DropzoneProvider maxFiles={1} maxSize={10 * 1024 * 1024}>
+          <CoverImageDropzone />
+          <DialogFooter>
+            <SelectedFilePreview />
+          </DialogFooter>
+        </DropzoneProvider>
       </DialogContent>
     </Dialog>
   );

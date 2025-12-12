@@ -69,7 +69,7 @@ export default function NoteButton({
   return (
     <DropdownMenu>
       <Button
-        className="flex w-full items-center justify-between rounded px-2 text-sm font-medium text-muted-foreground"
+        className="flex w-full items-center justify-between px-2 text-sm font-medium text-muted-foreground"
         variant="ghost"
         style={style}
         {...props}
