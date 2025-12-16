@@ -11,7 +11,7 @@ import {
 } from "../ui/dropdown-menu";
 import UserItem from "../user-item/user-item";
 
-export default function AppSidebarNavUser({
+export default function SidebarNavUser({
   preloadedUserQuery,
 }: {
   preloadedUserQuery: Preloaded<typeof api.user.getCurrentUser>;

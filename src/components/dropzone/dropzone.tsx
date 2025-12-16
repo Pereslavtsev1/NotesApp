@@ -108,7 +108,10 @@ export function Dropzone({ children, className }: DropzoneProps) {
   return (
     <div
       {...getRootProps()}
-      className={cn("w-full border border-dashed", className)}
+      className={cn(
+        "rounded-lg border border-dashed transition-colors duration-300",
+        className,
+      )}
     >
       <input {...getInputProps()} />
       {children}

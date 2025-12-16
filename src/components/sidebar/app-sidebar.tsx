@@ -5,12 +5,10 @@ import AppSidebarHeader from "./app-sidebar-header";
 
 export default function AppSidebar() {
   return (
-    <>
-      <Sidebar>
-        <AppSidebarHeader />
-        <AppSidebarContent />
-        <AppSidebarFooter />
-      </Sidebar>
-    </>
+    <Sidebar>
+      <AppSidebarHeader />
+      <AppSidebarContent />
+      <AppSidebarFooter />
+    </Sidebar>
   );
 }

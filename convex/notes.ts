@@ -135,7 +135,6 @@ export const duplicate = mutation({
     if (note.userId !== userId) {
       throw new Error("You do not have permission to duplicate this note");
     }
-
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { _id, _creationTime, parentNote, ...safeFields } = note;
 
@@ -146,12 +145,13 @@ export const duplicate = mutation({
   },
 });
 
-export const findRootNotes = query({
-  args: {},
+export const search = query({
   handler: async (ctx) => {
-    return await ctx.db
+    const userId = await getUser(ctx);
+    const notes = await ctx.db
       .query("notes")
-      .filter((q) => q.eq(q.field("parentNote"), undefined))
+      .withIndex("by_user", (q) => q.eq("userId", userId))
       .collect();
+    return notes;
   },
 });
