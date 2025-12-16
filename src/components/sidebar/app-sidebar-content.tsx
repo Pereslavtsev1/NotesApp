@@ -8,17 +8,39 @@ import {
   SidebarGroupLabel,
 } from "../ui/sidebar";
 
-import AppSidebarWorkspacesSection from "./app-sidebar-workspaces-section";
+import { getToken } from "@/lib/auth-server";
+import { preloadQuery } from "convex/nextjs";
+import { api } from "../../../convex/_generated/api";
 import { Button } from "../ui/button";
+import AppSidebarNotesSection from "./app-sidebar-notes-section";
 
 export default async function AppSidebarContent() {
+  const token = await getToken();
+  const notes = await preloadQuery(
+    api.notes.findAllUserWorkspaces,
+    {},
+    {
+      token,
+    },
+  );
+
+  const favoritesNotes = await preloadQuery(
+    api.notes.findAllUserWorkspaces,
+    { isFavorite: true },
+    {
+      token,
+    },
+  );
   return (
     <SidebarContent>
       <SidebarGroup>
         <SidebarGroupLabel className="font-semibold">
           Favorites
         </SidebarGroupLabel>
-        <SidebarGroupContent></SidebarGroupContent>
+
+        <SidebarGroupContent>
+          <AppSidebarNotesSection preloadedQuery={favoritesNotes} />
+        </SidebarGroupContent>
       </SidebarGroup>
 
       <SidebarGroup>
@@ -33,8 +55,8 @@ export default async function AppSidebarContent() {
             <PlusIcon />
           </Button>
         </SidebarGroupLabel>
-        <SidebarGroupContent className="">
-          <AppSidebarWorkspacesSection />
+        <SidebarGroupContent>
+          <AppSidebarNotesSection preloadedQuery={notes} />
         </SidebarGroupContent>
       </SidebarGroup>
     </SidebarContent>

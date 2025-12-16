@@ -41,6 +41,7 @@ export const createNote = mutation({
 export const findAllUserWorkspaces = query({
   args: {
     parentNote: v.optional(v.id("notes")),
+    isFavorite: v.optional(v.boolean()),
   },
   handler: async (ctx, args) => {
     console.log("parentNote", args.parentNote);
@@ -51,6 +52,12 @@ export const findAllUserWorkspaces = query({
         q.eq("userId", userId).eq("parentNote", args.parentNote),
       )
       .filter((q) => q.eq(q.field("isDeleted"), false))
+      .filter((q) =>
+        q.eq(
+          q.field("isFavorite"),
+          args.isFavorite === undefined ? false : args.isFavorite,
+        ),
+      )
       .order("desc")
       .collect();
     return notes;

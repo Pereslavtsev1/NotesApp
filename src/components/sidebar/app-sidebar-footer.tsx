@@ -1,10 +1,4 @@
-import {
-  SearchIcon,
-  Settings2Icon,
-  SettingsIcon,
-  Trash2Icon,
-  TrashIcon,
-} from "lucide-react";
+import { SettingsIcon, Trash2Icon } from "lucide-react";
 import { Button } from "../ui/button";
 import {
   SidebarFooter,
@@ -16,7 +10,7 @@ import {
 
 export default function AppSidebarFooter() {
   return (
-    <SidebarFooter>
+    <SidebarFooter className="px-0">
       <SidebarGroup>
         <SidebarMenu>
           <SidebarMenuItem>
