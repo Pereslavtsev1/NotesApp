@@ -23,7 +23,7 @@ const NoteNode = ({ parentNote, level = 0 }: NotesListProps) => {
     }));
   };
 
-  const notes = useQuery(api.notes.findAllUserWorkspaces, { parentNote });
+  const notes = useQuery(api.notes.findAllUserNotes, { parentNote });
 
   const handleClick = (note: Doc<"notes">) => {
     router.push(`/notes/${note._id}`);

@@ -1,39 +1,39 @@
+"use client";
 import { SettingsIcon, Trash2Icon } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { Button } from "../ui/button";
 import {
   SidebarFooter,
   SidebarGroup,
   SidebarMenu,
-  SidebarMenuButton,
   SidebarMenuItem,
 } from "../ui/sidebar";
 
 export default function AppSidebarFooter() {
+  const router = useRouter();
+
   return (
     <SidebarFooter className="px-0">
       <SidebarGroup>
         <SidebarMenu>
           <SidebarMenuItem>
-            <SidebarMenuButton asChild>
-              <Button
-                variant="ghost"
-                className="justify-start text-muted-foreground"
-              >
-                <Trash2Icon />
-                Trash
-              </Button>
-            </SidebarMenuButton>
+            <Button
+              variant="ghost"
+              className="w-full justify-start text-muted-foreground"
+              onClick={() => router.push("/trash")}
+            >
+              <Trash2Icon />
+              Trash
+            </Button>
           </SidebarMenuItem>
           <SidebarMenuItem>
-            <SidebarMenuButton asChild>
-              <Button
-                variant="ghost"
-                className="justify-start text-muted-foreground"
-              >
-                <SettingsIcon />
-                Settings
-              </Button>
-            </SidebarMenuButton>
+            <Button
+              variant="ghost"
+              className="w-full justify-start text-muted-foreground"
+            >
+              <SettingsIcon />
+              Settings
+            </Button>
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarGroup>

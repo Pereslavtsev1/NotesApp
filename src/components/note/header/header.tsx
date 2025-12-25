@@ -20,10 +20,10 @@ import {
   Trash2,
 } from "lucide-react";
 
+import { useCoverImage } from "@/hooks/use-cover-image";
+import { handleDelete, handleFavorite } from "@/lib/actions";
 import { cn } from "@/lib/utils";
 import { api } from "../../../../convex/_generated/api";
-import { handleDelete, handleFavorite } from "@/lib/actions";
-import { useCoverImage } from "@/hooks/use-cover-image";
 
 export default function Header({
   preloadedQuery,
@@ -49,7 +49,7 @@ export default function Header({
   ];
 
   return (
-    <header className="sticky top-0 z-50 w-full bg-background/80 py-2 backdrop-blur-md">
+    <header className="sticky top-0 z-50 w-full bg-background/80 py-3 backdrop-blur-md">
       <div className="flex w-full items-center gap-x-2 font-semibold text-muted-foreground">
         <SidebarTrigger />
         <NotePageNav note={note} />
@@ -61,6 +61,7 @@ export default function Header({
               handleFavorite({
                 id: note._id,
                 isFavorite: note.isFavorite,
+                recursive: true,
               })
             }
           >

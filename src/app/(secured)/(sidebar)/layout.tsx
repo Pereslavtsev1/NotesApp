@@ -1,3 +1,4 @@
+import SearchModal from "@/components/modals/search/search";
 import AppSidebar from "@/components/sidebar/app-sidebar";
 import { SidebarProvider } from "@/components/ui/sidebar";
 
@@ -9,10 +10,9 @@ export default async function SidebarLayout({
   return (
     <>
       <SidebarProvider>
-        <>
-          <AppSidebar />
-          {children}
-        </>
+        <AppSidebar />
+        {children}
+        <SearchModal />
       </SidebarProvider>
     </>
   );

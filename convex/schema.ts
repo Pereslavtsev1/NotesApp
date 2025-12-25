@@ -11,6 +11,7 @@ export default defineSchema({
     isDeleted: v.boolean(),
     coverImageKey: v.optional(v.string()),
     icon: v.optional(v.string()),
+    deletedAt: v.optional(v.number()),
   })
     .index("by_user", ["userId"])
     .index("by_user_parent", ["userId", "parentNote"]),

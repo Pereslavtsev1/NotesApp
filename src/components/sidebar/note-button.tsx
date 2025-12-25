@@ -31,19 +31,27 @@ type NoteButtonProps = {
   style?: React.CSSProperties;
 };
 
-const getActionsList = (note: Doc<"notes">) => [
+const getActionsList = (note: Doc<"notes">, onExpand?: () => void) => [
   {
     label: "Add children",
     icon: Plus,
     className: "hover:text-green-500",
-    onClick: () => handleAddChildren(note._id),
+    onClick: () => handleAddChildren(note._id).then(onExpand),
   },
   {
     label: note.isFavorite ? "Remove from favorite" : "Mark as favorite",
     icon: note.isFavorite ? StarOff : Star,
     className: "hover:text-yellow-500",
-    onClick: () =>
-      handleFavorite({ id: note._id, isFavorite: note.isFavorite }),
+    onClick: () => {
+      console.log("HERE");
+      handleFavorite({
+        id: note._id,
+        isFavorite: !note.isFavorite,
+        recursive: true,
+      });
+
+      console.log(note);
+    },
   },
   {
     label: "Duplicate",
@@ -54,7 +62,7 @@ const getActionsList = (note: Doc<"notes">) => [
   {
     label: "Delete",
     icon: Trash2,
-    className: "hover:text-red-500",
+    className: "hover:text-destructive-500",
     onClick: () => handleDelete(note._id),
   },
 ];
@@ -99,8 +107,8 @@ export default function NoteButton({
         </DropdownMenuTrigger>
       </Button>
 
-      <DropdownMenuContent align="start" className="flex w-40 flex-col">
-        {getActionsList(note).map(
+      <DropdownMenuContent align="start" className="flex flex-col">
+        {getActionsList(note, onExpand).map(
           ({ label, icon: Icon, className, onClick }) => (
             <Button
               key={label}

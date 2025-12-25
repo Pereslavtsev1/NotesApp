@@ -26,3 +26,17 @@ export function getStatusIcon(file: UploadFile) {
   }
   return null;
 }
+
+const DAYS_TO_DELETE = 30;
+const MS_IN_DAY = 1000 * 60 * 60 * 24;
+
+export function getDaysLeft(deletedAt: number) {
+  const deleteAt = deletedAt + DAYS_TO_DELETE * MS_IN_DAY;
+  const now = Date.now();
+
+  const diff = deleteAt - now;
+
+  if (diff <= 0) return 0;
+
+  return Math.ceil(diff / MS_IN_DAY);
+}

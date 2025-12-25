@@ -29,6 +29,7 @@ export async function handleDelete(id: Id<"notes">) {
     {
       id: id,
       isDeleted: true,
+      deletedAt: Date.now(),
     },
     { token },
   );
@@ -37,9 +38,11 @@ export async function handleDelete(id: Id<"notes">) {
 export async function handleFavorite({
   id,
   isFavorite,
+  recursive,
 }: {
   id: Id<"notes">;
   isFavorite: boolean;
+  recursive: boolean;
 }) {
   const token = await getToken();
 
@@ -47,7 +50,8 @@ export async function handleFavorite({
     api.notes.updateNote,
     {
       id: id,
-      isFavorite: !isFavorite,
+      isFavorite: isFavorite,
+      recursive: recursive,
     },
     { token },
   );
@@ -86,4 +90,16 @@ export async function handleAddChildren(parentNoteId: Id<"notes">) {
   );
 
   console.log(res);
+}
+
+export async function restoreNote(noteId: Id<"notes">) {
+  const token = await getToken();
+
+  await fetchMutation(api.notes.restore, { id: noteId }, { token });
+}
+
+export async function deleteNotePermanently(noteId: Id<"notes">) {
+  const token = await getToken();
+
+  await fetchMutation(api.notes.deletePermanently, { id: noteId }, { token });
 }

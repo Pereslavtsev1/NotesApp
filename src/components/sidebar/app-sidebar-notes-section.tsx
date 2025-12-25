@@ -12,9 +12,10 @@ import NoteNode from "./notes-list";
 export default function AppSidebarNotesSection({
   preloadedQuery,
 }: {
-  preloadedQuery: Preloaded<typeof api.notes.findAllUserWorkspaces>;
+  preloadedQuery: Preloaded<typeof api.notes.findAllUserNotes>;
 }) {
   const notes = usePreloadedQuery(preloadedQuery);
+  console.log(notes);
 
   const router = useRouter();
   const [expanded, setExpanded] = useState<Record<string, boolean>>({});

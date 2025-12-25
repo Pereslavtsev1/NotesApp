@@ -71,7 +71,7 @@ const ParentBreadcrumbItem = ({
         className="max-w-36 truncate font-semibold text-muted-foreground"
         asChild
       >
-        <Button onClick={handleClick} variant="ghost" className="px-2 py-1">
+        <Button onClick={handleClick} variant="ghost" className="px-2">
           {parentNote.title}
         </Button>
       </BreadcrumbLink>
