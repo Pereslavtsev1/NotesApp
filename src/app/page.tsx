@@ -2,9 +2,5 @@
 import { Authenticated } from "convex/react";
 
 export default function Home() {
-  return (
-    <>
-      <Authenticated>Authenticated</Authenticated>
-    </>
-  );
+	return <Authenticated>Authenticated</Authenticated>;
 }

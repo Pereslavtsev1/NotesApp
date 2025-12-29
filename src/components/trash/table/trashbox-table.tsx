@@ -1,14 +1,125 @@
 "use client";
-import { Preloaded, usePreloadedQuery } from "convex/react";
-import { api } from "../../../../convex/_generated/api";
-import { DataTable } from "./data-table";
+
+import {
+	type ColumnFiltersState,
+	flexRender,
+	getCoreRowModel,
+	useReactTable,
+} from "@tanstack/react-table";
+import { type Preloaded, usePreloadedQuery } from "convex/react";
+import { SearchIcon, TrashIcon } from "lucide-react";
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import {
+	Table,
+	TableBody,
+	TableCell,
+	TableHead,
+	TableHeader,
+	TableRow,
+} from "@/components/ui/table";
+import { handleDeleteNotePermanently } from "@/lib/actions";
+import type { api } from "../../../../convex/_generated/api";
 import { columns } from "./columns";
 
-export default function TrashboxTable({
-  preloadedQuery,
+export function TrashboxTable({
+	preloadedQuery,
 }: {
-  preloadedQuery: Preloaded<typeof api.notes.findAllUserNotes>;
+	preloadedQuery: Preloaded<typeof api.notes.findAllUserNotes>;
 }) {
-  const notes = usePreloadedQuery(preloadedQuery);
-  return <DataTable columns={columns} data={notes} />;
+	const notes = usePreloadedQuery(preloadedQuery);
+	const [rowSelection, setRowSelection] = useState({});
+	const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+	const table = useReactTable({
+		data: notes,
+		columns,
+		getCoreRowModel: getCoreRowModel(),
+		onRowSelectionChange: setRowSelection,
+		onColumnFiltersChange: setColumnFilters,
+		state: {
+			rowSelection,
+			columnFilters,
+		},
+	});
+
+	return (
+		<div className="space-y-10">
+			<div className="flex items-center justify-between gap-x-10">
+				<div className="relative flex-1 sm:max-w-md">
+					<SearchIcon className="absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted-foreground" />
+					<Input
+						placeholder="Search deleted notes..."
+						className="pl-9"
+						value={(table.getColumn("title")?.getFilterValue() as string) ?? ""}
+						onChange={(e) =>
+							table.getColumn("title")?.setFilterValue(e.target.value)
+						}
+					/>
+				</div>
+
+				<Button
+					variant="outline"
+					disabled={!table.getSelectedRowModel().rows.length}
+					onClick={() => {
+						handleDeleteNotePermanently(
+							table
+								.getSelectedRowModel()
+								.flatRows.map((row) => row.original._id),
+						);
+					}}
+				>
+					<TrashIcon className="size-4" />
+					Delete {table.getSelectedRowModel().rows.length}
+				</Button>
+			</div>
+
+			<div className="overflow-hidden rounded-md border">
+				<Table>
+					<TableHeader>
+						{table.getHeaderGroups().map((hg) => (
+							<TableRow key={hg.id}>
+								{hg.headers.map((h) => (
+									<TableHead key={h.id} className="px-3 md:px-5 lg:px-10">
+										{h.isPlaceholder
+											? null
+											: flexRender(h.column.columnDef.header, h.getContext())}
+									</TableHead>
+								))}
+							</TableRow>
+						))}
+					</TableHeader>
+
+					<TableBody>
+						{table.getRowModel().rows.length ? (
+							table.getRowModel().rows.map((row) => (
+								<TableRow
+									key={row.id}
+									data-state={row.getIsSelected() && "selected"}
+								>
+									{row.getVisibleCells().map((cell) => (
+										<TableCell key={cell.id} className="px-3 md:px-5 lg:px-10">
+											{flexRender(
+												cell.column.columnDef.cell,
+												cell.getContext(),
+											)}
+										</TableCell>
+									))}
+								</TableRow>
+							))
+						) : (
+							<TableRow>
+								<TableCell
+									colSpan={columns.length}
+									className="h-24 text-center"
+								>
+									No results.
+								</TableCell>
+							</TableRow>
+						)}
+					</TableBody>
+				</Table>
+			</div>
+		</div>
+	);
 }
