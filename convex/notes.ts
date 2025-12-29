@@ -93,61 +93,54 @@ export const findNote = query({
 });
 
 export const updateNote = mutation({
-  args: {
-    id: v.id("notes"),
-    title: v.optional(v.string()),
-    content: v.optional(v.string()),
-    isFavorite: v.optional(v.boolean()),
-    isDeleted: v.optional(v.boolean()),
-    recursive: v.optional(v.boolean()),
-    deletedAt: v.optional(v.number()),
-    icon: v.optional(v.string()),
-    coverImageKey: v.optional(v.string()),
-    parentNote: v.optional(v.id("notes")),
-  },
+	args: {
+		id: v.id("notes"),
+		title: v.optional(v.string()),
+		content: v.optional(v.string()),
+		isFavorite: v.optional(v.boolean()),
+		isDeleted: v.optional(v.boolean()),
+		recursive: v.optional(v.boolean()),
+		deletedAt: v.optional(v.number()),
+		icon: v.optional(v.string()),
+		coverImageKey: v.optional(v.string()),
+		parentNote: v.optional(v.id("notes")),
+	},
+	handler: async (ctx, args) => {
+		const userId = await getUserId(ctx);
+		await getUserNoteOrThrow(ctx, args.id, userId);
+		const { id, recursive, parentNote, ...rest } = args;
+			id,
+			pickDefined({
+				...rest,
+				parentNote,
+			}),
+		);
 
-  handler: async (ctx, args) => {
-    const userId = await getUser(ctx);
-    const note = await ctx.db.get(args.id);
+		if (!recursive) return;
 
-    if (!note) throw new Error("Note not found");
-    if (note.userId !== userId) throw new Error("No permission");
+		const updateChildren = async (parentId: Id<"notes">) => {
+			const children = await ctx.db
+				.query("notes")
+				.withIndex("by_user_parent", (q) =>
+					q.eq("userId", userId).eq("parentNote", parentId),
+				)
+				.collect();
 
-    const { id, recursive, parentNote, ...rest } = args;
+			for (const child of children) {
+				await ctx.db.patch(
+					child._id,
+					pickDefined({
+						isDeleted: args.isDeleted,
+						isFavorite: args.isFavorite,
+						deletedAt: args.deletedAt,
+					}),
+				);
+				await updateChildren(child._id);
+			}
+		};
 
-    await ctx.db.patch(
-      id,
-      pickDefined({
-        ...rest,
-        parentNote,
-      }),
-    );
-
-    if (!recursive) return;
-
-    const updateChildren = async (parentId: Id<"notes">) => {
-      const children = await ctx.db
-        .query("notes")
-        .withIndex("by_user_parent", (q) =>
-          q.eq("userId", userId).eq("parentNote", parentId),
-        )
-        .collect();
-
-      for (const child of children) {
-        await ctx.db.patch(
-          child._id,
-          pickDefined({
-            isDeleted: args.isDeleted,
-            isFavorite: args.isFavorite,
-            deletedAt: args.deletedAt,
-          }),
-        );
-        await updateChildren(child._id);
-      }
-    };
-
-    await updateChildren(id);
-  },
+		await updateChildren(id);
+	},
 });
 
 export const duplicate = mutation({
