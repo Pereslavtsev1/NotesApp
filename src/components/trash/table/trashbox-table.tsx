@@ -75,12 +75,16 @@ export function TrashboxTable({
 			</div>
 
 			<div className="overflow-hidden rounded-md border">
-				<Table>
+				<Table className="table-fixed w-full">
 					<TableHeader>
 						{table.getHeaderGroups().map((hg) => (
 							<TableRow key={hg.id}>
 								{hg.headers.map((h) => (
-									<TableHead key={h.id} className="px-3 md:px-5 lg:px-10">
+									<TableHead
+										key={h.id}
+										style={{ width: h.getSize() }}
+										className="px-3 md:px-5 lg:px-10"
+									>
 										{h.isPlaceholder
 											? null
 											: flexRender(h.column.columnDef.header, h.getContext())}
@@ -91,32 +95,19 @@ export function TrashboxTable({
 					</TableHeader>
 
 					<TableBody>
-						{table.getRowModel().rows.length ? (
-							table.getRowModel().rows.map((row) => (
-								<TableRow
-									key={row.id}
-									data-state={row.getIsSelected() && "selected"}
-								>
-									{row.getVisibleCells().map((cell) => (
-										<TableCell key={cell.id} className="px-3 md:px-5 lg:px-10">
-											{flexRender(
-												cell.column.columnDef.cell,
-												cell.getContext(),
-											)}
-										</TableCell>
-									))}
-								</TableRow>
-							))
-						) : (
-							<TableRow>
-								<TableCell
-									colSpan={columns.length}
-									className="h-24 text-center"
-								>
-									No results.
-								</TableCell>
+						{table.getRowModel().rows.map((row) => (
+							<TableRow key={row.id}>
+								{row.getVisibleCells().map((cell) => (
+									<TableCell
+										key={cell.id}
+										style={{ width: cell.column.getSize() }}
+										className="px-3 md:px-5 lg:px-10"
+									>
+										{flexRender(cell.column.columnDef.cell, cell.getContext())}
+									</TableCell>
+								))}
 							</TableRow>
-						)}
+						))}
 					</TableBody>
 				</Table>
 			</div>

@@ -31,6 +31,7 @@ function getTrashActions(note: Doc<"notes">) {
 export const columns: ColumnDef<Doc<"notes">>[] = [
 	{
 		id: "select",
+		maxSize: 50,
 		header: ({ table }) => (
 			<Checkbox
 				checked={
@@ -55,17 +56,19 @@ export const columns: ColumnDef<Doc<"notes">>[] = [
 	{
 		accessorKey: "title",
 		header: "Title",
+		size: 200,
 		cell: ({ row }) => {
 			const icon = row.original.icon;
 
 			return (
-				<span className="flex items-center gap-2">
+				<span className="flex items-center gap-2 min-w-0">
 					{icon ? (
-						<span className="text-lg leading-none">{icon}</span>
+						<span className="text-lg leading-none shrink-0">{icon}</span>
 					) : (
-						<FileIcon className="size-4 text-muted-foreground" />
+						<FileIcon className="size-4 text-muted-foreground shrink-0" />
 					)}
-					<span>{row.original.title}</span>
+
+					<span className="truncate min-w-0">{row.original.title}</span>
 				</span>
 			);
 		},

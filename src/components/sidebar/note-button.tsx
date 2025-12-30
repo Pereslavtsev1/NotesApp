@@ -74,12 +74,13 @@ export default function NoteButton({
 	return (
 		<DropdownMenu>
 			<Button
-				className="flex w-full items-center justify-between px-2 text-sm font-medium text-muted-foreground"
+				className="flex w-full items-center justify-between px-2 text-sm font-medium text-muted-foreground
+				truncate"
 				variant="ghost"
 				style={style}
 				{...props}
 			>
-				<div className="flex items-center gap-2">
+				<div className="flex items-center gap-2 min-w-0">
 					<div
 						onClick={(e) => {
 							e.stopPropagation();
@@ -87,14 +88,10 @@ export default function NoteButton({
 						}}
 						className="flex size-6 shrink-0 items-center justify-center rounded transition hover:bg-accent/20"
 					>
-						<ChevronRight
-							className={cn(
-								"size-4 text-muted-foreground duration-300 transition-transform",
-								expanded && "rotate-90",
-							)}
-						/>
+						<ChevronRight className="size-4" />
 					</div>
-					<span className="truncate">{note.title}</span>
+
+					<span className="truncate flex-1">{note.title}</span>
 				</div>
 
 				<DropdownMenuTrigger asChild>
