@@ -5,13 +5,22 @@ import {
   useDropzoneCtx,
 } from "@/components/dropzone/dropzone";
 import { cn } from "@/lib/utils";
+type CoverImageDropzoneProps = {
+  className?: string;
+};
 
-export default function CoverImageDropzone() {
+export default function CoverImageDropzone({
+  className,
+}: CoverImageDropzoneProps) {
   const { isDragActive } = useDropzoneCtx();
 
   return (
     <Dropzone
-      className={cn("rounded-lg border-2", isDragActive && "border-green-400")}
+      className={cn(
+        "rounded-lg border-2",
+        isDragActive && "border-green-400",
+        className,
+      )}
     >
       <DropzoneContent className="mx-auto w-full justify-center py-20">
         <div className="flex flex-col items-center gap-2">
@@ -26,7 +35,7 @@ export default function CoverImageDropzone() {
           >
             {isDragActive
               ? "Drop the file here..."
-              : "Click to upload or drag and drop"}
+              : "Click to upload or drag and drop."}
           </p>
         </div>
       </DropzoneContent>

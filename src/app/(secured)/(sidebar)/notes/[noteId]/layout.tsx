@@ -1,4 +1,4 @@
-import CoverImageModal from "@/components/modals/cover-image/cover-image";
+import CoverImageModal from "@/components/modals/cover-image/cover-image-modal";
 
 export default function CoverImageLayout({
   children,

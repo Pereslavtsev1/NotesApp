@@ -1,14 +1,14 @@
 import SettingsHeader from "@/components/settings/header";
 
 export default function SettingsLayout({
-	children,
+  children,
 }: Readonly<{
-	children: React.ReactNode;
+  children: React.ReactNode;
 }>) {
-	return (
-		<div className="w-full">
-			<SettingsHeader />
-			{children}
-		</div>
-	);
+  return (
+    <div className="w-full">
+      <SettingsHeader />
+      <div className="mx-auto my-6">{children}</div>
+    </div>
+  );
 }

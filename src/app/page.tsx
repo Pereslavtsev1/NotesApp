@@ -1,6 +1,6 @@
 "use client";
-import { Authenticated } from "convex/react";
+import { redirect } from "next/navigation";
 
 export default function Home() {
-	return <Authenticated>Authenticated</Authenticated>;
+  redirect("/notes");
 }
