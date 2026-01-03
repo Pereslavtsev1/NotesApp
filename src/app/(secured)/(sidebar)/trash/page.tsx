@@ -16,7 +16,7 @@ export default async function TrashPage() {
   );
   return (
     <>
-      <Card className="my-6 border-border/50 bg-sidebar shadow-sm">
+      <Card className="mb-6 border-border/50 bg-sidebar shadow-sm">
         <CardContent className="flex flex-col items-start gap-3 sm:flex-row sm:items-center">
           <div className="mx-auto shrink-0 rounded-full bg-amber-500/10 p-2 sm:mx-0">
             <CircleAlert className="size-5 text-amber-600 dark:text-amber-500" />

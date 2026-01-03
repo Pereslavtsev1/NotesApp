@@ -1,6 +1,6 @@
 "use client";
-
 import { cn } from "@/lib/utils";
+import { v4 as uuid } from "uuid";
 import { createContext, ReactNode, useContext, useState } from "react";
 import { FileRejection, useDropzone } from "react-dropzone";
 import { toast } from "sonner";
@@ -49,7 +49,7 @@ export function DropzoneProvider({
 
   const handleDrop = (accepted: File[]) => {
     const newFiles: UploadFile[] = accepted.map((file) => ({
-      key: crypto.randomUUID(),
+      key: uuid(),
       file,
       uploading: false,
       uploaded: false,

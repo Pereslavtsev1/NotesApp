@@ -7,8 +7,10 @@ export default function TrashLayout({
 }>) {
   return (
     <div className="w-full">
-      <TrashHeader />
-      <div className="mx-auto max-w-7xl">{children}</div>
+      <div className="px-2 sm:px-4 md:px-6 lg:px-8">
+        <TrashHeader />
+      </div>
+      <div className="mt-6 px-2 sm:px-4 md:px-6 lg:px-8">{children}</div>
     </div>
   );
 }

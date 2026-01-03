@@ -7,8 +7,11 @@ export default function SettingsLayout({
 }>) {
   return (
     <div className="w-full">
-      <SettingsHeader />
-      <div className="mx-auto my-6">{children}</div>
+      <div className="px-2 sm:px-4 md:px-6 lg:px-8">
+        <SettingsHeader />
+      </div>
+
+      <div className="mt-6 px-2 sm:px-4 md:px-6 lg:px-8">{children}</div>
     </div>
   );
 }

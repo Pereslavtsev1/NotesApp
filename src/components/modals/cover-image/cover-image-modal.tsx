@@ -5,13 +5,11 @@ import {
   Dialog,
   DialogContent,
   DialogDescription,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
 import { useCoverImage } from "@/hooks/use-cover-image";
-import CoverImage from "./cover-image";
-import { Button } from "@/components/ui/button";
+import CoverImageModalContent from "./cover-image";
 
 export default function CoverImageModal() {
   const { open, toggle } = useCoverImage();
@@ -25,13 +23,7 @@ export default function CoverImageModal() {
         </DialogHeader>
 
         <DropzoneProvider maxFiles={1} maxSize={10 * 1024 * 1024}>
-          <CoverImage />
-          <DialogFooter>
-            <Button variant="outline" type="button" onClick={() => {}}>
-              Cancel
-            </Button>
-            <Button type="submit">Upload</Button>
-          </DialogFooter>
+          <CoverImageModalContent />
         </DropzoneProvider>
       </DialogContent>
     </Dialog>

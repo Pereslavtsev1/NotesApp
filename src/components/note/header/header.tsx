@@ -21,7 +21,11 @@ import {
 } from "lucide-react";
 
 import { useCoverImage } from "@/hooks/use-cover-image";
-import { handleDelete, handleFavorite } from "@/lib/actions";
+import {
+  handleDelete,
+  handleFavorite,
+  handleRemoveCoverImage,
+} from "@/lib/actions";
 import { cn } from "@/lib/utils";
 import { api } from "../../../../convex/_generated/api";
 
@@ -38,7 +42,10 @@ export default function Header({
       icon: <ImageIcon />,
       label: note.coverImageKey ? "Remove cover" : "Add cover",
       className: "",
-      onClick: () => toggle(),
+      onClick: () =>
+        note.coverImageKey
+          ? handleRemoveCoverImage({ id: note._id })
+          : toggle(),
     },
     {
       icon: note.isDeleted ? <RotateCcw /> : <Trash2 />,
