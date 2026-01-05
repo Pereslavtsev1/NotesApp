@@ -1,17 +1,6 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
-import { SidebarTrigger } from "@/components/ui/sidebar";
-import { Preloaded, usePreloadedQuery } from "convex/react";
-import NotePageNav from "./note-page-nav";
-
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-
+import { type Preloaded, usePreloadedQuery } from "convex/react";
 import {
   ImageIcon,
   MoreHorizontal,
@@ -19,7 +8,14 @@ import {
   Star,
   Trash2,
 } from "lucide-react";
-
+import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { SidebarTrigger } from "@/components/ui/sidebar";
 import { useCoverImage } from "@/hooks/use-cover-image";
 import {
   handleDelete,
@@ -27,7 +23,8 @@ import {
   handleRemoveCoverImage,
 } from "@/lib/actions";
 import { cn } from "@/lib/utils";
-import { api } from "../../../../convex/_generated/api";
+import type { api } from "../../../../convex/_generated/api";
+import NotePageNav from "./note-page-nav";
 
 export default function Header({
   preloadedQuery,

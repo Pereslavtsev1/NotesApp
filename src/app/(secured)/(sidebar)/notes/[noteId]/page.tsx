@@ -1,13 +1,13 @@
 "use server";
 
 import EditorWrapper from "@/components/editor/editor-wrapper";
+import CoverImage from "@/components/note/cover-image/cover-image";
 import Header from "@/components/note/header/header";
 import Toolbar from "@/components/note/toolbar/toolbar";
 import { getToken } from "@/lib/auth-server";
 import { preloadQuery } from "convex/nextjs";
 import { api } from "../../../../../../convex/_generated/api";
 import type { Id } from "../../../../../../convex/_generated/dataModel";
-import CoverImage from "@/components/note/cover-image/cover-image";
 
 export default async function NotePage({
   params,
@@ -22,6 +22,7 @@ export default async function NotePage({
     { id: noteId },
     { token },
   );
+
   return (
     <div className="w-full">
       <div className="px-2 sm:px-4 md:px-6 lg:px-8">
