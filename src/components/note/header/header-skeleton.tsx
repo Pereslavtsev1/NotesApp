@@ -1,19 +1,23 @@
+"use client";
+
+import { BaseHeader } from "@/components/header/base-header";
+import HeaderLeft from "@/components/header/header-left-side";
+import HeaderRight from "@/components/header/header-right-side";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { Skeleton } from "@/components/ui/skeleton";
 
 export default function HeaderSkeleton() {
   return (
-    <header className="sticky top-0 z-50 w-full bg-background/80 py-3 backdrop-blur-md">
-      <div className="flex w-full items-center gap-x-2">
+    <BaseHeader>
+      <HeaderLeft>
         <SidebarTrigger />
-        <div className="flex w-full items-center">
-          <Skeleton className="h-4 w-24" />
-          <div className="ml-auto flex items-center gap-x-2">
-            <Skeleton className="size-9 rounded-md" />
-            <Skeleton className="size-9 rounded-md" />
-          </div>
-        </div>
-      </div>
-    </header>
+        <Skeleton className="h-4 w-24" />
+      </HeaderLeft>
+
+      <HeaderRight>
+        <Skeleton className="size-9 rounded-md" />
+        <Skeleton className="size-9 rounded-md" />
+      </HeaderRight>
+    </BaseHeader>
   );
 }

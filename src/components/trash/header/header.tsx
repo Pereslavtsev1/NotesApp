@@ -1,28 +1,15 @@
-"use client";
-
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbList,
-  BreadcrumbPage,
-} from "@/components/ui/breadcrumb";
+import { BaseHeader } from "@/components/header/base-header";
+import { HeaderBreadcrumb } from "@/components/header/header-breadcrumb";
+import HeaderLeft from "@/components/header/header-left-side";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 
 export default function TrashHeader() {
   return (
-    <header className="sticky top-0 z-50 w-full bg-background/80 py-4 backdrop-blur-md">
-      <div className="flex w-full items-center gap-x-2 font-semibold text-muted-foreground">
+    <BaseHeader>
+      <HeaderLeft>
         <SidebarTrigger />
-        <Breadcrumb>
-          <BreadcrumbList>
-            <BreadcrumbItem>
-              <BreadcrumbPage className="max-w-36 truncate font-semibold text-muted-foreground">
-                Trash
-              </BreadcrumbPage>
-            </BreadcrumbItem>
-          </BreadcrumbList>
-        </Breadcrumb>
-      </div>
-    </header>
+        <HeaderBreadcrumb title="Trash" />
+      </HeaderLeft>
+    </BaseHeader>
   );
 }

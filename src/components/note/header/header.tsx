@@ -26,7 +26,11 @@ import { cn } from "@/lib/utils";
 import type { api } from "../../../../convex/_generated/api";
 import NotePageNav from "./note-page-nav";
 
-export default function Header({
+import { BaseHeader } from "@/components/header/base-header";
+import HeaderLeft from "@/components/header/header-left-side";
+import HeaderRight from "@/components/header/header-right-side";
+
+export default function NoteHeader({
   preloadedQuery,
 }: {
   preloadedQuery: Preloaded<typeof api.notes.findNote>;
@@ -38,7 +42,6 @@ export default function Header({
     {
       icon: <ImageIcon />,
       label: note.coverImageKey ? "Remove cover" : "Add cover",
-      className: "",
       onClick: () =>
         note.coverImageKey
           ? handleRemoveCoverImage({ id: note._id })
@@ -53,58 +56,59 @@ export default function Header({
   ];
 
   return (
-    <header className="sticky top-0 z-50 w-full bg-background/80 py-3 backdrop-blur-md">
-      <div className="flex w-full items-center gap-x-2 font-semibold text-muted-foreground">
+    <BaseHeader>
+      <HeaderLeft>
         <SidebarTrigger />
         <NotePageNav note={note} />
-        <div className="ml-auto flex gap-x-2">
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={() =>
-              handleFavorite({
-                id: note._id,
-                isFavorite: note.isFavorite,
-                recursive: true,
-              })
-            }
-          >
-            <Star
-              className={cn(
-                note.isFavorite
-                  ? "text-yellow-500 fill-yellow-500"
-                  : "text-muted-foreground",
-              )}
-            />
-          </Button>
+      </HeaderLeft>
 
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="icon">
-                <MoreHorizontal />
-              </Button>
-            </DropdownMenuTrigger>
+      <HeaderRight>
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={() =>
+            handleFavorite({
+              id: note._id,
+              isFavorite: note.isFavorite,
+              recursive: true,
+            })
+          }
+        >
+          <Star
+            className={cn(
+              note.isFavorite
+                ? "text-yellow-500 fill-yellow-500"
+                : "text-muted-foreground",
+            )}
+          />
+        </Button>
 
-            <DropdownMenuContent align="end" className="w-48">
-              {menuItems.map((item) => (
-                <DropdownMenuItem key={item.label} asChild>
-                  <Button
-                    variant="ghost"
-                    className={cn(
-                      "w-full justify-start gap-x-4 font-semibold text-muted-foreground hover:bg-accent",
-                      item.className,
-                    )}
-                    onClick={item.onClick}
-                  >
-                    {item.icon}
-                    {item.label}
-                  </Button>
-                </DropdownMenuItem>
-              ))}
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </div>
-      </div>
-    </header>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="ghost" size="icon">
+              <MoreHorizontal />
+            </Button>
+          </DropdownMenuTrigger>
+
+          <DropdownMenuContent align="end" className="w-48">
+            {menuItems.map((item) => (
+              <DropdownMenuItem key={item.label} asChild>
+                <Button
+                  variant="ghost"
+                  className={cn(
+                    "w-full justify-start gap-x-4 font-semibold text-muted-foreground hover:bg-accent",
+                    item.className,
+                  )}
+                  onClick={item.onClick}
+                >
+                  {item.icon}
+                  {item.label}
+                </Button>
+              </DropdownMenuItem>
+            ))}
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </HeaderRight>
+    </BaseHeader>
   );
 }
