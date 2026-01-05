@@ -1,7 +1,6 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { Skeleton } from "@/components/ui/skeleton";
 import {
   Table,
   TableBody,
@@ -10,7 +9,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { handleDeleteNotePermanently } from "@/lib/actions";
+import { useIsMobile } from "@/hooks/use-mobile";
 import {
   type ColumnFiltersState,
   flexRender,
@@ -18,25 +17,34 @@ import {
   useReactTable,
   VisibilityState,
 } from "@tanstack/react-table";
-import { type Preloaded, usePreloadedQuery } from "convex/react";
-import { SearchIcon, TrashIcon } from "lucide-react";
+import { usePaginatedQuery } from "convex/react";
 import { useEffect, useState } from "react";
-import type { api } from "../../../../convex/_generated/api";
+import { useInView } from "react-intersection-observer";
+import { api } from "../../../../convex/_generated/api";
+import { Doc } from "../../../../convex/_generated/dataModel";
 import { columns } from "./columns";
-import { useIsMobile } from "@/hooks/use-mobile";
+import { TrashboxTableToolbar } from "./trashbox-table-toolbar";
+export function TrashboxTable() {
+  const { results, isLoading, loadMore, status } = usePaginatedQuery(
+    api.notes.findAllUserDeletedNotes,
+    {},
+    {
+      initialNumItems: 1,
+    },
+  );
+  const { ref, inView } = useInView();
+  useEffect(() => {
+    if (inView && !isLoading && status === "CanLoadMore") {
+      loadMore(1);
+    }
+  }, [inView, loadMore, status, isLoading]);
 
-export function TrashboxTable({
-  preloadedQuery,
-}: {
-  preloadedQuery: Preloaded<typeof api.notes.findAllUserNotes>;
-}) {
-  const notes = usePreloadedQuery(preloadedQuery);
   const [rowSelection, setRowSelection] = useState({});
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
   const isMobile = useIsMobile();
-  const table = useReactTable({
-    data: notes,
+  const table = useReactTable<Doc<"notes">>({
+    data: results,
     columns,
     getCoreRowModel: getCoreRowModel(),
     onRowSelectionChange: setRowSelection,
@@ -49,7 +57,7 @@ export function TrashboxTable({
     },
   });
   useEffect(() => {
-    if (isMobile) {
+    if (!isLoading && isMobile) {
       setColumnVisibility({
         deletedAt: false,
       });
@@ -58,35 +66,7 @@ export function TrashboxTable({
 
   return (
     <div className="space-y-10">
-      <div className="flex items-center justify-between gap-x-10">
-        <div className="relative flex-1 sm:max-w-md">
-          <SearchIcon className="absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted-foreground" />
-          <Input
-            placeholder="Search deleted notes..."
-            className="pl-9"
-            value={(table.getColumn("title")?.getFilterValue() as string) ?? ""}
-            onChange={(e) =>
-              table.getColumn("title")?.setFilterValue(e.target.value)
-            }
-          />
-        </div>
-
-        <Button
-          variant="outline"
-          disabled={!table.getSelectedRowModel().rows.length}
-          onClick={() => {
-            handleDeleteNotePermanently(
-              table
-                .getSelectedRowModel()
-                .flatRows.map((row) => row.original._id),
-            );
-          }}
-        >
-          <TrashIcon className="size-4" />
-          Delete {table.getSelectedRowModel().rows.length}
-        </Button>
-      </div>
-
+      <TrashboxTableToolbar table={table} />
       <div className="overflow-hidden rounded-md border">
         <Table className="w-full table-fixed">
           <TableHeader>
@@ -121,6 +101,24 @@ export function TrashboxTable({
                 ))}
               </TableRow>
             ))}
+
+            {status !== "Exhausted" &&
+              Array.from({ length: 4 }).map((_, index) => (
+                <TableRow ref={ref} key={index}>
+                  {columns.map((col) => (
+                    <TableCell
+                      key={col.id}
+                      style={{ width: col.size }}
+                      className="px-3 py-4 md:px-5 lg:px-10"
+                    >
+                      {(status === "LoadingFirstPage" ||
+                        status === "LoadingMore") && (
+                        <Skeleton className="h-5 w-1/3" />
+                      )}
+                    </TableCell>
+                  ))}
+                </TableRow>
+              ))}
           </TableBody>
         </Table>
       </div>

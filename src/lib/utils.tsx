@@ -95,3 +95,7 @@ export async function uploadFile(file: UploadFile) {
 export function buildImageUrl(fileKey: string) {
   return `https://fuckingnotesapp.t3.storage.dev/${fileKey}`;
 }
+
+export type ClassNameProps = {
+  className?: string;
+};

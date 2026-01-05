@@ -1,9 +1,10 @@
+import { paginationOptsValidator } from "convex/server";
 import { v } from "convex/values";
 import type { Id } from "./_generated/dataModel";
 import {
   type MutationCtx,
-  mutation,
   type QueryCtx,
+  mutation,
   query,
 } from "./_generated/server";
 
@@ -230,19 +231,6 @@ export const restoreSmart = mutation({
   },
 });
 
-export const findAllUserDeletedNotes = query({
-  handler: async (ctx) => {
-    const userId = await getUserId(ctx);
-
-    return ctx.db
-      .query("notes")
-      .withIndex("by_user", (q) => q.eq("userId", userId))
-      .filter((q) => q.eq(q.field("isDeleted"), true))
-      .order("desc")
-      .collect();
-  },
-});
-
 export const removeCoverImage = mutation({
   args: {
     id: v.id("notes"),
@@ -251,5 +239,17 @@ export const removeCoverImage = mutation({
     const userId = await getUserId(ctx);
     await getUserNoteOrThrow(ctx, args.id, userId);
     return await ctx.db.patch(args.id, { coverImageKey: undefined });
+  },
+});
+
+export const findAllUserDeletedNotes = query({
+  args: { paginationOpts: paginationOptsValidator },
+  handler: async (ctx, args) => {
+    const userId = await getUserId(ctx);
+    return await ctx.db
+      .query("notes")
+      .withIndex("by_user", (q) => q.eq("userId", userId))
+      .filter((q) => q.eq(q.field("isDeleted"), true))
+      .paginate(args.paginationOpts);
   },
 });
