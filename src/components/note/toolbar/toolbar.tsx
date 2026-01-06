@@ -52,7 +52,7 @@ export default function Toolbar({ preloadedQuery }: ToolbarProps) {
   return (
     <>
       <div className="group relative mb-4 py-4">
-        <div className="flex items-center gap-x-2 py-4 pl-8 opacity-0 transition-opacity duration-300 group-hover:opacity-100 sm:pl-14">
+        <div className="flex items-center gap-x-2 px-8 py-4 opacity-0 transition-opacity duration-300 group-hover:opacity-100 sm:px-14">
           {!note.icon && (
             <IconPicker onChange={onIconSelect} asChild>
               <Button variant="ghost" size="sm" className="font-semibold">
@@ -75,7 +75,7 @@ export default function Toolbar({ preloadedQuery }: ToolbarProps) {
           )}
         </div>
 
-        <div className="flex items-start gap-3 pl-8 sm:pl-14">
+        <div className="flex items-start gap-3 px-8 sm:px-14">
           {note.icon && (
             <div className="relative shrink-0">
               <span className="text-xl sm:text-2xl md:text-3xl">
@@ -108,7 +108,7 @@ export default function Toolbar({ preloadedQuery }: ToolbarProps) {
                 onClick={enableInput}
                 className="w-full text-left"
               >
-                <h1 className="text-xl font-bold wrap-break-word sm:text-2xl md:text-3xl">
+                <h1 className="text-xl font-bold wrap-anywhere sm:text-2xl md:text-3xl">
                   {note.title}
                 </h1>
               </button>

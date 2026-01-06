@@ -31,7 +31,6 @@ function getTrashActions(note: Doc<"notes">) {
 export const columns: ColumnDef<Doc<"notes">>[] = [
   {
     id: "select",
-    accessorKey: "select",
     maxSize: 50,
     header: ({ table }) => (
       <Checkbox
@@ -74,7 +73,6 @@ export const columns: ColumnDef<Doc<"notes">>[] = [
   },
 
   {
-    id: "deletedAt",
     accessorKey: "deletedAt",
     header: "Deleted",
     cell: ({ row }) => {
@@ -104,8 +102,6 @@ export const columns: ColumnDef<Doc<"notes">>[] = [
   },
 
   {
-    id: "daysLeft",
-    accessorKey: "daysLeft",
     header: "Days left",
     maxSize: 90,
     cell: ({ row }) => {

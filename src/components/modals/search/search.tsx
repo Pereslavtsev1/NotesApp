@@ -15,7 +15,7 @@ import {
   CommandList,
 } from "@/components/ui/command";
 
-const SearchModal = () => {
+export default function SearchModal() {
   const { open, setOpen } = useSearch();
   const notes = useQuery(api.notes.search);
   const router = useRouter();
@@ -58,6 +58,4 @@ const SearchModal = () => {
       </CommandList>
     </CommandDialog>
   );
-};
-
-export default SearchModal;
+}

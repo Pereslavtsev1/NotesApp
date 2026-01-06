@@ -253,3 +253,30 @@ export const findAllUserDeletedNotes = query({
       .paginate(args.paginationOpts);
   },
 });
+
+export const findAllUserDeletedNotes1 = query({
+  args: {
+    paginationOpts: paginationOptsValidator,
+    search: v.optional(v.string()),
+  },
+  handler: async (ctx, args) => {
+    const userId = await getUserId(ctx);
+    const search = args.search?.trim();
+
+    if (!search) {
+      return await ctx.db
+        .query("notes")
+        .withIndex("by_user_deleted", (q) =>
+          q.eq("userId", userId).eq("isDeleted", true),
+        )
+        .paginate(args.paginationOpts);
+    }
+
+    return await ctx.db
+      .query("notes")
+      .withSearchIndex("search_title", (q) =>
+        q.search("title", search).eq("userId", userId).eq("isDeleted", true),
+      )
+      .paginate(args.paginationOpts);
+  },
+});

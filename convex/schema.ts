@@ -14,5 +14,10 @@ export default defineSchema({
     deletedAt: v.optional(v.number()),
   })
     .index("by_user", ["userId"])
-    .index("by_user_parent", ["userId", "parentNote"]),
+    .index("by_user_parent", ["userId", "parentNote"])
+    .index("by_user_deleted", ["userId", "isDeleted"])
+    .searchIndex("search_title", {
+      searchField: "title",
+      filterFields: ["userId", "isDeleted"],
+    }),
 });
