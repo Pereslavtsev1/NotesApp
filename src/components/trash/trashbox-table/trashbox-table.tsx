@@ -45,8 +45,8 @@ export default function TrashboxTable() {
   const [debouncedSearch] = useDebounce(searchInput, 300);
 
   const { results, status, loadMore, isLoading } = usePaginatedQuery(
-    api.notes.findAllUserDeletedNotes1,
-    { search: debouncedSearch },
+    api.notes.findAllNotes,
+    { search: debouncedSearch, isDeleted: true },
     { initialNumItems: ITEMS },
   );
 
@@ -108,23 +108,19 @@ export default function TrashboxTable() {
             <EmptyMedia variant="icon">
               <Trash2Icon className="size-6" />
             </EmptyMedia>
-            <EmptyContent className="-space-y-2">
+            <EmptyContent className="-space-y-2 font-medium">
               {hasSearchQuery ? (
                 <>
-                  <EmptyTitle className="font-semibold">
-                    No results found
-                  </EmptyTitle>
-                  <EmptyDescription className="font-semibold">
+                  <EmptyTitle>No results found</EmptyTitle>
+                  <EmptyDescription>
                     No deleted notes match &quot;{debouncedSearch}&quot;. Try
                     adjusting your search query.
                   </EmptyDescription>
                 </>
               ) : (
                 <>
-                  <EmptyTitle className="font-semibold">
-                    Trash is empty
-                  </EmptyTitle>
-                  <EmptyDescription className="font-semibold">
+                  <EmptyTitle>Trash is empty</EmptyTitle>
+                  <EmptyDescription>
                     You don’t have any deleted notes. Deleted notes will appear
                     here.
                   </EmptyDescription>

@@ -21,7 +21,7 @@ export default function Toolbar({ preloadedQuery }: ToolbarProps) {
   const inputRef = useRef<HTMLTextAreaElement | null>(null);
   const [value, setValue] = useState(note.title);
   const [isEditing, setIsEditing] = useState(false);
-  const [debouncedValue] = useDebounce(value, 350);
+  const [debouncedValue] = useDebounce(value, 200);
 
   const updateNote = useMutation(api.notes.updateNote);
 
