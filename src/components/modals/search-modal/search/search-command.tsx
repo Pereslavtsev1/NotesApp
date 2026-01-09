@@ -20,7 +20,7 @@ import SearchCommandNotFoundState from "./search-command-not-found-state";
 import SearchCommandNoteItem from "./search-command-note-item";
 import SearchCommandEmptyFoundState from "./search-command-empty-state";
 
-const ITEMS = 5;
+const ITEMS = 10;
 
 export default function SearchModal() {
   const { open, setOpen } = useSearch();
@@ -39,9 +39,6 @@ export default function SearchModal() {
       loadMore(ITEMS);
     }
   }, [inView, status, loadMore]);
-
-  const showEmpty =
-    !isLoading && results.length === 0 && debouncedSearch.trim().length > 0;
 
   return (
     <CommandDialog open={open} onOpenChange={setOpen}>

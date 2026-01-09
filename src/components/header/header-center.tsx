@@ -1,5 +1,15 @@
+import { ClassNameProps, cn } from "@/lib/utils";
 import { ReactNode } from "react";
 
-export default function HeaderCenter({ children }: { children: ReactNode }) {
-  return <div className="flex min-w-0 flex-1 justify-center">{children}</div>;
+export default function HeaderCenter({
+  children,
+  className,
+}: { children?: ReactNode } & ClassNameProps) {
+  return (
+    <div
+      className={cn("flex flex-1 justify-center max-w-7xl mx-auto", className)}
+    >
+      {children}
+    </div>
+  );
 }

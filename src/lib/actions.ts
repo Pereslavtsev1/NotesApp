@@ -76,7 +76,6 @@ export async function handleFavorite({
   recursive: boolean;
 }) {
   const token = await getToken();
-
   return await fetchMutation(
     api.notes.updateNote,
     {

@@ -1,13 +1,5 @@
 "use client";
 
-import { type Preloaded, usePreloadedQuery } from "convex/react";
-import {
-  ImageIcon,
-  MoreHorizontal,
-  RotateCcw,
-  Star,
-  Trash2,
-} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -23,7 +15,15 @@ import {
   handleRemoveCoverImage,
 } from "@/lib/actions";
 import { cn } from "@/lib/utils";
-import type { api } from "../../../../convex/_generated/api";
+import { type Preloaded, usePreloadedQuery } from "convex/react";
+import {
+  ImageIcon,
+  MoreHorizontal,
+  RotateCcw,
+  Star,
+  Trash2,
+} from "lucide-react";
+import { api } from "../../../../convex/_generated/api";
 import NotePageNav from "./note-page-nav";
 
 import { BaseHeader } from "@/components/header/base-header";
@@ -69,7 +69,7 @@ export default function NoteHeader({
           onClick={() =>
             handleFavorite({
               id: note._id,
-              isFavorite: note.isFavorite,
+              isFavorite: !note.isFavorite,
               recursive: true,
             })
           }

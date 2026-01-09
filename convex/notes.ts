@@ -182,26 +182,12 @@ export const duplicate = mutation({
   },
 });
 
-export const search = query({
-  handler: async (ctx) => {
-    const userId = await getUserId(ctx);
-
-    return ctx.db
-      .query("notes")
-      .withIndex("by_user", (q) => q.eq("userId", userId))
-      .filter((q) => q.eq(q.field("isDeleted"), false))
-      .order("desc")
-      .collect();
-  },
-});
-
 export const deletePermanently = mutation({
   args: {
     ids: v.array(v.id("notes")),
   },
   handler: async (ctx, { ids }) => {
     const userId = await getUserId(ctx);
-
     for (const id of ids) {
       await getUserNoteOrThrow(ctx, id, userId);
       await ctx.db.delete(id);
@@ -239,18 +225,6 @@ export const removeCoverImage = mutation({
     const userId = await getUserId(ctx);
     await getUserNoteOrThrow(ctx, args.id, userId);
     return await ctx.db.patch(args.id, { coverImageKey: undefined });
-  },
-});
-
-export const findAllUserDeletedNotes = query({
-  args: { paginationOpts: paginationOptsValidator },
-  handler: async (ctx, args) => {
-    const userId = await getUserId(ctx);
-    return await ctx.db
-      .query("notes")
-      .withIndex("by_user", (q) => q.eq("userId", userId))
-      .filter((q) => q.eq(q.field("isDeleted"), true))
-      .paginate(args.paginationOpts);
   },
 });
 

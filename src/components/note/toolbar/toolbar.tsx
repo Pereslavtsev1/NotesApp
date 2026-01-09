@@ -19,9 +19,9 @@ export default function Toolbar({ preloadedQuery }: ToolbarProps) {
   const note = usePreloadedQuery(preloadedQuery);
   const { toggle } = useCoverImage();
   const inputRef = useRef<HTMLTextAreaElement | null>(null);
-  const [value, setValue] = useState(note.title);
+  const [title, setTitle] = useState(note.title);
   const [isEditing, setIsEditing] = useState(false);
-  const [debouncedValue] = useDebounce(value, 200);
+  const [debouncedValue] = useDebounce(title, 200);
 
   const updateNote = useMutation(api.notes.updateNote);
 
@@ -97,8 +97,8 @@ export default function Toolbar({ preloadedQuery }: ToolbarProps) {
             {isEditing ? (
               <TextareaAutosize
                 ref={inputRef}
-                value={value}
-                onChange={(e) => setValue(e.target.value)}
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
                 onBlur={() => setIsEditing(false)}
                 className="w-full resize-none bg-transparent text-xl font-bold wrap-break-word outline-none sm:text-2xl md:text-3xl"
               />
@@ -109,7 +109,7 @@ export default function Toolbar({ preloadedQuery }: ToolbarProps) {
                 className="w-full text-left"
               >
                 <h1 className="text-xl font-bold wrap-anywhere sm:text-2xl md:text-3xl">
-                  {note.title}
+                  {title}
                 </h1>
               </button>
             )}
