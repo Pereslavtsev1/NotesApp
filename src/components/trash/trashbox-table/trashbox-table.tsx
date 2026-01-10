@@ -54,6 +54,7 @@ export default function TrashboxTable() {
     rootMargin: "200px",
   });
 
+  // eslint-disable-next-line react-hooks/incompatible-library
   const table = useReactTable<Doc<"notes">>({
     data: results,
     columns,

@@ -86,15 +86,20 @@ export default function NoteButton({
             }}
             className="flex size-6 shrink-0 items-center justify-center rounded transition hover:bg-accent/20"
           >
-            <ChevronRight className="size-4" />
+            <ChevronRight
+              className={`${
+                expanded ? "rotate-90" : "rotate-0"
+              } size-4 transition-transform
+              duration-200`}
+            />
           </div>
 
           <span className="flex-1 truncate">{note.title}</span>
         </div>
 
         <DropdownMenuTrigger asChild>
-          <div className="flex h-6 w-6 items-center justify-center rounded p-1 transition hover:bg-sidebar-accent/20">
-            <MoreHorizontal className="h-4 w-4" />
+          <div className="flex size-6 items-center justify-center rounded p-1 transition hover:bg-sidebar-accent/20">
+            <MoreHorizontal className="size-4" />
           </div>
         </DropdownMenuTrigger>
       </Button>
