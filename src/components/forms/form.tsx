@@ -1,4 +1,4 @@
-import { ReactNode } from "react";
+import { ComponentPropsWithoutRef, ReactNode, useState } from "react";
 import {
   Controller,
   ControllerProps,
@@ -13,7 +13,14 @@ import {
   FieldLabel,
 } from "../ui/field";
 import { Input } from "../ui/input";
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupButton,
+  InputGroupInput,
+} from "../ui/input-group";
 import { Textarea } from "../ui/textarea";
+import { EyeIcon, EyeOffIcon } from "lucide-react";
 
 type FormControlProps<
   TFieldValues extends FieldValues = FieldValues,
@@ -115,11 +122,41 @@ function FormBase<
     />
   );
 }
+type InputProps = ComponentPropsWithoutRef<typeof Input>;
+export const FormInput: FormControlFunc<InputProps> = (props) => {
+  return (
+    <FormBase {...props}>{(field) => <Input {...field} {...props} />}</FormBase>
+  );
+};
+export const FormPasswordInput: FormControlFunc<
+  Omit<ComponentPropsWithoutRef<typeof InputGroupInput>, "type">
+> = (props) => {
+  const [visible, setVisible] = useState(false);
 
-export const FormInput: FormControlFunc = (props) => {
   return (
     <FormBase {...props}>
-      {(field) => <Input {...field} className={props.className} />}
+      {(field) => (
+        <InputGroup>
+          <InputGroupInput
+            {...field}
+            {...props}
+            type={visible ? "text" : "password"}
+          />
+          <InputGroupAddon align="inline-end">
+            <InputGroupButton
+              type="button"
+              onClick={() => setVisible((v) => !v)}
+              onMouseDown={(e) => e.preventDefault()}
+            >
+              {visible ? (
+                <EyeOffIcon className="size-4 text-muted-foreground" />
+              ) : (
+                <EyeIcon className="size-4 text-muted-foreground" />
+              )}
+            </InputGroupButton>
+          </InputGroupAddon>
+        </InputGroup>
+      )}
     </FormBase>
   );
 };

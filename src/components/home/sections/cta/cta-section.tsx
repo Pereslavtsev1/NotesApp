@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { TextAnimate } from "@/components/ui/text-animate";
 import { ClassNameProps, cn } from "@/lib/utils";
 import { ArrowRightIcon, CheckCircle2Icon, SparklesIcon } from "lucide-react";
+import Link from "next/link";
 
 export default function CtaSection({ className }: ClassNameProps) {
   return (
@@ -35,21 +36,21 @@ export default function CtaSection({ className }: ClassNameProps) {
 
       <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
         <Button size="lg" className="bg-foreground px-8 py-6 text-base">
-          Start writing now
+          <Link href="/sign-up">Start writing free</Link>
           <ArrowRightIcon className="ml-2 size-5" />
         </Button>
       </div>
       <div className="mt-10 flex flex-wrap items-center justify-center gap-8 text-sm text-muted-foreground">
         <div className="flex items-center gap-2">
-          <CheckCircle2Icon className="h-5 w-5" />
+          <CheckCircle2Icon className="size-5" />
           <span>No credit card</span>
         </div>
         <div className="flex items-center gap-2">
-          <CheckCircle2Icon className="h-5 w-5" />
+          <CheckCircle2Icon className="size-5" />
           <span>Free forever</span>
         </div>
         <div className="flex items-center gap-2">
-          <CheckCircle2Icon className="h-5 w-5" />
+          <CheckCircle2Icon className="size-5" />
           <span>Cancel anytime</span>
         </div>
       </div>

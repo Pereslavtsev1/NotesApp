@@ -30,7 +30,7 @@ export default async function NotePage({
       </div>
       <CoverImage preloadedQuery={preloadedQuery} />
 
-      <div className="mx-auto max-w-7xl px-2 sm:px-4 md:px-6 lg:px-8">
+      <div className="mx-auto px-2 sm:px-4 md:px-6 lg:px-8">
         <Toolbar preloadedQuery={preloadedQuery} />
         <EditorWrapper preloadedQuery={preloadedQuery} />
       </div>

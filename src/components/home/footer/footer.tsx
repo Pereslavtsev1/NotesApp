@@ -30,12 +30,6 @@ const footerLinks = [
   },
 ];
 
-const legalLinks = [
-  { label: "Terms of Service", href: "#" },
-  { label: "Privacy Policy", href: "#" },
-  { label: "Cookie Policy", href: "#" },
-];
-
 export default function HomePageFooter() {
   return (
     <footer className="border-t border-border/50 px-6 py-20">
@@ -79,18 +73,6 @@ export default function HomePageFooter() {
           <p className="text-base text-muted-foreground">
             © 2026 NotesApp. Crafted with care for productivity.
           </p>
-
-          <div className="flex items-center gap-x-8">
-            {legalLinks.map((link) => (
-              <Link
-                key={link.label}
-                href={link.href}
-                className="text-base font-medium text-muted-foreground transition-colors hover:text-foreground"
-              >
-                {link.label}
-              </Link>
-            ))}
-          </div>
         </div>
       </div>
     </footer>

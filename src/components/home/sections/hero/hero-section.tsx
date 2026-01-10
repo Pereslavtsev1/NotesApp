@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { TextAnimate } from "@/components/ui/text-animate";
 import { ClassNameProps, cn } from "@/lib/utils";
 import { ArrowRightIcon, SparklesIcon } from "lucide-react";
+import Link from "next/link";
 
 export default function HeroSection({ className }: ClassNameProps) {
   return (
@@ -44,7 +45,7 @@ export default function HeroSection({ className }: ClassNameProps) {
 
       <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
         <Button size="lg" className="bg-foreground px-8 py-6 text-base">
-          Start writing free
+          <Link href="/sign-up">Start writing free</Link>
           <ArrowRightIcon className="ml-2 size-5" />
         </Button>
 
