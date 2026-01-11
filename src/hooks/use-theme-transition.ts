@@ -1,10 +1,11 @@
 "use client";
 
 import { useCallback } from "react";
+import { flushSync } from "react-dom";
 
 export function useThemeTransition() {
   const changeThemeWithTransition = useCallback(
-    ({
+    async ({
       nextTheme,
       buttonRef,
       setTheme,
@@ -15,14 +16,15 @@ export function useThemeTransition() {
     }) => {
       if (!buttonRef.current) return;
 
-      if (!document.startViewTransition) {
-        setTheme(nextTheme);
-        return;
-      }
-
-      document.startViewTransition(() => {
-        setTheme(nextTheme);
-      });
+      // if (!document.startViewTransition) {
+      //   setTheme(nextTheme);
+      //   return;
+      // }
+      //
+      //
+      await document.startViewTransition(() => {
+        flushSync(() => setTheme(nextTheme));
+      }).ready;
 
       const { top, left, width, height } =
         buttonRef.current.getBoundingClientRect();
