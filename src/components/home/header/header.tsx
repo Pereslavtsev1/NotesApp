@@ -26,6 +26,7 @@ export default function HomePageHeader() {
               ref={ref}
               variant="ghost"
               size="icon"
+              suppressHydrationWarning
               onClick={() =>
                 changeThemeWithTransition({
                   nextTheme: theme === "light" ? "dark" : "light",
@@ -35,7 +36,11 @@ export default function HomePageHeader() {
               }
               aria-label="Toggle theme"
             >
-              {theme === "light" ? <MoonIcon /> : <SunIcon />}
+              {theme === "light" ? (
+                <MoonIcon suppressHydrationWarning />
+              ) : (
+                <SunIcon suppressHydrationWarning />
+              )}
             </Button>
 
             <Button variant="ghost" asChild>

@@ -64,6 +64,7 @@ export default function FeaturesSection({ className }: ClassNameProps) {
           animation="slideUp"
           by="character"
           as="h2"
+          once={true}
         >
           Everything you need,
         </TextAnimate>
@@ -73,6 +74,7 @@ export default function FeaturesSection({ className }: ClassNameProps) {
           animation="slideUp"
           by="character"
           as="h2"
+          once={true}
         >
           nothing you don&apos;t
         </TextAnimate>

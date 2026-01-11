@@ -20,6 +20,7 @@ export default function HeroSection({ className }: ClassNameProps) {
         animation="slideUp"
         by="character"
         as="h1"
+        once={true}
       >
         Capture ideas.
       </TextAnimate>
@@ -29,6 +30,7 @@ export default function HeroSection({ className }: ClassNameProps) {
         animation="slideUp"
         by="character"
         as="h1"
+        once={true}
       >
         Stay organized.
       </TextAnimate>
@@ -38,6 +40,7 @@ export default function HeroSection({ className }: ClassNameProps) {
         animation="slideUp"
         by="character"
         as="p"
+        once={true}
       >
         A beautiful, lightning-fast note-taking app designed for your personal
         productivity. No distractions, just pure focus.

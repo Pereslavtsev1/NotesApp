@@ -20,6 +20,7 @@ export default function CtaSection({ className }: ClassNameProps) {
         animation="slideUp"
         by="character"
         as="h1"
+        once={true}
       >
         Ready to get organized?
       </TextAnimate>
@@ -29,6 +30,7 @@ export default function CtaSection({ className }: ClassNameProps) {
         animation="slideUp"
         by="character"
         as="p"
+        once={true}
       >
         Join thousands who&apos;ve transformed their note-taking. No credit card
         required.
