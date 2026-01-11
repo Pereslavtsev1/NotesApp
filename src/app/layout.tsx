@@ -38,9 +38,7 @@ export default function RootLayout({
               enableSystem
               disableTransitionOnChange
             >
-              <main className="mx-auto w-full overflow-x-hidden">
-                {children}
-              </main>
+              <main className="mx-auto w-full">{children}</main>
               <Toaster />
             </ThemeProvider>
           </ConvexClientProvider>

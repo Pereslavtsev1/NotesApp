@@ -42,7 +42,7 @@ export function useThemeTransition() {
           ],
         },
         {
-          duration: 600,
+          duration: 700,
           easing: "ease-in-out",
           pseudoElement: "::view-transition-new(root)",
         },

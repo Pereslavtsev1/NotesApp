@@ -27,7 +27,6 @@ export default function Editor({ onChange, initialContent }: EditorProps) {
   });
   return (
     <BlockNoteView
-      className="mb-40 overflow-y-hidden text-wrap"
       theme={theme === "dark" ? "dark" : "light"}
       editor={editor}
       shadCNComponents={{}}

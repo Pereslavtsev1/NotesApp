@@ -1,8 +1,6 @@
 .bn-container[data-theming-css-demo] .bn-editor {
   background: transparent;
-  @media screen and (max-width: 400) {
-    padding: 2.5rem;
-  }
+  padding: 0;
 }
 
 .bn-container[data-theming-css-demo] h1 {

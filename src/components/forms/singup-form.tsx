@@ -62,6 +62,13 @@ export default function SignUpForm({ className }: SignUpFormProps) {
     );
   };
 
+  const signInWithGoogle = async () => {
+    await authClient.signIn.social({
+      provider: "google",
+      callbackURL: "/notes",
+    });
+  };
+
   const {
     handleSubmit,
     formState: { isSubmitting, isValid },
@@ -94,6 +101,7 @@ export default function SignUpForm({ className }: SignUpFormProps) {
                 type="button"
                 className="w-full gap-2"
                 disabled={isSubmitting}
+                onClick={signInWithGoogle}
               >
                 <Icons.google />
                 Sign up with Google

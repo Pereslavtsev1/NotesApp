@@ -5,7 +5,6 @@ import {
   Empty,
   EmptyContent,
   EmptyDescription,
-  EmptyHeader,
   EmptyMedia,
   EmptyTitle,
 } from "@/components/ui/empty";
@@ -78,19 +77,21 @@ export default function TrashboxTable() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between gap-x-10">
+      <div className="flex items-center justify-between gap-3">
         <div className="relative flex-1 sm:max-w-md">
           <SearchIcon className="absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted-foreground" />
           <Input
-            placeholder="Search deleted notes..."
+            placeholder="Search trash…"
             className="pl-9"
             value={searchInput}
             onChange={(e) => setSearchInput(e.target.value)}
           />
         </div>
+
         <Button
           variant="outline"
           disabled={selectedCount <= 0}
+          className="hidden sm:inline-flex"
           onClick={() =>
             handleDeleteNotePermanently(
               table
@@ -99,36 +100,55 @@ export default function TrashboxTable() {
             )
           }
         >
-          Delete {selectedCount} items
+          Delete {selectedCount}
+        </Button>
+
+        <Button
+          variant="outline"
+          size="icon"
+          disabled={selectedCount <= 0}
+          className="sm:hidden"
+          onClick={() =>
+            handleDeleteNotePermanently(
+              table
+                .getSelectedRowModel()
+                .flatRows.map((row) => row.original._id),
+            )
+          }
+        >
+          <Trash2Icon className="size-4" />
         </Button>
       </div>
 
       {!hasResults && !isLoading ? (
-        <Empty className="border">
-          <EmptyHeader>
-            <EmptyMedia variant="icon">
-              <Trash2Icon className="size-6" />
-            </EmptyMedia>
-            <EmptyContent className="-space-y-2 font-medium">
-              {hasSearchQuery ? (
-                <>
-                  <EmptyTitle>No results found</EmptyTitle>
-                  <EmptyDescription>
-                    No deleted notes match &quot;{debouncedSearch}&quot;. Try
-                    adjusting your search query.
-                  </EmptyDescription>
-                </>
-              ) : (
-                <>
-                  <EmptyTitle>Trash is empty</EmptyTitle>
-                  <EmptyDescription>
-                    You don’t have any deleted notes. Deleted notes will appear
-                    here.
-                  </EmptyDescription>
-                </>
-              )}
-            </EmptyContent>
-          </EmptyHeader>
+        <Empty className="rounded-lg bg-linear-to-b from-muted/20 via-transparent to-transparent py-16 sm:py-24">
+          <EmptyMedia
+            variant="icon"
+            className="bg-muted/40 text-muted-foreground"
+          >
+            <Trash2Icon className="size-6" />
+          </EmptyMedia>
+          <EmptyContent>
+            {hasSearchQuery ? (
+              <>
+                <EmptyTitle>No results found</EmptyTitle>
+                <EmptyDescription>
+                  We couldn't find anything matching{" "}
+                  <span className="font-semibold text-foreground">
+                    "{debouncedSearch}"
+                  </span>
+                </EmptyDescription>
+              </>
+            ) : (
+              <>
+                <EmptyTitle>Your trash is empty</EmptyTitle>
+                <EmptyDescription>
+                  Permanently deleted notes will appear here. Items are
+                  automatically removed after 30 days.
+                </EmptyDescription>
+              </>
+            )}
+          </EmptyContent>
         </Empty>
       ) : (
         <div className="overflow-hidden rounded-md border">

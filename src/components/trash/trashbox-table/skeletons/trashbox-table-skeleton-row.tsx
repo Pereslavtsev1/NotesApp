@@ -35,7 +35,7 @@ function renderSkeletonCell(columnId: string) {
       return <Skeleton className="h-4 w-1/3" />;
 
     case "actions":
-      return <Skeleton className="size-7 rounded" />;
+      return <Skeleton className="size-6 rounded" />;
 
     default:
       return <Skeleton className="h-4 w-2/3" />;

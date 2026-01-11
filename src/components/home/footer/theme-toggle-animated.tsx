@@ -2,19 +2,16 @@
 
 import { Button } from "@/components/ui/button";
 import { MoonIcon, SunIcon } from "lucide-react";
+import { useTheme } from "next-themes";
 import { useCallback } from "react";
 
 type ThemeToggleAnimatedProps = {
   theme: "light" | "dark";
-  setTheme: (theme: "light" | "dark") => void;
   ref: React.RefObject<HTMLButtonElement | null>;
 };
 
-export function ThemeToggleAnimated({
-  theme,
-  setTheme,
-  ref,
-}: ThemeToggleAnimatedProps) {
+export function ThemeToggleAnimated({ theme, ref }: ThemeToggleAnimatedProps) {
+  const { setTheme } = useTheme();
   const toggleTheme = useCallback(() => {
     if (!ref.current) return;
 
@@ -46,7 +43,7 @@ export function ThemeToggleAnimated({
         ],
       },
       {
-        duration: 200,
+        duration: 1000,
         easing: "ease-in-out",
         pseudoElement: "::view-transition-new(root)",
       },

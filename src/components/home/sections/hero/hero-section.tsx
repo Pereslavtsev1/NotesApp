@@ -44,9 +44,11 @@ export default function HeroSection({ className }: ClassNameProps) {
       </TextAnimate>
 
       <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
-        <Button size="lg" className="bg-foreground px-8 py-6 text-base">
-          <Link href="/sign-up">Start writing free</Link>
-          <ArrowRightIcon className="ml-2 size-5" />
+        <Button size="lg" className="bg-foreground px-8 py-6 text-base" asChild>
+          <Link href="/sign-up">
+            Start writing free
+            <ArrowRightIcon className="ml-2 size-5" />
+          </Link>
         </Button>
 
         <Button size="lg" variant="outline" className="px-8 py-6 text-base">

@@ -122,14 +122,14 @@ export const columns: ColumnDef<Doc<"notes">>[] = [
 
   {
     id: "actions",
-    maxSize: 50,
+    size: 50,
     cell: ({ row }) => {
       const note = row.original;
 
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="size-8 p-0">
+            <Button variant="ghost" className="size-6">
               <MoreHorizontal className="size-4" />
             </Button>
           </DropdownMenuTrigger>
