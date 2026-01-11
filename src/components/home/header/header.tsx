@@ -2,23 +2,16 @@
 import { BaseHeader } from "@/components/header/base-header";
 import HeaderCenter from "@/components/header/header-center";
 import { Button } from "@/components/ui/button";
-import { FileTextIcon } from "lucide-react";
+import { useThemeTransition } from "@/hooks/use-theme-transition";
+import { FileTextIcon, MoonIcon, SunIcon } from "lucide-react";
 import { useTheme } from "next-themes";
 import Link from "next/link";
-import { useEffect, useRef, useState } from "react";
-import { ThemeToggleAnimated } from "../footer/theme-toggle-animated";
+import { useRef } from "react";
 
 export default function HomePageHeader() {
-  const [mounted, setMounted] = useState(false);
   const ref = useRef<HTMLButtonElement>(null);
-  const { theme } = useTheme();
-  const currentTheme = theme === "dark" ? "dark" : "light";
-  useEffect(() => {
-    const id = requestAnimationFrame(() => setMounted(true));
-    return () => cancelAnimationFrame(id);
-  }, []);
-  if (!mounted) return null;
-
+  const { theme, setTheme } = useTheme();
+  const { changeThemeWithTransition } = useThemeTransition();
   return (
     <BaseHeader>
       <HeaderCenter className="py-6">
@@ -29,7 +22,21 @@ export default function HomePageHeader() {
           </div>
 
           <div className="flex items-center">
-            <ThemeToggleAnimated theme={currentTheme} ref={ref} />
+            <Button
+              ref={ref}
+              variant="ghost"
+              size="icon"
+              onClick={() =>
+                changeThemeWithTransition({
+                  nextTheme: theme === "light" ? "dark" : "light",
+                  buttonRef: ref,
+                  setTheme,
+                })
+              }
+              aria-label="Toggle theme"
+            >
+              {theme === "light" ? <MoonIcon /> : <SunIcon />}
+            </Button>
 
             <Button variant="ghost" asChild>
               <Link href="/login">Login</Link>
