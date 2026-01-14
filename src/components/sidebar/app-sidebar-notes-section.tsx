@@ -40,6 +40,7 @@ export default function AppSidebarNotesSection({
           <NoteButton
             key={note._id}
             note={note}
+            level={0}
             expanded={expanded[note._id]}
             onClick={() => handleClick(note)}
             onExpand={() => onExpand(note._id)}

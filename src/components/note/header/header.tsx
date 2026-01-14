@@ -14,12 +14,13 @@ import {
   handleFavorite,
   handleRemoveCoverImage,
 } from "@/lib/actions";
-import { cn } from "@/lib/utils";
+import { ClassNameProps, cn } from "@/lib/utils";
 import { type Preloaded, usePreloadedQuery } from "convex/react";
 import {
   ImageIcon,
   MoreHorizontal,
   RotateCcw,
+  Smile,
   Star,
   Trash2,
 } from "lucide-react";
@@ -29,24 +30,43 @@ import NotePageNav from "./note-page-nav";
 import { BaseHeader } from "@/components/header/base-header";
 import HeaderLeft from "@/components/header/header-left-side";
 import HeaderRight from "@/components/header/header-right-side";
+import { useIconPickerDrawer } from "@/hooks/use-icon-picker-drawer";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 export default function NoteHeader({
   preloadedQuery,
+  className,
 }: {
   preloadedQuery: Preloaded<typeof api.notes.findNote>;
-}) {
+} & ClassNameProps) {
   const note = usePreloadedQuery(preloadedQuery);
-  const { toggle } = useCoverImage();
+  const isMobile = useIsMobile();
+  const { toggle: toggleIconPickerDrawer } = useIconPickerDrawer();
+  const { toggle: toggleCoverImage } = useCoverImage();
 
   const menuItems = [
+    ...(isMobile
+      ? [
+          {
+            icon: <Smile />,
+            label: note.icon ? "Change icon" : "Add icon",
+            onClick: () => {
+              console.log("Open emoji picker");
+              toggleIconPickerDrawer();
+            },
+          },
+        ]
+      : []),
+
     {
       icon: <ImageIcon />,
       label: note.coverImageKey ? "Remove cover" : "Add cover",
       onClick: () =>
         note.coverImageKey
           ? handleRemoveCoverImage({ id: note._id })
-          : toggle(),
+          : toggleCoverImage(),
     },
+
     {
       icon: note.isDeleted ? <RotateCcw /> : <Trash2 />,
       label: note.isDeleted ? "Restore" : "Delete",
@@ -56,7 +76,7 @@ export default function NoteHeader({
   ];
 
   return (
-    <BaseHeader>
+    <BaseHeader className={className}>
       <HeaderLeft>
         <SidebarTrigger />
         <NotePageNav note={note} />

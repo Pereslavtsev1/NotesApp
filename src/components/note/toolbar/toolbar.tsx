@@ -3,13 +3,13 @@
 import { Button } from "@/components/ui/button";
 import { useCoverImage } from "@/hooks/use-cover-image";
 import { handleRemoveIcon, handleSetIcon } from "@/lib/actions";
-import { Preloaded, useMutation, usePreloadedQuery } from "convex/react";
+import { type Preloaded, useMutation, usePreloadedQuery } from "convex/react";
 import { ImageIcon, Smile, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import TextareaAutosize from "react-textarea-autosize";
 import { useDebounce } from "use-debounce";
 import { api } from "../../../../convex/_generated/api";
-import IconPicker from "./icon-picker";
+import IconPickerPopover from "./icon-picker-popover";
 
 type ToolbarProps = {
   preloadedQuery: Preloaded<typeof api.notes.findNote>;
@@ -47,9 +47,9 @@ export default function Toolbar({ preloadedQuery }: ToolbarProps) {
 
   return (
     <div className="group relative mb-4 py-3 sm:py-4 md:py-6">
-      <div className="flex items-center gap-x-2 py-2 opacity-0 transition-opacity group-hover:opacity-100">
+      <div className="hidden items-center gap-x-2 py-4 opacity-0 transition-opacity group-hover:opacity-100 sm:flex">
         {!note.icon && (
-          <IconPicker
+          <IconPickerPopover
             onChange={(icon) => handleSetIcon({ id: note._id, icon })}
             asChild
           >
@@ -57,7 +57,7 @@ export default function Toolbar({ preloadedQuery }: ToolbarProps) {
               <Smile className="mr-1 size-4" />
               Add icon
             </Button>
-          </IconPicker>
+          </IconPickerPopover>
         )}
 
         {!note.coverImageKey && (
@@ -96,12 +96,7 @@ export default function Toolbar({ preloadedQuery }: ToolbarProps) {
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               onBlur={() => setIsEditing(false)}
-              className="
-                  w-full resize-none bg-transparent text-lg
-                  leading-tight font-bold outline-none
-                  sm:text-2xl
-                  md:text-3xl
-                "
+              className="w-full resize-none bg-transparent text-lg leading-tight font-bold outline-none sm:text-2xl md:text-3xl"
             />
           ) : (
             <button onClick={enableInput} className="w-full text-left">

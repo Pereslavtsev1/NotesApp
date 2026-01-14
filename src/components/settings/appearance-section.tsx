@@ -9,10 +9,10 @@ import {
   CardHeader,
   CardTitle,
 } from "../ui/card";
-import { cn } from "@/lib/utils";
+import { ClassNameProps, cn } from "@/lib/utils";
 import { Label } from "../ui/label";
 
-export default function AppearanceSection() {
+export default function AppearanceSection({ className }: ClassNameProps) {
   const { theme, setTheme } = useTheme();
   const { changeThemeWithTransition } = useThemeTransition();
 
@@ -20,7 +20,7 @@ export default function AppearanceSection() {
   const darkRef = useRef<HTMLButtonElement>(null);
 
   return (
-    <Card className="bg-background">
+    <Card className={cn("bg-background", className)}>
       <CardHeader className="font-semibold">
         <CardTitle>Appearance</CardTitle>
         <CardDescription>

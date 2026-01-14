@@ -29,7 +29,6 @@ export default function Editor({ onChange, initialContent }: EditorProps) {
     <BlockNoteView
       theme={theme === "dark" ? "dark" : "light"}
       editor={editor}
-      shadCNComponents={{}}
       onChange={async () => {
         onChange(JSON.stringify(editor.document));
       }}

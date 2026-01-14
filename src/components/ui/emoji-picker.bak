@@ -8,7 +8,6 @@ import {
 } from "frimousse";
 import { LoaderIcon, SearchIcon } from "lucide-react";
 import type * as React from "react";
-
 import { cn } from "@/lib/utils";
 
 function EmojiPicker({
@@ -164,4 +163,3 @@ export {
   EmojiPickerContent,
   EmojiPickerFooter,
 };
-

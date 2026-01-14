@@ -1,7 +1,6 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 @source "../node_modules/@blocknote/shadcn";
-
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
@@ -160,4 +159,3 @@
     @apply bg-background text-foreground;
   }
 }
-

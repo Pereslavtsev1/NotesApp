@@ -2,6 +2,7 @@ import { UploadFile } from "@/components/dropzone/dropzone";
 import { clsx, type ClassValue } from "clsx";
 
 import { AlertCircle, CheckCircle, Loader2 } from "lucide-react";
+import { toast } from "sonner";
 import { twMerge } from "tailwind-merge";
 
 export function cn(...inputs: ClassValue[]) {
@@ -99,3 +100,22 @@ export function buildImageUrl(fileKey: string) {
 export type ClassNameProps = {
   className?: string;
 };
+
+export type ToastMessages = {
+  success: string;
+  error: string;
+};
+
+export async function runWithToast<T>(
+  action: () => Promise<T>,
+  messages: ToastMessages,
+  afterSuccess?: () => void,
+) {
+  try {
+    await action();
+    afterSuccess?.();
+    toast.success(messages.success);
+  } catch {
+    toast.error(messages.error);
+  }
+}

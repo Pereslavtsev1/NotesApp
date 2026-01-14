@@ -25,11 +25,11 @@ export default async function NotePage({
 
   return (
     <div className="w-full">
-      <div className="px-2 sm:px-4 md:px-6 lg:px-8">
-        <Header preloadedQuery={preloadedQuery} />
-      </div>
+      <Header
+        preloadedQuery={preloadedQuery}
+        className="px-4 sm:px-6 md:px-6 lg:px-10"
+      />
       <CoverImage preloadedQuery={preloadedQuery} />
-
       <div className="mx-auto px-14 md:px-16 lg:px-20">
         <Toolbar preloadedQuery={preloadedQuery} />
         <EditorWrapper preloadedQuery={preloadedQuery} />

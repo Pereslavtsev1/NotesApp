@@ -33,10 +33,11 @@ import { api } from "../../../../convex/_generated/api";
 import type { Doc } from "../../../../convex/_generated/dataModel";
 import { columns } from "./columns";
 import TrashboxTableSkeletonRow from "./skeletons/trashbox-table-skeleton-row";
+import { ClassNameProps, cn } from "@/lib/utils";
 
 const ITEMS = 10;
 
-export default function TrashboxTable() {
+export default function TrashboxTable({ className }: ClassNameProps) {
   const [rowSelection, setRowSelection] = useState({});
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
   const [searchInput, setSearchInput] = useState("");
@@ -76,7 +77,7 @@ export default function TrashboxTable() {
   const hasSearchQuery = debouncedSearch.trim().length > 0;
 
   return (
-    <div className="space-y-6">
+    <div className={cn("space-y-6", className)}>
       <div className="flex items-center justify-between gap-3">
         <div className="relative flex-1 sm:max-w-md">
           <SearchIcon className="absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted-foreground" />

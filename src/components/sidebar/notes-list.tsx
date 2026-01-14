@@ -40,7 +40,7 @@ const NoteNode = ({ parentNote, level = 0 }: NotesListProps) => {
             expanded={expanded[note._id]}
             onClick={() => handleClick(note)}
             onExpand={() => onExpand(note._id)}
-            style={{ paddingLeft: level ? `${level * 12 + 12}px` : "" }}
+            level={level}
           />
           {expanded[note._id] && (
             <NoteNode parentNote={note._id} level={level + 1} />
