@@ -1,22 +1,22 @@
-"use client";
+'use client';
 
-import { DropzoneProvider } from "@/components/dropzone/dropzone";
+import { DropzoneProvider } from '@/components/dropzone/dropzone';
 import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
-import { useCoverImage } from "@/hooks/use-cover-image";
-import CoverImageModalContent from "./cover-image";
+} from '@/components/ui/dialog';
+import { useCoverImage } from '@/hooks/use-cover-image';
+import CoverImageModalContent from './cover-image-modal-content';
 
 export default function CoverImageModal() {
   const { open, toggle } = useCoverImage();
 
   return (
     <Dialog open={open} onOpenChange={toggle}>
-      <DialogContent className="md:space-y-5">
+      <DialogContent className='md:space-y-5'>
         <DialogHeader>
           <DialogTitle>Upload image</DialogTitle>
           <DialogDescription>Choose an image file to upload.</DialogDescription>

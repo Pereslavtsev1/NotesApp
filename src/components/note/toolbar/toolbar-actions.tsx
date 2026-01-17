@@ -1,0 +1,68 @@
+'use client';
+import { Button } from '@/components/ui/button';
+import { useCoverImage } from '@/hooks/use-cover-image';
+import {
+  handleRemoveCoverImage,
+  handleRemoveIcon,
+  handleSetIcon,
+} from '@/lib/actions';
+import { ImageIcon, Smile, X } from 'lucide-react';
+import { Doc } from '../../../../convex/_generated/dataModel';
+import IconPickerPopover from './icon-picker-popover';
+
+type ToolbarActionsProps = {
+  note: Doc<'notes'>;
+};
+
+export function ToolbarActions({ note }: ToolbarActionsProps) {
+  const { toggle } = useCoverImage();
+
+  return (
+    <div className='hidden items-center gap-x-2 py-4 opacity-0 transition-opacity group-hover:opacity-100 sm:flex'>
+      {note.icon ? (
+        <Button
+          variant='ghost'
+          className='font-semibold hover:text-destructive'
+          onClick={() => handleRemoveIcon({ id: note._id })}
+        >
+          <X className='size-4' />
+          Remove icon
+        </Button>
+      ) : (
+        <IconPickerPopover
+          onChange={(icon) => handleSetIcon({ id: note._id, icon })}
+          asChild
+        >
+          <Button variant='ghost' className='font-semibold'>
+            <Smile className='size-4' />
+            Add icon
+          </Button>
+        </IconPickerPopover>
+      )}
+
+      <Button
+        variant='ghost'
+        className='font-semibold'
+        onClick={() =>
+          note.coverImageKey
+            ? handleRemoveCoverImage({ id: note._id })
+            : toggle()
+        }
+      >
+        <span className='hover:text-destructive flex items-center gap-x-2'>
+          {note.coverImageKey ? (
+            <>
+              <X className='size-4' />
+              Remove cover
+            </>
+          ) : (
+            <>
+              <ImageIcon className='size-4' />
+              Add cover
+            </>
+          )}
+        </span>
+      </Button>
+    </div>
+  );
+}

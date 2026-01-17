@@ -1,6 +1,6 @@
-import CtaSection from "@/components/home/sections/cta/cta-section";
-import FeaturesSection from "@/components/home/sections/features/features-section";
-import HeroSection from "@/components/home/sections/hero/hero-section";
+import CtaSection from '@/components/home/sections/cta/cta-section';
+import FeaturesSection from '@/components/home/sections/features/features-section';
+import HeroSection from '@/components/home/sections/hero/hero-section';
 
 export default function LandingPage() {
   return (
