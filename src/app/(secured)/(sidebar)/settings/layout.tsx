@@ -1,4 +1,4 @@
-import SettingsHeader from '@/components/settings/header';
+import SettingsHeader from '@/components/pages/settings-page/header';
 
 export default function SettingsLayout({
   children,

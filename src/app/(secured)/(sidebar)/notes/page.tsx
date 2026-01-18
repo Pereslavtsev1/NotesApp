@@ -1,13 +1,5 @@
-import { BaseHeader } from '@/components/header/base-header';
-import HeaderLeft from '@/components/header/header-left-side';
-import { SidebarTrigger } from '@/components/ui/sidebar';
+import NotesPageHeader from '@/components/pages/notes-page/header/notes-page-header';
 
 export default function Notes() {
-  return (
-    <BaseHeader>
-      <HeaderLeft>
-        <SidebarTrigger />
-      </HeaderLeft>
-    </BaseHeader>
-  );
+  return <NotesPageHeader />;
 }

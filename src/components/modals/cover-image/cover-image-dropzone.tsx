@@ -3,7 +3,7 @@ import {
   DropzoneContent,
   DropzoneTitle,
   useDropzoneCtx,
-} from '@/components/dropzone/dropzone';
+} from '@/components/general/dropzone/dropzone';
 import { cn } from '@/lib/utils';
 type CoverImageDropzoneProps = {
   className?: string;

@@ -1,13 +1,13 @@
-"use client";
+'use client';
 
-import TrashWarningCard from "@/components/trash/trash-warning-card/trash-warning-card";
-import TrashboxTable from "@/components/trash/trashbox-table/trashbox-table";
+import TrashPageTable from '@/components/pages/trash-page/trash-table/trahs-page-table';
+import TrashPageWarningCard from '@/components/pages/trash-page/trash-warning-card/trash-page-warning-card';
 
 export default function TrashPage() {
   return (
     <>
-      <TrashWarningCard className="my-6" />
-      <TrashboxTable className="mt-12" />
+      <TrashPageWarningCard className='my-6' />
+      <TrashPageTable className='mt-12' />
     </>
   );
 }

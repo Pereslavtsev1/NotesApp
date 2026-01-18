@@ -1,6 +1,5 @@
 'use client';
 
-import { DropzoneProvider } from '@/components/dropzone/dropzone';
 import {
   Dialog,
   DialogContent,
@@ -10,6 +9,7 @@ import {
 } from '@/components/ui/dialog';
 import { useCoverImage } from '@/hooks/use-cover-image';
 import CoverImageModalContent from './cover-image-modal-content';
+import { DropzoneProvider } from '@/components/general/dropzone/dropzone';
 
 export default function CoverImageModal() {
   const { open, toggle } = useCoverImage();

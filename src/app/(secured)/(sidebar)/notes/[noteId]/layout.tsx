@@ -1,10 +1,10 @@
 import CoverImageModal from '@/components/modals/cover-image/cover-image-modal';
-import Header from '@/components/note/header/header';
-import IconPickerDrawer from '@/components/note/toolbar/icon-picker-drawer';
 import { getToken } from '@/lib/auth-server';
 import { preloadQuery } from 'convex/nextjs';
 import { api } from '../../../../../../convex/_generated/api';
 import { Id } from '../../../../../../convex/_generated/dataModel';
+import NotePageHeader from '@/components/pages/note-page/header/note-page-header';
+import IconPickerDrawer from '@/components/general/icon-picker/icon-picker-drawer';
 
 export default async function CoverImageLayout({
   children,
@@ -23,7 +23,7 @@ export default async function CoverImageLayout({
   );
   return (
     <>
-      <Header preloadedQuery={preloadedQuery} />
+      <NotePageHeader preloadedQuery={preloadedQuery} />
       {children}
       <CoverImageModal />
       <IconPickerDrawer noteId={noteId as Id<'notes'>} />

@@ -1,5 +1,5 @@
-import HomePageFooter from "@/components/home/footer/footer";
-import HomePageHeader from "@/components/home/header/header";
+import HomePageFooter from '@/components/pages/home-page/footer/home-page-footer';
+import HomePageHeader from '@/components/pages/home-page/header/home-page-header';
 
 export default function HomeLayout({
   children,
@@ -8,9 +8,11 @@ export default function HomeLayout({
 }>) {
   return (
     <>
-      <HomePageHeader />
-      {children}
-      <HomePageFooter />
+      <div className='mx-auto max-w-7xl'>
+        <HomePageHeader />
+        {children}
+        <HomePageFooter />
+      </div>
     </>
   );
 }
