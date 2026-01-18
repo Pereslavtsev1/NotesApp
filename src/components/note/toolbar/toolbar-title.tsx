@@ -53,7 +53,7 @@ export function ToolbarTitle({ note }: ToolbarTitleProps) {
             </h1>
           </button>
         ) : (
-          <IconPickerPopover onChange={() => {}}>
+          <IconPickerPopover onChange={() => {}} asChild>
             <button type='button'>
               <h1 className='text-lg font-bold leading-tight sm:text-2xl md:text-3xl'>
                 {note.icon}

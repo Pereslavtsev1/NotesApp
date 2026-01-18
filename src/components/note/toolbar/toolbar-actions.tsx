@@ -31,7 +31,7 @@ export function ToolbarActions({ note }: ToolbarActionsProps) {
       ) : (
         <IconPickerPopover
           onChange={(icon) => handleSetIcon({ id: note._id, icon })}
-          asChild
+          asChild={true}
         >
           <Button variant='ghost' className='font-semibold'>
             <Smile className='size-4' />
@@ -49,19 +49,17 @@ export function ToolbarActions({ note }: ToolbarActionsProps) {
             : toggle()
         }
       >
-        <span className='hover:text-destructive flex items-center gap-x-2'>
-          {note.coverImageKey ? (
-            <>
-              <X className='size-4' />
-              Remove cover
-            </>
-          ) : (
-            <>
-              <ImageIcon className='size-4' />
-              Add cover
-            </>
-          )}
-        </span>
+        {note.coverImageKey ? (
+          <span className='flex items-center hover:text-destructive gap-x-2'>
+            <X className='size-4' />
+            Remove cover
+          </span>
+        ) : (
+          <span className='flex items-center hover:text-destructive gap-x-2'>
+            <ImageIcon className='size-4' />
+            Add cover
+          </span>
+        )}
       </Button>
     </div>
   );

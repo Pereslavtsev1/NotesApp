@@ -13,6 +13,7 @@ import {
   handleDelete,
   handleFavorite,
   handleRemoveCoverImage,
+  handleRemoveIcon,
 } from '@/lib/actions';
 import { ClassNameProps, cn } from '@/lib/utils';
 import { type Preloaded, usePreloadedQuery } from 'convex/react';
@@ -32,8 +33,7 @@ import { BaseHeader } from '@/components/header/base-header';
 import HeaderLeft from '@/components/header/header-left-side';
 import HeaderRight from '@/components/header/header-right-side';
 import { useIconPickerDrawer } from '@/hooks/use-icon-picker-drawer';
-import { useIsMobile } from '@/hooks/use-mobile';
-
+import { useMediaQuery } from '@/hooks/use-media-query';
 export default function NoteHeader({
   preloadedQuery,
   className,
@@ -43,6 +43,7 @@ export default function NoteHeader({
   const note = usePreloadedQuery(preloadedQuery);
   const { toggle: toggleIconPickerDrawer } = useIconPickerDrawer();
   const { toggle: toggleCoverImage } = useCoverImage();
+  const isMobile = useMediaQuery('(max-width: 768px)');
 
   const menuItems = [
     {
@@ -56,26 +57,43 @@ export default function NoteHeader({
 
     {
       icon: note.isDeleted ? <RotateCcw /> : <Trash2 />,
-      label: note.isDeleted ? 'Restore' : 'Delete',
+      label: note.isDeleted ? 'Restore note' : 'Delete note',
       className: !note.isDeleted ? 'hover:text-red-500' : '',
       onClick: () => handleDelete(note._id),
     },
-
-    {
-      icon: <Smile />,
-      label: note.icon ? 'Remove icon' : 'Add icon',
-      onClick: () => {
-        console.log('Open emoji picker');
-      },
-    },
+    ...(isMobile
+      ? [
+          {
+            icon: <Smile />,
+            label: note.icon ? 'Remove icon' : 'Add icon',
+            onClick: () => {
+              if (note.icon) {
+                handleRemoveIcon({ id: note._id });
+              } else {
+                toggleIconPickerDrawer();
+              }
+            },
+          },
+        ]
+      : []),
     ...(note.icon
       ? [
           {
             icon: <Edit />,
             label: 'Edit icon',
             onClick: () => {
-              console.log('Open icon picker');
               toggleIconPickerDrawer();
+            },
+          },
+        ]
+      : []),
+    ...(note.coverImageKey
+      ? [
+          {
+            icon: <ImageIcon />,
+            label: 'Edit cover image',
+            onClick: () => {
+              toggleCoverImage();
             },
           },
         ]
@@ -123,7 +141,7 @@ export default function NoteHeader({
                 <Button
                   variant='ghost'
                   className={cn(
-                    'w-full justify-start gap-x-4 font-semibold text-muted-foreground hover:bg-accent',
+                    'w-full justify-start gap-x-4 font-medium text-muted-foreground hover:bg-accent',
                     item.className
                   )}
                   onClick={item.onClick}

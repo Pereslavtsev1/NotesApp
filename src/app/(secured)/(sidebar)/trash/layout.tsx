@@ -1,4 +1,4 @@
-import TrashHeader from "@/components/trash/header/header";
+import TrashHeader from '@/components/trash/header/header';
 
 export default function TrashLayout({
   children,
@@ -8,7 +8,7 @@ export default function TrashLayout({
   return (
     <>
       <TrashHeader />
-      {children}
+      <div className='px-2 sm:px-4 md:px-8 lg:px-8'>{children}</div>
     </>
   );
 }

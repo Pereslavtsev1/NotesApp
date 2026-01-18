@@ -12,6 +12,9 @@
 .bn-container[data-theming-css-demo] h3 {
   font-size: 0.8rem;
 }
+.bn-container[data-theming-css-demo] .bn-suggestion-menu-item {
+  font-weight: 450;
+}
 
 @media (min-width: 600px) {
   .bn-container[data-theming-css-demo] h1 {
