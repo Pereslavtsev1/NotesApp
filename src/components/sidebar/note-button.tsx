@@ -29,6 +29,7 @@ type NoteButtonProps = {
   expanded?: boolean;
   onExpand?: () => void;
   level: number;
+  selectedNoteId: string;
 };
 
 const getActionsList = (
@@ -97,6 +98,7 @@ const getActionsList = (
 export default function NoteButton({
   note,
   level,
+  selectedNoteId,
   expanded,
   onExpand,
   ...props
@@ -127,6 +129,8 @@ export default function NoteButton({
 
         <Button
           className={cn(
+            selectedNoteId === note._id &&
+              'bg-accent text-accent-foreground dark:bg-accent/50',
             'flex w-full items-center justify-between truncate text-sm font-medium text-muted-foreground'
           )}
           style={{

@@ -1,4 +1,4 @@
-import SettingsHeader from "@/components/settings/header";
+import SettingsHeader from '@/components/settings/header';
 
 export default function SettingsLayout({
   children,
@@ -8,7 +8,7 @@ export default function SettingsLayout({
   return (
     <>
       <SettingsHeader />
-      {children}
+      <div className='px-2 sm:px-4 md:px-8 lg:px-8'>{children}</div>
     </>
   );
 }

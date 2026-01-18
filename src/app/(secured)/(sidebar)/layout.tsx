@@ -4,9 +4,12 @@ import { SidebarProvider } from '@/components/ui/sidebar';
 
 export default async function SidebarLayout({
   children,
+  params,
 }: Readonly<{
   children: React.ReactNode;
+  params: Promise<{ noteId: string }>;
 }>) {
+  const { noteId } = await params;
   return (
     <SidebarProvider>
       <AppSidebar />

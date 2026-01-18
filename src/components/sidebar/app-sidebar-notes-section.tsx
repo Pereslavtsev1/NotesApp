@@ -1,13 +1,13 @@
-"use client";
+'use client';
 
-import { Preloaded, usePreloadedQuery } from "convex/react";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
-import { api } from "../../../convex/_generated/api";
-import type { Doc } from "../../../convex/_generated/dataModel";
-import { Skeleton } from "../ui/skeleton";
-import NoteButton from "./note-button";
-import NoteNode from "./notes-list";
+import { Preloaded, usePreloadedQuery } from 'convex/react';
+import { useParams, useRouter } from 'next/navigation';
+import { useState } from 'react';
+import { api } from '../../../convex/_generated/api';
+import type { Doc } from '../../../convex/_generated/dataModel';
+import { Skeleton } from '../ui/skeleton';
+import NoteButton from './note-button';
+import NoteNode from './notes-list';
 
 export default function AppSidebarNotesSection({
   preloadedQuery,
@@ -16,6 +16,8 @@ export default function AppSidebarNotesSection({
 }) {
   const notes = usePreloadedQuery(preloadedQuery);
   console.log(notes);
+  const { noteId: selectedNoteId } = useParams<{ noteId: string }>();
+  console.log(selectedNoteId);
 
   const router = useRouter();
   const [expanded, setExpanded] = useState<Record<string, boolean>>({});
@@ -27,11 +29,11 @@ export default function AppSidebarNotesSection({
     }));
   };
 
-  const handleClick = (note: Doc<"notes">) => {
+  const handleClick = (note: Doc<'notes'>) => {
     router.push(`/notes/${note._id}`);
   };
 
-  if (!notes) return <Skeleton className="size-9 w-full" />;
+  if (!notes) return <Skeleton className='size-9 w-full' />;
 
   return (
     <>
@@ -44,6 +46,7 @@ export default function AppSidebarNotesSection({
             expanded={expanded[note._id]}
             onClick={() => handleClick(note)}
             onExpand={() => onExpand(note._id)}
+            selectedNoteId={selectedNoteId}
           />
           {expanded[note._id] && <NoteNode parentNote={note._id} level={1} />}
         </div>

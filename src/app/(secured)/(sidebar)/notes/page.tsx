@@ -4,7 +4,7 @@ import { SidebarTrigger } from '@/components/ui/sidebar';
 
 export default function Notes() {
   return (
-    <BaseHeader className='px-4 sm:px-6 md:px-6 lg:px-10'>
+    <BaseHeader>
       <HeaderLeft>
         <SidebarTrigger />
       </HeaderLeft>

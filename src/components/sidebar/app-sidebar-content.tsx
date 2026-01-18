@@ -1,19 +1,19 @@
-"use server";
+'use server';
 
-import { preloadQuery } from "convex/nextjs";
-import { PlusIcon } from "lucide-react";
-import { handleCreate } from "@/lib/actions";
+import { preloadQuery } from 'convex/nextjs';
+import { ArrowUpWideNarrow, PlusIcon } from 'lucide-react';
+import { handleCreate } from '@/lib/actions';
 
-import { getToken } from "@/lib/auth-server";
-import { api } from "../../../convex/_generated/api";
-import { Button } from "../ui/button";
+import { getToken } from '@/lib/auth-server';
+import { api } from '../../../convex/_generated/api';
+import { Button } from '../ui/button';
 import {
   SidebarContent,
   SidebarGroup,
   SidebarGroupContent,
   SidebarGroupLabel,
-} from "../ui/sidebar";
-import AppSidebarNotesSection from "./app-sidebar-notes-section";
+} from '../ui/sidebar';
+import AppSidebarNotesSection from './app-sidebar-notes-section';
 
 export default async function AppSidebarContent() {
   const token = await getToken();
@@ -21,19 +21,19 @@ export default async function AppSidebarContent() {
   const favoritesNotes = await preloadQuery(
     api.notes.findAllUserNotes,
     { isFavorite: true },
-    { token },
+    { token }
   );
 
   const workspaceNotes = await preloadQuery(
     api.notes.findAllUserNotes,
     { isFavorite: false },
-    { token },
+    { token }
   );
 
   return (
     <SidebarContent>
       <SidebarGroup>
-        <SidebarGroupLabel className="font-semibold">
+        <SidebarGroupLabel className='font-semibold'>
           Favorites
         </SidebarGroupLabel>
         <SidebarGroupContent>
@@ -42,12 +42,12 @@ export default async function AppSidebarContent() {
       </SidebarGroup>
 
       <SidebarGroup>
-        <SidebarGroupLabel className="relative font-semibold">
+        <SidebarGroupLabel className='relative font-semibold'>
           Workspaces
           <Button
-            type="button"
-            variant="ghost"
-            className="absolute right-2 size-5 rounded p-0 hover:bg-sidebar-accent"
+            type='button'
+            variant='ghost'
+            className='absolute right-2 size-5 rounded p-0 hover:bg-sidebar-accent'
             onClick={handleCreate}
           >
             <PlusIcon />
