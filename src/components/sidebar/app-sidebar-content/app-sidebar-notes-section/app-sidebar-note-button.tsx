@@ -1,5 +1,11 @@
 'use client';
 
+import { Button } from '@/components/ui/button';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 import {
   handleAddChildren,
   handleDelete,
@@ -17,12 +23,6 @@ import {
   Trash2,
 } from 'lucide-react';
 import { Doc } from '../../../../../convex/_generated/dataModel';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
-import { Button } from '@/components/ui/button';
 
 type AppSidebarNoteButtonProps = {
   note: Doc<'notes'>;
@@ -41,56 +41,58 @@ const getActionsList = (
     label: 'Add children',
     icon: Plus,
     className: 'hover:text-green-500',
-    onClick: () =>
-      runWithToast(
-        () => handleAddChildren(note._id),
-        {
+    onClick: async () =>
+      await runWithToast({
+        action: () => handleAddChildren({ parentNoteId: note._id }),
+        messages: {
           success: 'Child note added',
           error: 'Failed to add child note',
         },
-        () => {
-          if (!expanded) onExpand?.();
-        }
-      ),
+        afterSuccess: () => !expanded && onExpand?.(),
+      }),
   },
   {
     label: note.isFavorite ? 'Remove from favorite' : 'Mark as favorite',
     icon: note.isFavorite ? StarOff : Star,
     className: 'hover:text-yellow-500',
-    onClick: () =>
-      runWithToast(
-        () =>
+    onClick: async () => {
+      await runWithToast({
+        action: () =>
           handleFavorite({
             id: note._id,
             isFavorite: !note.isFavorite,
             recursive: true,
           }),
-        {
+        messages: {
           success: note.isFavorite
             ? 'Removed from favorites'
             : 'Added to favorites',
           error: 'Failed to update favorite',
-        }
-      ),
+        },
+      });
+    },
   },
   {
     label: 'Duplicate',
     icon: Copy,
     className: 'hover:text-blue-500',
-    onClick: () =>
-      runWithToast(() => handleDuplicate(note._id), {
-        success: 'Note duplicated',
-        error: 'Failed to duplicate note',
+    onClick: async () =>
+      await runWithToast({
+        action: () => handleDuplicate({ id: note._id }),
+        messages: {
+          success: 'Note duplicated',
+          error: 'Failed to duplicate note',
+        },
       }),
   },
   {
     label: 'Delete',
     icon: Trash2,
     className: 'hover:text-destructive',
-    onClick: () =>
-      runWithToast(() => handleDelete(note._id), {
-        success: 'Note deleted',
-        error: 'Failed to delete note',
+    onClick: async () =>
+      await runWithToast({
+        action: () => handleDelete({ id: note._id }),
+        messages: { success: 'Note deleted', error: 'Failed to delete note' },
       }),
   },
 ];

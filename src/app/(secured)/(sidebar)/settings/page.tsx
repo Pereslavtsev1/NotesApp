@@ -1,4 +1,4 @@
-import AppearanceSection from '@/components/pages/settings-page/appearance-section';
+import AppearanceSection from '@/components/pages/settings-page/appearance-section/appearance-section';
 
 export default function SettingsPage() {
   return <AppearanceSection className='my-6' />;

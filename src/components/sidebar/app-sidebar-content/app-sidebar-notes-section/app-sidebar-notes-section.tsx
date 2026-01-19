@@ -1,5 +1,6 @@
 'use client';
 
+import { useSidebar } from '@/components/ui/sidebar';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Preloaded, usePreloadedQuery } from 'convex/react';
 import { useParams, useRouter } from 'next/navigation';
@@ -15,9 +16,8 @@ export default function AppSidebarNotesSection({
   preloadedQuery: Preloaded<typeof api.notes.findAllUserNotes>;
 }) {
   const notes = usePreloadedQuery(preloadedQuery);
-  console.log(notes);
   const { noteId: selectedNoteId } = useParams<{ noteId: string }>();
-  console.log(selectedNoteId);
+  const { setOpenMobile } = useSidebar();
 
   const router = useRouter();
   const [expanded, setExpanded] = useState<Record<string, boolean>>({});
@@ -30,6 +30,7 @@ export default function AppSidebarNotesSection({
   };
 
   const handleClick = (note: Doc<'notes'>) => {
+    setOpenMobile(false);
     router.push(`/notes/${note._id}`);
   };
 

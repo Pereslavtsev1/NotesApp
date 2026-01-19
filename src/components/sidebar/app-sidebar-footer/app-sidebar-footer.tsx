@@ -7,10 +7,12 @@ import {
   SidebarGroup,
   SidebarMenu,
   SidebarMenuItem,
+  useSidebar,
 } from '../../ui/sidebar';
 
 export default function AppSidebarFooter() {
   const router = useRouter();
+  const { setOpenMobile } = useSidebar();
 
   return (
     <SidebarFooter className='px-0'>
@@ -20,7 +22,10 @@ export default function AppSidebarFooter() {
             <Button
               variant='ghost'
               className='w-full justify-start text-muted-foreground'
-              onClick={() => router.push('/trash')}
+              onClick={() => {
+                router.push('/trash');
+                setOpenMobile(false);
+              }}
             >
               <Trash2Icon />
               Trash
@@ -30,7 +35,10 @@ export default function AppSidebarFooter() {
             <Button
               variant='ghost'
               className='w-full justify-start text-muted-foreground'
-              onClick={() => router.push('/settings')}
+              onClick={() => {
+                router.push('/settings');
+                setOpenMobile(false);
+              }}
             >
               <SettingsIcon />
               Settings

@@ -19,7 +19,7 @@ import {
 } from '@/components/ui/table';
 import { useMediaQuery } from '@/hooks/use-media-query';
 import { handleDeleteNotePermanently } from '@/lib/actions';
-import { ClassNameProps, cn } from '@/lib/utils';
+import { ClassNameProps, cn, runWithToast } from '@/lib/utils';
 import {
   flexRender,
   getCoreRowModel,
@@ -86,6 +86,21 @@ export default function TrashPageTable({ className }: ClassNameProps) {
   const hasResults = results.length > 0;
   const hasSearchQuery = debouncedSearch.trim().length > 0;
 
+  const handleDeleteSelectedNotes = async () => {
+    await runWithToast({
+      action: () =>
+        handleDeleteNotePermanently({
+          ids: table
+            .getSelectedRowModel()
+            .flatRows.map((row) => row.original._id),
+        }),
+      messages: {
+        success: `Deleted ${table.getSelectedRowModel().flatRows.length} items`,
+        error: 'Failed to delete',
+      },
+    });
+  };
+
   return (
     <div className={cn('space-y-6', className)}>
       <div className='flex items-center justify-between gap-3'>
@@ -93,7 +108,7 @@ export default function TrashPageTable({ className }: ClassNameProps) {
           <SearchIcon className='absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted-foreground' />
           <Input
             placeholder='Search trash…'
-            className='pl-9'
+            className='pl-9 font-medium'
             value={searchInput}
             onChange={(e) => setSearchInput(e.target.value)}
           />
@@ -102,37 +117,18 @@ export default function TrashPageTable({ className }: ClassNameProps) {
         <Button
           variant='outline'
           disabled={selectedCount <= 0}
-          className='hidden sm:inline-flex'
-          onClick={() =>
-            handleDeleteNotePermanently(
-              table
-                .getSelectedRowModel()
-                .flatRows.map((row) => row.original._id)
-            )
-          }
+          onClick={handleDeleteSelectedNotes}
+          className='font-medium text-muted-foreground'
         >
-          Delete {selectedCount} items
-        </Button>
-
-        <Button
-          variant='outline'
-          size='icon'
-          disabled={selectedCount <= 0}
-          className='sm:hidden'
-          onClick={() =>
-            handleDeleteNotePermanently(
-              table
-                .getSelectedRowModel()
-                .flatRows.map((row) => row.original._id)
-            )
-          }
-        >
-          <Trash2Icon className='size-4' />
+          <Trash2Icon className='flex text-muted-foreground sm:hidden' />
+          <span className='hidden font-medium sm:flex'>
+            Delete {selectedCount} items
+          </span>
         </Button>
       </div>
 
       {!hasResults && !isLoading ? (
-        <Empty className='rounded-lg bg-linear-to-b from-muted/20 via-transparent to-transparent py-16 sm:py-24'>
+        <Empty className='rounded-lg py-16 sm:py-24'>
           <EmptyMedia
             variant='icon'
             className='bg-muted/40 text-muted-foreground'
@@ -189,7 +185,7 @@ export default function TrashPageTable({ className }: ClassNameProps) {
                     <TableCell
                       key={cell.id}
                       style={{ width: cell.column.getSize() }}
-                      className='px-3 md:px-5 lg:px-10'
+                      className='px-3 font-medium md:px-5 lg:px-10'
                     >
                       {flexRender(
                         cell.column.columnDef.cell,

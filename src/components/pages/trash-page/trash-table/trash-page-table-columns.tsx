@@ -1,6 +1,4 @@
 'use client';
-import type { ColumnDef } from '@tanstack/react-table';
-import { FileIcon, MoreHorizontal, RotateCcw, Trash2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import {
@@ -9,6 +7,8 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { handleDeleteNotePermanently, handleRestoreNote } from '@/lib/actions';
+import type { ColumnDef } from '@tanstack/react-table';
+import { FileIcon, MoreHorizontal, RotateCcw, Trash2 } from 'lucide-react';
 import { Doc } from '../../../../../convex/_generated/dataModel';
 
 function getTrashActions(note: Doc<'notes'>) {
@@ -17,13 +17,13 @@ function getTrashActions(note: Doc<'notes'>) {
       label: 'Restore',
       icon: RotateCcw,
       className: 'hover:text-green-400',
-      onClick: () => handleRestoreNote(note._id),
+      onClick: () => handleRestoreNote({ id: note._id }),
     },
     {
       label: 'Delete permanently',
       icon: Trash2,
       className: 'hover:text-destructive',
-      onClick: () => handleDeleteNotePermanently([note._id]),
+      onClick: () => handleDeleteNotePermanently({ ids: [note._id] }),
     },
   ];
 }

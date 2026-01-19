@@ -55,11 +55,16 @@ export type ToastMessages = {
   error: string;
 };
 
-export async function runWithToast<T>(
-  action: () => Promise<T>,
-  messages: ToastMessages,
-  afterSuccess?: () => void
-) {
+type runWithToastProps<T> = {
+  action: () => Promise<T>;
+  messages: ToastMessages;
+  afterSuccess?: () => void;
+};
+export async function runWithToast<T>({
+  action,
+  messages,
+  afterSuccess,
+}: runWithToastProps<T>) {
   try {
     await action();
     afterSuccess?.();
