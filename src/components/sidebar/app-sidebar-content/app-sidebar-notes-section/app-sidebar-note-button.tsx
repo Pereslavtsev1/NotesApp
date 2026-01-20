@@ -7,10 +7,10 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import {
-  handleAddChildren,
-  handleDelete,
-  handleDuplicate,
-  handleFavorite,
+  handleAddChildrenNote,
+  handleDeleteNote,
+  handleDuplicateNote,
+  handleFavoriteNote,
 } from '@/lib/actions';
 import { cn, runWithToast } from '@/lib/utils';
 import {
@@ -43,7 +43,7 @@ const getActionsList = (
     className: 'hover:text-green-500',
     onClick: async () =>
       await runWithToast({
-        action: () => handleAddChildren({ parentNoteId: note._id }),
+        action: () => handleAddChildrenNote({ parentNoteId: note._id }),
         messages: {
           success: 'Child note added',
           error: 'Failed to add child note',
@@ -58,7 +58,7 @@ const getActionsList = (
     onClick: async () => {
       await runWithToast({
         action: () =>
-          handleFavorite({
+          handleFavoriteNote({
             id: note._id,
             isFavorite: !note.isFavorite,
             recursive: true,
@@ -78,7 +78,7 @@ const getActionsList = (
     className: 'hover:text-blue-500',
     onClick: async () =>
       await runWithToast({
-        action: () => handleDuplicate({ id: note._id }),
+        action: () => handleDuplicateNote({ id: note._id }),
         messages: {
           success: 'Note duplicated',
           error: 'Failed to duplicate note',
@@ -91,7 +91,7 @@ const getActionsList = (
     className: 'hover:text-destructive',
     onClick: async () =>
       await runWithToast({
-        action: () => handleDelete({ id: note._id }),
+        action: () => handleDeleteNote({ id: note._id }),
         messages: { success: 'Note deleted', error: 'Failed to delete note' },
       }),
   },
@@ -177,5 +177,31 @@ export default function AppSidebarNoteButton({
         )}
       </DropdownMenuContent>
     </DropdownMenu>
+  );
+}
+
+import { Skeleton } from '@/components/ui/skeleton';
+
+type AppSidebarNoteButtonSkeletonProps = {
+  level: number;
+};
+
+export function AppSidebarNoteButtonSkeleton({
+  level,
+}: AppSidebarNoteButtonSkeletonProps) {
+  return (
+    <div className={cn('relative flex items-center w-full py-2')}>
+      <Skeleton
+        className='size-4 shrink-0 rounded'
+        style={{ marginLeft: `${8 + level * 12}px` }}
+      />
+
+      <Skeleton className='mx-2 h-4 flex-1 rounded' />
+
+      <Skeleton
+        className='size-4 shrink-0 rounded'
+        style={{ marginRight: '12px' }}
+      />
+    </div>
   );
 }

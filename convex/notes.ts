@@ -1,16 +1,16 @@
-import { paginationOptsValidator } from "convex/server";
-import { v } from "convex/values";
-import type { Id } from "./_generated/dataModel";
+import { paginationOptsValidator } from 'convex/server';
+import { v } from 'convex/values';
+import type { Id } from './_generated/dataModel';
 import {
   type MutationCtx,
   type QueryCtx,
   mutation,
   query,
-} from "./_generated/server";
+} from './_generated/server';
 
 const pickDefined = <T extends Record<string, unknown>>(obj: T) =>
   Object.fromEntries(
-    Object.entries(obj).filter(([, value]) => value !== undefined),
+    Object.entries(obj).filter(([, value]) => value !== undefined)
   ) as Partial<T>;
 
 type Ctx = MutationCtx | QueryCtx;
@@ -18,24 +18,24 @@ type Ctx = MutationCtx | QueryCtx;
 const getUserId = async (ctx: Ctx): Promise<string> => {
   const identity = await ctx.auth.getUserIdentity();
   if (!identity) {
-    throw new Error("Not authenticated");
+    throw new Error('Not authenticated');
   }
   return identity.subject;
 };
 
 const getUserNoteOrThrow = async (
   ctx: Ctx,
-  noteId: Id<"notes">,
-  userId: string,
+  noteId: Id<'notes'>,
+  userId: string
 ) => {
   const note = await ctx.db.get(noteId);
 
   if (!note) {
-    throw new Error("Note not found");
+    throw new Error('Note not found');
   }
 
   if (note.userId !== userId) {
-    throw new Error("No permission");
+    throw new Error('No permission');
   }
 
   return note;
@@ -44,7 +44,7 @@ const getUserNoteOrThrow = async (
 export const createNote = mutation({
   args: {
     title: v.string(),
-    parentNote: v.optional(v.id("notes")),
+    parentNote: v.optional(v.id('notes')),
   },
   handler: async (ctx, args) => {
     const userId = await getUserId(ctx);
@@ -58,7 +58,7 @@ export const createNote = mutation({
       isFavorite = parentNote.isFavorite;
     }
 
-    return ctx.db.insert("notes", {
+    return ctx.db.insert('notes', {
       title: args.title,
       parentNote: args.parentNote,
       userId,
@@ -68,33 +68,9 @@ export const createNote = mutation({
   },
 });
 
-export const findAllUserNotes = query({
-  args: {
-    parentNote: v.optional(v.id("notes")),
-    isFavorite: v.optional(v.boolean()),
-  },
-  handler: async (ctx, args) => {
-    const userId = await getUserId(ctx);
-    let notesQuery = ctx.db
-      .query("notes")
-      .withIndex("by_user_parent", (q) =>
-        q.eq("userId", userId).eq("parentNote", args.parentNote),
-      )
-      .filter((q) => q.eq(q.field("isDeleted"), false));
-
-    if (args.isFavorite !== undefined) {
-      notesQuery = notesQuery.filter((q) =>
-        q.eq(q.field("isFavorite"), args.isFavorite),
-      );
-    }
-
-    return notesQuery.order("desc").collect();
-  },
-});
-
 export const findNote = query({
   args: {
-    id: v.id("notes"),
+    id: v.id('notes'),
   },
   handler: async (ctx, args) => {
     const userId = await getUserId(ctx);
@@ -103,7 +79,7 @@ export const findNote = query({
 });
 export const removeIcon = mutation({
   args: {
-    id: v.id("notes"),
+    id: v.id('notes'),
   },
   handler: async (ctx, args) => {
     const userId = await getUserId(ctx);
@@ -114,7 +90,7 @@ export const removeIcon = mutation({
 
 export const updateNote = mutation({
   args: {
-    id: v.id("notes"),
+    id: v.id('notes'),
     title: v.optional(v.string()),
     content: v.optional(v.string()),
     isFavorite: v.optional(v.boolean()),
@@ -123,7 +99,7 @@ export const updateNote = mutation({
     deletedAt: v.optional(v.number()),
     icon: v.optional(v.string()),
     coverImageKey: v.optional(v.string()),
-    parentNote: v.optional(v.id("notes")),
+    parentNote: v.optional(v.id('notes')),
   },
   handler: async (ctx, args) => {
     const userId = await getUserId(ctx);
@@ -135,16 +111,16 @@ export const updateNote = mutation({
       pickDefined({
         ...rest,
         parentNote,
-      }),
+      })
     );
 
     if (!recursive) return;
 
-    const updateChildren = async (parentId: Id<"notes">) => {
+    const updateChildren = async (parentId: Id<'notes'>) => {
       const children = await ctx.db
-        .query("notes")
-        .withIndex("by_user_parent", (q) =>
-          q.eq("userId", userId).eq("parentNote", parentId),
+        .query('notes')
+        .withIndex('by_user_parent', (q) =>
+          q.eq('userId', userId).eq('parentNote', parentId)
         )
         .collect();
 
@@ -155,7 +131,7 @@ export const updateNote = mutation({
             isDeleted: args.isDeleted,
             isFavorite: args.isFavorite,
             deletedAt: args.deletedAt,
-          }),
+          })
         );
         await updateChildren(child._id);
       }
@@ -167,15 +143,15 @@ export const updateNote = mutation({
 
 export const duplicate = mutation({
   args: {
-    id: v.id("notes"),
+    id: v.id('notes'),
   },
   handler: async (ctx, args) => {
     const userId = await getUserId(ctx);
     const note = await getUserNoteOrThrow(ctx, args.id, userId);
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+
     const { _id, _creationTime, parentNote, ...safeFields } = note;
 
-    return ctx.db.insert("notes", {
+    return ctx.db.insert('notes', {
       ...safeFields,
       parentNote: undefined,
     });
@@ -184,7 +160,7 @@ export const duplicate = mutation({
 
 export const deletePermanently = mutation({
   args: {
-    ids: v.array(v.id("notes")),
+    ids: v.array(v.id('notes')),
   },
   handler: async (ctx, { ids }) => {
     const userId = await getUserId(ctx);
@@ -196,7 +172,7 @@ export const deletePermanently = mutation({
 });
 
 export const restoreSmart = mutation({
-  args: { id: v.id("notes") },
+  args: { id: v.id('notes') },
   handler: async (ctx, { id }) => {
     const userId = await getUserId(ctx);
     const note = await getUserNoteOrThrow(ctx, id, userId);
@@ -219,7 +195,7 @@ export const restoreSmart = mutation({
 
 export const removeCoverImage = mutation({
   args: {
-    id: v.id("notes"),
+    id: v.id('notes'),
   },
   handler: async (ctx, args) => {
     const userId = await getUserId(ctx);
@@ -231,29 +207,52 @@ export const removeCoverImage = mutation({
 export const findAllNotes = query({
   args: {
     paginationOpts: paginationOptsValidator,
-    search: v.optional(v.string()),
+    parentNoteId: v.optional(v.string()),
     isDeleted: v.boolean(),
+    isFavorite: v.optional(v.boolean()),
   },
   handler: async (ctx, args) => {
     const userId = await getUserId(ctx);
-    const search = args.search?.trim();
 
-    if (!search) {
-      return await ctx.db
-        .query("notes")
-        .withIndex("by_user_deleted", (q) =>
-          q.eq("userId", userId).eq("isDeleted", args.isDeleted),
+    if (args.isFavorite === undefined) {
+      return ctx.db
+        .query('notes')
+        .withIndex('by_user_parent_deleted', (q) =>
+          q
+            .eq('userId', userId)
+            .eq('parentNote', args.parentNoteId as Id<'notes'> | undefined)
+            .eq('isDeleted', args.isDeleted)
         )
+        .order('desc')
         .paginate(args.paginationOpts);
     }
 
-    return await ctx.db
-      .query("notes")
-      .withSearchIndex("search_title", (q) =>
+    const isFavorite = args.isFavorite;
+    return ctx.db
+      .query('notes')
+      .withIndex('by_user_parent_deleted_favorite', (q) =>
         q
-          .search("title", search)
-          .eq("userId", userId)
-          .eq("isDeleted", args.isDeleted),
+          .eq('userId', userId)
+          .eq('parentNote', args.parentNoteId as Id<'notes'> | undefined)
+          .eq('isDeleted', args.isDeleted)
+          .eq('isFavorite', isFavorite)
+      )
+      .order('desc')
+      .paginate(args.paginationOpts);
+  },
+});
+
+export const searchNote = query({
+  args: {
+    paginationOpts: paginationOptsValidator,
+    search: v.string(),
+    isDeleted: v.boolean(),
+  },
+  handler: async (ctx, args) => {
+    return ctx.db
+      .query('notes')
+      .withSearchIndex('search_title', (q) =>
+        q.search('title', args.search).eq('isDeleted', args.isDeleted)
       )
       .paginate(args.paginationOpts);
   },

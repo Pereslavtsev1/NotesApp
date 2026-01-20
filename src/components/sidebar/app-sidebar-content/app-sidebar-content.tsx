@@ -1,35 +1,31 @@
-'use server';
+'use client';
 
-import { handleCreate } from '@/lib/actions';
-import { preloadQuery } from 'convex/nextjs';
-import { PlusIcon } from 'lucide-react';
-
-import { getToken } from '@/lib/auth-server';
-import { api } from '../../../../convex/_generated/api';
-import { Button } from '../../ui/button';
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
+import { Id } from '../../../../convex/_generated/dataModel';
 import {
   SidebarContent,
   SidebarGroup,
   SidebarGroupContent,
   SidebarGroupLabel,
 } from '../../ui/sidebar';
+import AppCreateNoteButton from './app-sidebar-create-note-button';
 import AppSidebarNotesSection from './app-sidebar-notes-section/app-sidebar-notes-section';
 
-export default async function AppSidebarContent() {
-  const token = await getToken();
+export default function AppSidebarContent() {
+  const [expanded, setExpanded] = useState<Record<string, boolean>>({});
+  const router = useRouter();
 
-  const favoritesNotes = await preloadQuery(
-    api.notes.findAllUserNotes,
-    { isFavorite: true },
-    { token }
-  );
+  const handleExpand = (noteId: string) => {
+    setExpanded((prev) => ({
+      ...prev,
+      [noteId]: !prev[noteId],
+    }));
+  };
 
-  const workspaceNotes = await preloadQuery(
-    api.notes.findAllUserNotes,
-    { isFavorite: false },
-    { token }
-  );
-
+  const handleClick = (noteId: Id<'notes'>) => {
+    router.push(`/notes/${noteId}`);
+  };
   return (
     <SidebarContent>
       <SidebarGroup>
@@ -37,24 +33,30 @@ export default async function AppSidebarContent() {
           Favorites
         </SidebarGroupLabel>
         <SidebarGroupContent>
-          <AppSidebarNotesSection preloadedQuery={favoritesNotes} />
+          <AppSidebarNotesSection
+            isFavorite={true}
+            expanded={expanded}
+            handleClick={handleClick}
+            onExpand={handleExpand}
+            items={10}
+          />
         </SidebarGroupContent>
       </SidebarGroup>
 
       <SidebarGroup>
         <SidebarGroupLabel className='relative font-semibold'>
           Workspaces
-          <Button
-            type='button'
-            variant='ghost'
-            className='absolute right-2 size-5 rounded p-0 hover:bg-sidebar-accent'
-            onClick={handleCreate}
-          >
-            <PlusIcon />
-          </Button>
+          <AppCreateNoteButton />
         </SidebarGroupLabel>
+
         <SidebarGroupContent>
-          <AppSidebarNotesSection preloadedQuery={workspaceNotes} />
+          <AppSidebarNotesSection
+            isFavorite={false}
+            expanded={expanded}
+            handleClick={handleClick}
+            onExpand={handleExpand}
+            items={10}
+          />
         </SidebarGroupContent>
       </SidebarGroup>
     </SidebarContent>

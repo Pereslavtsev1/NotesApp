@@ -1,59 +1,94 @@
 'use client';
 
-import { useSidebar } from '@/components/ui/sidebar';
-import { Skeleton } from '@/components/ui/skeleton';
-import { Preloaded, usePreloadedQuery } from 'convex/react';
-import { useParams, useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { usePaginatedQuery } from 'convex/react';
+import { useParams } from 'next/navigation';
+import { useEffect } from 'react';
+import { useInView } from 'react-intersection-observer';
 import { api } from '../../../../../convex/_generated/api';
-import { Doc } from '../../../../../convex/_generated/dataModel';
-import AppSidebarNoteButton from './app-sidebar-note-button';
-import AppSidebarNoteNode from './app-sidebar-note-node';
+import { Id } from '../../../../../convex/_generated/dataModel';
+import AppSidebarNoteButton, {
+  AppSidebarNoteButtonSkeleton,
+} from './app-sidebar-note-button';
+
+const ITEMS = 10;
+
+type AppSidebarNotesSectionProps = {
+  isFavorite: boolean;
+  expanded: Record<string, boolean>;
+  handleClick: (noteId: Id<'notes'>) => void;
+  onExpand: (noteId: string) => void;
+  parentNote?: Id<'notes'>;
+  skeletonCount?: number;
+  level?: number;
+};
 
 export default function AppSidebarNotesSection({
-  preloadedQuery,
-}: {
-  preloadedQuery: Preloaded<typeof api.notes.findAllUserNotes>;
-}) {
-  const notes = usePreloadedQuery(preloadedQuery);
+  isFavorite,
+  expanded,
+  handleClick,
+  onExpand,
+  parentNote,
+  level = 0,
+  skeletonCount = 5,
+}: AppSidebarNotesSectionProps) {
   const { noteId: selectedNoteId } = useParams<{ noteId: string }>();
-  const { setOpenMobile } = useSidebar();
+  const { results, loadMore, status, isLoading } = usePaginatedQuery(
+    api.notes.findAllNotes,
+    {
+      parentNoteId: parentNote,
+      isDeleted: false,
+      isFavorite: isFavorite,
+    },
+    { initialNumItems: ITEMS }
+  );
+  console.log('isLoading', isLoading);
 
-  const router = useRouter();
-  const [expanded, setExpanded] = useState<Record<string, boolean>>({});
+  const { ref, inView } = useInView({
+    rootMargin: '200px',
+  });
 
-  const onExpand = (noteId: string) => {
-    setExpanded((prev) => ({
-      ...prev,
-      [noteId]: !prev[noteId],
-    }));
-  };
-
-  const handleClick = (note: Doc<'notes'>) => {
-    setOpenMobile(false);
-    router.push(`/notes/${note._id}`);
-  };
-
-  if (!notes) return <Skeleton className='size-9 w-full' />;
+  useEffect(() => {
+    if (inView && status === 'CanLoadMore') {
+      loadMore(ITEMS);
+    }
+  }, [inView, status, loadMore]);
 
   return (
     <>
-      {notes.map((note) => (
-        <div key={note._id}>
-          <AppSidebarNoteButton
-            key={note._id}
-            note={note}
-            level={0}
-            expanded={expanded[note._id]}
-            onClick={() => handleClick(note)}
-            onExpand={() => onExpand(note._id)}
-            selectedNoteId={selectedNoteId}
-          />
-          {expanded[note._id] && (
-            <AppSidebarNoteNode parentNote={note._id} level={1} />
-          )}
-        </div>
-      ))}
+      {results.length === 0 && isLoading ? (
+        <>
+          {Array.from({ length: skeletonCount }).map((_, i) => (
+            <AppSidebarNoteButtonSkeleton level={level} key={i} />
+          ))}
+        </>
+      ) : (
+        results.map((note, index) => (
+          <div key={note._id}>
+            <AppSidebarNoteButton
+              note={note}
+              level={level}
+              expanded={expanded[note._id]}
+              onClick={() => handleClick(note._id)}
+              onExpand={() => onExpand(note._id)}
+              selectedNoteId={selectedNoteId}
+            />
+
+            {expanded[note._id] && (
+              <AppSidebarNotesSection
+                isFavorite={isFavorite}
+                expanded={expanded}
+                handleClick={handleClick}
+                onExpand={onExpand}
+                parentNote={note._id}
+                level={level + 1}
+                skeletonCount={3}
+              />
+            )}
+
+            {index === results.length - 1 && <div ref={ref} />}
+          </div>
+        ))
+      )}
     </>
   );
 }

@@ -10,8 +10,8 @@ import {
 import { SidebarTrigger } from '@/components/ui/sidebar';
 import { useCoverImage } from '@/hooks/use-cover-image';
 import {
-  handleDelete,
-  handleFavorite,
+  handleDeleteNote,
+  handleFavoriteNote,
   handleRemoveCoverImage,
   handleRemoveIcon,
 } from '@/lib/actions';
@@ -20,7 +20,7 @@ import { type Preloaded, usePreloadedQuery } from 'convex/react';
 import {
   Edit,
   ImageIcon,
-  MoreHorizontal,
+  MoreHorizontalIcon,
   RotateCcw,
   Smile,
   Star,
@@ -68,7 +68,7 @@ export default function NotePageHeader({
       className: !note.isDeleted ? 'hover:text-destructive' : '',
       onClick: () =>
         runWithToast({
-          action: () => handleDelete({ id: note._id }),
+          action: () => handleDeleteNote({ id: note._id }),
           messages: {
             success: note.isDeleted ? 'Note restored' : 'Note deleted',
             error: 'Failed to update note',
@@ -130,7 +130,7 @@ export default function NotePageHeader({
           onClick={() =>
             runWithToast({
               action: () =>
-                handleFavorite({
+                handleFavoriteNote({
                   id: note._id,
                   isFavorite: !note.isFavorite,
                   recursive: true,
@@ -156,7 +156,7 @@ export default function NotePageHeader({
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant='ghost' size='icon'>
-              <MoreHorizontal />
+              <MoreHorizontalIcon />
             </Button>
           </DropdownMenuTrigger>
 

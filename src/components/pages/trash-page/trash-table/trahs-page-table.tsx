@@ -44,9 +44,15 @@ export default function TrashPageTable({ className }: ClassNameProps) {
   const [debouncedSearch] = useDebounce(searchInput, 300);
 
   const { results, status, loadMore, isLoading } = usePaginatedQuery(
-    api.notes.findAllNotes,
-    { search: debouncedSearch, isDeleted: true },
-    { initialNumItems: ITEMS }
+    debouncedSearch.trim().length > 0
+      ? api.notes.searchNote
+      : api.notes.findAllNotes,
+    debouncedSearch.trim().length > 0
+      ? { search: debouncedSearch, isDeleted: true }
+      : { isDeleted: true },
+    {
+      initialNumItems: ITEMS,
+    }
   );
   const isMobile = useMediaQuery('(max-width: 768px)');
 
