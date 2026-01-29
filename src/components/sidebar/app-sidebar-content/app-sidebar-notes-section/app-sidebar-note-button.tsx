@@ -144,8 +144,11 @@ export default function AppSidebarNoteButton({
           {...props}
         >
           <div className='flex min-w-0 items-center gap-2'>
-            <span className='flex-1 truncate' style={{ paddingRight: '20px' }}>
-              {note.title}
+            <span
+              className='flex-1 items-center truncate'
+              style={{ paddingRight: '20px' }}
+            >
+              {note.icon} {note.title}
             </span>
           </div>
         </Button>
