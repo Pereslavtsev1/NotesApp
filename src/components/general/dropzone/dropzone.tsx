@@ -81,6 +81,11 @@ export function DropzoneProvider({
     maxFiles,
     maxSize,
     noKeyboard: true,
+    accept: {
+      'image/png': ['.png'],
+      'image/jpeg': ['.jpg', '.jpeg'],
+      'image/gif': ['.gif'],
+    },
   });
 
   const { getRootProps, getInputProps, isDragActive, open } = dropzone;
