@@ -31,11 +31,13 @@ export default function CoverImageModalContent() {
     },
   });
 
+  const hasFiles = files.length > 0;
+
   return (
     <>
       <CoverImageDropzone />
 
-      {files.length > 0 && (
+      {hasFiles && (
         <div className='space-y-3 overflow-y-hidden'>
           <h3 className='text-sm font-semibold'>
             Selected file{files.length > 1 ? 's' : ''}
@@ -85,26 +87,27 @@ export default function CoverImageModalContent() {
               {(uploadMutation.error as Error).message}
             </p>
           )}
-
-          <div className='flex flex-col-reverse gap-2 sm:flex-row sm:justify-end'>
-            <Button
-              variant='outline'
-              type='button'
-              disabled={uploadMutation.isPending}
-            >
-              Cancel
-            </Button>
-
-            <Button
-              type='button'
-              onClick={() => uploadMutation.mutate(files[0])}
-              disabled={uploadMutation.isPending}
-            >
-              {uploadMutation.isPending ? 'Uploading...' : 'Upload'}
-            </Button>
-          </div>
         </div>
       )}
+
+      <div className='flex flex-col-reverse gap-2 sm:flex-row sm:justify-end'>
+        <Button
+          variant='outline'
+          type='button'
+          onClick={toggle}
+          disabled={uploadMutation.isPending}
+        >
+          Cancel
+        </Button>
+
+        <Button
+          type='button'
+          onClick={() => hasFiles && uploadMutation.mutate(files[0])}
+          disabled={!hasFiles || uploadMutation.isPending}
+        >
+          {uploadMutation.isPending ? 'Uploading...' : 'Upload'}
+        </Button>
+      </div>
     </>
   );
 }
