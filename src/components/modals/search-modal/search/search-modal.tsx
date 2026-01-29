@@ -1,6 +1,5 @@
 'use client';
 import { useSearch } from '@/hooks/use-search';
-import { usePaginatedQuery } from 'convex/react';
 import { useRouter } from 'next/navigation';
 
 import {
@@ -11,10 +10,10 @@ import {
   CommandList,
 } from '@/components/ui/command';
 
+import { useSearchNotes } from '@/hooks/use-search-notes';
 import { useEffect, useState } from 'react';
 import { useInView } from 'react-intersection-observer';
 import { useDebounce } from 'use-debounce';
-import { api } from '../../../../../convex/_generated/api';
 import CommandItemSkeleton from '../skeletons/command-item-skeleton';
 import SearchCommandEmptyFoundState from './search-command-empty-state';
 import SearchCommandNotFoundState from './search-command-not-found-state';
@@ -28,18 +27,9 @@ export default function SearchModal() {
   const [searchInput, setSearchInput] = useState('');
   const [debouncedSearch] = useDebounce(searchInput, 300);
   const { ref, inView } = useInView({ rootMargin: '200px' });
-  const { results, status, loadMore, isLoading } = usePaginatedQuery(
-    debouncedSearch.trim().length > 0
-      ? api.notes.searchNote
-      : api.notes.findAllNotes,
-    debouncedSearch.trim().length > 0
-      ? { search: debouncedSearch, isDeleted: false }
-      : { isDeleted: false },
-    {
-      initialNumItems: ITEMS,
-    }
-  );
-
+  const { status, isLoading, notes, loadMore } = useSearchNotes({
+    search: debouncedSearch,
+  });
   useEffect(() => {
     if (inView && status === 'CanLoadMore') {
       loadMore(ITEMS);
@@ -57,24 +47,23 @@ export default function SearchModal() {
         />
 
         <CommandList className='h-full overflow-y-auto'>
-          {isLoading && (
+          {isLoading ? (
             <>
               {Array.from({ length: ITEMS }).map((_, i) => (
                 <CommandItemSkeleton key={i} />
               ))}
             </>
-          )}
-
-          {!isLoading &&
-            results.length === 0 &&
+          ) : (
+            notes.length === 0 &&
             (debouncedSearch.trim() ? (
               <SearchCommandNotFoundState query={debouncedSearch} />
             ) : (
               <SearchCommandEmptyFoundState />
-            ))}
+            ))
+          )}
 
           <CommandGroup>
-            {results.map((note) => (
+            {notes.map((note) => (
               <SearchCommandNoteItem
                 key={note._id}
                 note={note}

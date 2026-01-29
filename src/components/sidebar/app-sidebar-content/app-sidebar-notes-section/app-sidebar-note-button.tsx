@@ -6,6 +6,7 @@ import {
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { Skeleton } from '@/components/ui/skeleton';
 import {
   handleAddChildrenNote,
   handleDeleteNote,
@@ -180,8 +181,6 @@ export default function AppSidebarNoteButton({
   );
 }
 
-import { Skeleton } from '@/components/ui/skeleton';
-
 type AppSidebarNoteButtonSkeletonProps = {
   level: number;
 };
@@ -190,18 +189,12 @@ export function AppSidebarNoteButtonSkeleton({
   level,
 }: AppSidebarNoteButtonSkeletonProps) {
   return (
-    <div className={cn('relative flex items-center w-full py-2')}>
+    <div className={cn('relative flex items-center py-2')}>
       <Skeleton
-        className='size-4 shrink-0 rounded'
+        className='size-4 rounded'
         style={{ marginLeft: `${8 + level * 12}px` }}
       />
-
-      <Skeleton className='mx-2 h-4 flex-1 rounded' />
-
-      <Skeleton
-        className='size-4 shrink-0 rounded'
-        style={{ marginRight: '12px' }}
-      />
+      <Skeleton className='mx-2 h-4 w-32 rounded' />
     </div>
   );
 }

@@ -13,16 +13,16 @@ export default defineSchema({
     icon: v.optional(v.string()),
     deletedAt: v.optional(v.number()),
   })
+    .searchIndex('search_title', {
+      searchField: 'title',
+      filterFields: ['userId', 'isDeleted'],
+    })
     .index('by_user_parent', ['userId', 'parentNote'])
-    .index('by_user_parent_deleted', ['userId', 'parentNote', 'isDeleted'])
-    .index('by_user_parent_deleted_favorite', [
+    .index('by_user_deleted', ['userId', 'isDeleted'])
+    .index('by_user_parent_favorite_deleted', [
       'userId',
       'parentNote',
       'isDeleted',
       'isFavorite',
-    ])
-    .searchIndex('search_title', {
-      searchField: 'title',
-      filterFields: ['isDeleted'],
-    }),
+    ]),
 });

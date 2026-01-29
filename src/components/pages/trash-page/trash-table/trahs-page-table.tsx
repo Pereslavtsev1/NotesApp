@@ -18,6 +18,7 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { useMediaQuery } from '@/hooks/use-media-query';
+import { useTrashNotes } from '@/hooks/use-trash-notes';
 import { handleDeleteNotePermanently } from '@/lib/actions';
 import { ClassNameProps, cn, runWithToast } from '@/lib/utils';
 import {
@@ -26,12 +27,10 @@ import {
   useReactTable,
   type VisibilityState,
 } from '@tanstack/react-table';
-import { usePaginatedQuery } from 'convex/react';
 import { SearchIcon, Trash2Icon } from 'lucide-react';
 import { useEffect, useEffectEvent, useState } from 'react';
 import { useInView } from 'react-intersection-observer';
 import { useDebounce } from 'use-debounce';
-import { api } from '../../../../../convex/_generated/api';
 import TrashboxTableSkeletonRow from './skeletons/trash-table-skeleton-row';
 import { trashPageTableColumns } from './trash-page-table-columns';
 
@@ -42,18 +41,9 @@ export default function TrashPageTable({ className }: ClassNameProps) {
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
   const [searchInput, setSearchInput] = useState('');
   const [debouncedSearch] = useDebounce(searchInput, 300);
-
-  const { results, status, loadMore, isLoading } = usePaginatedQuery(
-    debouncedSearch.trim().length > 0
-      ? api.notes.searchNote
-      : api.notes.findAllNotes,
-    debouncedSearch.trim().length > 0
-      ? { search: debouncedSearch, isDeleted: true }
-      : { isDeleted: true },
-    {
-      initialNumItems: ITEMS,
-    }
-  );
+  const { notes, status, isLoading, loadMore } = useTrashNotes({
+    search: debouncedSearch,
+  });
   const isMobile = useMediaQuery('(max-width: 768px)');
 
   const { ref, inView } = useInView({
@@ -61,7 +51,7 @@ export default function TrashPageTable({ className }: ClassNameProps) {
   });
 
   const table = useReactTable({
-    data: results,
+    data: notes,
     columns: trashPageTableColumns,
     getCoreRowModel: getCoreRowModel(),
     manualFiltering: true,
@@ -89,7 +79,7 @@ export default function TrashPageTable({ className }: ClassNameProps) {
   }, [isMobile]);
 
   const selectedCount = table.getSelectedRowModel().flatRows.length;
-  const hasResults = results.length > 0;
+  const hasResults = notes.length > 0;
   const hasSearchQuery = debouncedSearch.trim().length > 0;
 
   const handleDeleteSelectedNotes = async () => {
@@ -146,9 +136,9 @@ export default function TrashPageTable({ className }: ClassNameProps) {
               <>
                 <EmptyTitle>No results found</EmptyTitle>
                 <EmptyDescription>
-                  We couldn't find anything matching{' '}
+                  We couldn&apos;t find anything matching{' '}
                   <span className='font-semibold text-foreground'>
-                    "{debouncedSearch}"
+                    &quot;{debouncedSearch}&quot;
                   </span>
                 </EmptyDescription>
               </>

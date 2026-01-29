@@ -209,33 +209,19 @@ export const findAllNotes = query({
     paginationOpts: paginationOptsValidator,
     parentNoteId: v.optional(v.string()),
     isDeleted: v.boolean(),
-    isFavorite: v.optional(v.boolean()),
+    isFavorite: v.boolean(),
   },
   handler: async (ctx, args) => {
     const userId = await getUserId(ctx);
 
-    if (args.isFavorite === undefined) {
-      return ctx.db
-        .query('notes')
-        .withIndex('by_user_parent_deleted', (q) =>
-          q
-            .eq('userId', userId)
-            .eq('parentNote', args.parentNoteId as Id<'notes'> | undefined)
-            .eq('isDeleted', args.isDeleted)
-        )
-        .order('desc')
-        .paginate(args.paginationOpts);
-    }
-
-    const isFavorite = args.isFavorite;
     return ctx.db
       .query('notes')
-      .withIndex('by_user_parent_deleted_favorite', (q) =>
+      .withIndex('by_user_parent_favorite_deleted', (q) =>
         q
           .eq('userId', userId)
           .eq('parentNote', args.parentNoteId as Id<'notes'> | undefined)
           .eq('isDeleted', args.isDeleted)
-          .eq('isFavorite', isFavorite)
+          .eq('isFavorite', args.isFavorite)
       )
       .order('desc')
       .paginate(args.paginationOpts);
@@ -253,6 +239,44 @@ export const searchNote = query({
       .query('notes')
       .withSearchIndex('search_title', (q) =>
         q.search('title', args.search).eq('isDeleted', args.isDeleted)
+      )
+      .paginate(args.paginationOpts);
+  },
+});
+
+export const findTrashNotes = query({
+  args: {
+    paginationOpts: paginationOptsValidator,
+    isDeleted: v.boolean(),
+  },
+  handler: async (ctx, args) => {
+    const userId = await getUserId(ctx);
+
+    return ctx.db
+      .query('notes')
+      .withIndex('by_user_deleted', (q) =>
+        q.eq('userId', userId).eq('isDeleted', args.isDeleted)
+      )
+      .order('desc')
+      .paginate(args.paginationOpts);
+  },
+});
+
+export const searchTrashNotes = query({
+  args: {
+    paginationOpts: paginationOptsValidator,
+    search: v.string(),
+  },
+  handler: async (ctx, args) => {
+    const userId = await getUserId(ctx);
+
+    return ctx.db
+      .query('notes')
+      .withSearchIndex('search_title', (q) =>
+        q
+          .search('title', args.search)
+          .eq('userId', userId)
+          .eq('isDeleted', true)
       )
       .paginate(args.paginationOpts);
   },

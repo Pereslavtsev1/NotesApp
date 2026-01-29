@@ -38,7 +38,6 @@ export default function AppSidebarContent() {
             expanded={expanded}
             handleClick={handleClick}
             onExpand={handleExpand}
-            items={10}
           />
         </SidebarGroupContent>
       </SidebarGroup>
@@ -55,7 +54,6 @@ export default function AppSidebarContent() {
             expanded={expanded}
             handleClick={handleClick}
             onExpand={handleExpand}
-            items={10}
           />
         </SidebarGroupContent>
       </SidebarGroup>
