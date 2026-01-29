@@ -12,9 +12,7 @@ export function useTrashNotes({ search }: UseTrashNotesProps) {
 
   const { results, status, loadMore, isLoading } = usePaginatedQuery(
     trimmedSearch ? api.notes.searchTrashNotes : api.notes.findTrashNotes,
-    trimmedSearch
-      ? { search: trimmedSearch, isDeleted: true }
-      : { isDeleted: true },
+    trimmedSearch ? { search: trimmedSearch } : { isDeleted: true },
     { initialNumItems: ITEMS }
   );
 
