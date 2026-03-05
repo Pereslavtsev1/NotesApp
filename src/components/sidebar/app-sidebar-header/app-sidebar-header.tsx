@@ -13,7 +13,7 @@ import AppSidebarNav from './app-sidebar-nav';
 export default async function AppSidebarHeader() {
   const token = await getToken();
   const preloadedUserQuery = await preloadQuery(
-    api.user.getCurrentUser,
+    api.auth.getCurrentUser,
     {},
     { token }
   );

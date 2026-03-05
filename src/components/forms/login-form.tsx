@@ -10,6 +10,7 @@ import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import type { z } from 'zod';
 
+import { FormInput, FormPasswordInput } from '../general/forms/form';
 import { Button } from '../ui/button';
 import {
   Card,
@@ -20,7 +21,6 @@ import {
 } from '../ui/card';
 import { Field, FieldGroup, FieldSeparator } from '../ui/field';
 import { Icons } from '../ui/icons';
-import { FormInput, FormPasswordInput } from '../general/forms/form';
 
 type LoginFormData = z.infer<typeof loginSchema>;
 
@@ -48,14 +48,13 @@ export default function LoginForm({ className }: LoginFormProps) {
       },
       {
         onError: (error) => {
-          console.error(error.error);
+          console.error(error);
           toast.error(
             error.error.message || 'Something went wrong. Please try again.'
           );
         },
-
         onSuccess: () => {
-          router.push('/notes');
+          router.push('/login');
         },
       }
     );
