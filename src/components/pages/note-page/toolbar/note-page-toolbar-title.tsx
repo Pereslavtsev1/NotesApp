@@ -4,10 +4,10 @@ import { useMutation } from 'convex/react';
 import { useEffect, useRef, useState } from 'react';
 import TextareaAutosize from 'react-textarea-autosize';
 import { useDebounce } from 'use-debounce';
-
+import IconPickerPopover from '@/components/general/icon-picker/icon-picker-popover';
 import { useIconPickerDrawer } from '@/hooks/use-icon-picker-drawer';
 import { useMediaQuery } from '@/hooks/use-media-query';
-import IconPickerPopover from '@/components/general/icon-picker/icon-picker-popover';
+import { handleSetIcon } from '@/lib/actions';
 import { api } from '../../../../../convex/_generated/api';
 import { Doc } from '../../../../../convex/_generated/dataModel';
 
@@ -48,14 +48,17 @@ export function NotePageToolbarTitle({ note }: NotePageToolbarTitleProps) {
       {note.icon &&
         (isMobile ? (
           <button type='button' onClick={() => toggle()}>
-            <h1 className='text-lg font-bold leading-tight sm:text-2xl md:text-3xl'>
+            <h1 className='text-lg leading-tight font-bold sm:text-2xl md:text-3xl'>
               {note.icon}
             </h1>
           </button>
         ) : (
-          <IconPickerPopover onChange={() => {}} asChild>
+          <IconPickerPopover
+            onChange={(icon) => handleSetIcon({ id: note._id, icon: icon })}
+            asChild
+          >
             <button type='button'>
-              <h1 className='text-lg font-bold leading-tight sm:text-2xl md:text-3xl'>
+              <h1 className='text-lg leading-tight font-bold sm:text-2xl md:text-3xl'>
                 {note.icon}
               </h1>
             </button>
@@ -69,7 +72,7 @@ export function NotePageToolbarTitle({ note }: NotePageToolbarTitleProps) {
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             onBlur={() => setIsEditing(false)}
-            className='w-full resize-none bg-transparent text-lg font-bold leading-tight outline-none sm:text-2xl md:text-3xl'
+            className='w-full resize-none bg-transparent text-lg leading-tight font-bold outline-none sm:text-2xl md:text-3xl'
           />
         ) : (
           <button
@@ -77,7 +80,7 @@ export function NotePageToolbarTitle({ note }: NotePageToolbarTitleProps) {
             onClick={enableInput}
             className='w-full text-left'
           >
-            <h1 className='wrap-anywhere text-lg font-bold leading-tight sm:text-2xl md:text-3xl'>
+            <h1 className='text-lg leading-tight font-bold wrap-anywhere sm:text-2xl md:text-3xl'>
               {title}
             </h1>
           </button>

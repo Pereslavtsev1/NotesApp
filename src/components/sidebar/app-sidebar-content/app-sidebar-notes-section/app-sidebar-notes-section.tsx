@@ -41,8 +41,6 @@ export default function AppSidebarNotesSection({
     },
     { initialNumItems: ITEMS }
   );
-  console.log('isLoading', isLoading);
-
   const { ref, inView } = useInView({
     rootMargin: '200px',
   });

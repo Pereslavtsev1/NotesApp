@@ -14,9 +14,10 @@ import UserItem from './user-item/user-item';
 export default function AppSidebarNavUser({
   preloadedUserQuery,
 }: {
-  preloadedUserQuery: Preloaded<typeof api.user.getCurrentUser>;
+  preloadedUserQuery: Preloaded<typeof api.auth.getCurrentUser>;
 }) {
   const user = usePreloadedQuery(preloadedUserQuery);
+  console.log(user);
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -25,13 +26,10 @@ export default function AppSidebarNavUser({
           variant='ghost'
           size='lg'
         >
-          <UserItem
-            src={user.image || ''}
-            alt={user.username || user.displayUsername || ''}
-          />
+          <UserItem src={user?.pictureUrl || ''} alt={user?.name || ''} />
           <div className='flex flex-col overflow-hidden'>
             <span className='truncate text-xs text-muted-foreground'>
-              {user.name}
+              {user?.name}
             </span>
           </div>
           <div className='absolute right-3'>
@@ -46,13 +44,10 @@ export default function AppSidebarNavUser({
         sideOffset={8}
       >
         <div className='mb-2 flex items-center gap-3 rounded-md'>
-          <UserItem
-            src={user.image || ''}
-            alt={user.username || user.displayUsername || ''}
-          />
+          <UserItem src={user?.pictureUrl || ''} alt={user?.name || ''} />
           <div className='flex flex-col overflow-hidden'>
             <span className='truncate text-xs font-semibold text-muted-foreground'>
-              {user.name}
+              {user?.name}
             </span>
           </div>
         </div>

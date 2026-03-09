@@ -1,4 +1,5 @@
 import { ConvexClientProvider } from '@/components/providers/convex-client-provider';
+import { ReactQueryProvider } from '@/components/providers/react-query-provider';
 import { ThemeProvider } from '@/components/providers/theme-provider';
 import { Toaster } from '@/components/ui/sonner';
 import { getToken } from '@/lib/auth-server';
@@ -31,17 +32,19 @@ export default async function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <ConvexClientProvider initialToken={token}>
-          <ThemeProvider
-            attribute='class'
-            defaultTheme='system'
-            enableSystem
-            disableTransitionOnChange
-          >
-            <main className='mx-auto w-full'>{children}</main>
-            <Toaster />
-          </ThemeProvider>
-        </ConvexClientProvider>
+        <ReactQueryProvider>
+          <ConvexClientProvider initialToken={token}>
+            <ThemeProvider
+              attribute='class'
+              defaultTheme='system'
+              enableSystem
+              disableTransitionOnChange
+            >
+              <main className='mx-auto w-full'>{children}</main>
+              <Toaster />
+            </ThemeProvider>
+          </ConvexClientProvider>
+        </ReactQueryProvider>
       </body>
     </html>
   );

@@ -1,5 +1,4 @@
-import { getToken } from '@/lib/auth-server';
-import { preloadQuery } from 'convex/nextjs';
+import { preloadAuthQuery } from '@/lib/auth-server';
 import { api } from '../../../../convex/_generated/api';
 import {
   SidebarGroup,
@@ -11,11 +10,9 @@ import AppSidebarNavUser from './app-sidbar-nav-user';
 import AppSidebarNav from './app-sidebar-nav';
 
 export default async function AppSidebarHeader() {
-  const token = await getToken();
-  const preloadedUserQuery = await preloadQuery(
+  const preloadedUserQuery = await preloadAuthQuery(
     api.auth.getCurrentUser,
-    {},
-    { token }
+    {}
   );
   return (
     <SidebarHeader className='px-0'>

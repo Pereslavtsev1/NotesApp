@@ -50,15 +50,15 @@ export function NotePageToolbarActions({ note }: NotePageToolbarActionsProps) {
         }
       >
         {note.coverImageKey ? (
-          <span className='flex items-center hover:text-destructive gap-x-2'>
+          <>
             <X className='size-4' />
             Remove cover
-          </span>
+          </>
         ) : (
-          <span className='flex items-center hover:text-destructive gap-x-2'>
+          <>
             <ImageIcon className='size-4' />
             Add cover
-          </span>
+          </>
         )}
       </Button>
     </div>

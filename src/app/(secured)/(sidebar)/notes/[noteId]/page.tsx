@@ -1,12 +1,11 @@
 'use server';
 
 import NotePageCoverImage from '@/components/pages/note-page/cover-image/note-page-cover-image';
+import NotePageEditorWrapper from '@/components/pages/note-page/editor/note-page-editor-wrapper';
 import NotePageToolbar from '@/components/pages/note-page/toolbar/note-page-toolbar';
-import { getToken } from '@/lib/auth-server';
-import { preloadQuery } from 'convex/nextjs';
+import { preloadAuthQuery } from '@/lib/auth-server';
 import { api } from '../../../../../../convex/_generated/api';
 import type { Id } from '../../../../../../convex/_generated/dataModel';
-import NotePageEditorWrapper from '@/components/pages/note-page/editor/note-page-editor-wrapper';
 
 export default async function NotePage({
   params,
@@ -14,12 +13,9 @@ export default async function NotePage({
   params: Promise<{ noteId: Id<'notes'> }>;
 }) {
   const { noteId } = await params;
-  const token = await getToken();
-  const preloadedQuery = await preloadQuery(
-    api.notes.findNote,
-    { id: noteId },
-    { token }
-  );
+  const preloadedQuery = await preloadAuthQuery(api.notes.findNote, {
+    id: noteId,
+  });
 
   return (
     <div className='w-full'>
