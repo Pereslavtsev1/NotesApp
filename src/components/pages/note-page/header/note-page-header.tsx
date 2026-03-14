@@ -17,8 +17,8 @@ import { api } from '../../../../../convex/_generated/api';
 import { BaseHeader } from '@/components/general/header/base-header';
 import HeaderActions from '@/components/general/header/header-actions';
 import HeaderNav from '@/components/general/header/header-nav';
-import NotePageNav from './note-page-nav';
 import { useNoteHeaderMenu } from '@/hooks/use-note-header-menu';
+import NotePageNav from './note-page-nav';
 
 export default function NotePageHeader({
   preloadedQuery,
@@ -28,6 +28,21 @@ export default function NotePageHeader({
 } & ClassNameProps) {
   const note = usePreloadedQuery(preloadedQuery);
   const menuItems = useNoteHeaderMenu({ note });
+  const favoriteToggle = () =>
+    runWithToast({
+      action: () =>
+        handleFavoriteNote({
+          id: note._id,
+          isFavorite: !note.isFavorite,
+          recursive: true,
+        }),
+      messages: {
+        success: note.isFavorite
+          ? 'Removed from favorites'
+          : 'Added to favorites',
+        error: 'Failed to update favorite',
+      },
+    });
 
   return (
     <BaseHeader className={className}>
@@ -37,26 +52,7 @@ export default function NotePageHeader({
       </HeaderNav>
 
       <HeaderActions>
-        <Button
-          variant='ghost'
-          size='icon'
-          onClick={() =>
-            runWithToast({
-              action: () =>
-                handleFavoriteNote({
-                  id: note._id,
-                  isFavorite: !note.isFavorite,
-                  recursive: true,
-                }),
-              messages: {
-                success: note.isFavorite
-                  ? 'Removed from favorites'
-                  : 'Added to favorites',
-                error: 'Failed to update favorite',
-              },
-            })
-          }
-        >
+        <Button variant='ghost' size='icon' onClick={() => favoriteToggle()}>
           <Star
             className={cn(
               note.isFavorite
