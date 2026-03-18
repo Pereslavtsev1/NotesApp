@@ -1,8 +1,8 @@
 'use client';
+import { Button } from '@/components/ui/button';
+import { SidebarMenuItem } from '@/components/ui/sidebar';
 import { useSearch } from '@/hooks/use-search';
 import { SearchIcon } from 'lucide-react';
-import { Button } from '../../ui/button';
-import { SidebarMenuItem } from '../../ui/sidebar';
 
 export default function AppSidebarNav() {
   const { toggle } = useSearch();
