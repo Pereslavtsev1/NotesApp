@@ -1,4 +1,5 @@
 'use client';
+import IconPickerPopover from '@/components/general/icon-picker/icon-picker-popover';
 import { Button } from '@/components/ui/button';
 import { useCoverImage } from '@/hooks/use-cover-image';
 import {
@@ -6,15 +7,19 @@ import {
   handleRemoveIcon,
   handleSetIcon,
 } from '@/lib/actions';
+import { Preloaded, usePreloadedQuery } from 'convex/react';
 import { ImageIcon, Smile, X } from 'lucide-react';
-import { Doc } from '../../../../../convex/_generated/dataModel';
-import IconPickerPopover from '@/components/general/icon-picker/icon-picker-popover';
+import { api } from '../../../../../convex/_generated/api';
+import { use } from 'react';
 
 type NotePageToolbarActionsProps = {
-  note: Doc<'notes'>;
+  preloadedQuery: Promise<Preloaded<typeof api.notes.findNote>>;
 };
 
-export function NotePageToolbarActions({ note }: NotePageToolbarActionsProps) {
+export function NotePageToolbarActions({
+  preloadedQuery,
+}: NotePageToolbarActionsProps) {
+  const note = usePreloadedQuery(use(preloadedQuery));
   const { toggle } = useCoverImage();
 
   return (

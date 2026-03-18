@@ -1,27 +1,28 @@
-'use client';
-
-import { type Preloaded, usePreloadedQuery } from 'convex/react';
-
+import { Preloaded } from 'convex/react';
+import { Suspense } from 'react';
 import { api } from '../../../../../convex/_generated/api';
 import { NotePageToolbarActions } from './note-page-toolbar-actions';
 import { NotePageToolbarTitle } from './note-page-toolbar-title';
+import ToolbarSkeleton from './note-page-toolbar-skeleton';
+import NotePageToolbarTitleSkeleton from './skeletons/note-page-toolbar-title-skeleton';
 
 type NotePageToolbarProps = {
-  preloadedQuery: Preloaded<typeof api.notes.findNote>;
+  preloadedQuery: Promise<Preloaded<typeof api.notes.findNote>>;
 };
 
-export default function NotePageToolbar({
+export default async function NotePageToolbar({
   preloadedQuery,
 }: NotePageToolbarProps) {
-  const note = usePreloadedQuery(preloadedQuery);
-
   return (
     <div className='group relative mb-4 py-3 sm:py-4 md:py-6'>
       <div className='h-16'>
-        <NotePageToolbarActions note={note} />
+        <Suspense fallback={<ToolbarSkeleton />}>
+          <NotePageToolbarActions preloadedQuery={preloadedQuery} />
+        </Suspense>
       </div>
-
-      <NotePageToolbarTitle note={note} />
+      <Suspense fallback={<NotePageToolbarTitleSkeleton />}>
+        <NotePageToolbarTitle prelaodedQuery={preloadedQuery} />
+      </Suspense>
     </div>
   );
 }

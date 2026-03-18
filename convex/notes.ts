@@ -73,6 +73,7 @@ export const findNote = query({
     id: v.id('notes'),
   },
   handler: async (ctx, args) => {
+    console.log('Finding note with id:', args.id);
     const userId = await getUserId(ctx);
     return await getUserNoteOrThrow(ctx, args.id, userId);
   },

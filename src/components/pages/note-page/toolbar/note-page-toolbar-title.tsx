@@ -1,46 +1,55 @@
 'use client';
 
-import { useMutation } from 'convex/react';
-import { useEffect, useRef, useState } from 'react';
-import TextareaAutosize from 'react-textarea-autosize';
-import { useDebounce } from 'use-debounce';
 import IconPickerPopover from '@/components/general/icon-picker/icon-picker-popover';
 import { useIconPickerDrawer } from '@/hooks/use-icon-picker-drawer';
 import { useMediaQuery } from '@/hooks/use-media-query';
 import { handleSetIcon } from '@/lib/actions';
+import { Preloaded, useMutation, usePreloadedQuery } from 'convex/react';
+import { use, useRef, useState } from 'react';
+import TextareaAutosize from 'react-textarea-autosize';
 import { api } from '../../../../../convex/_generated/api';
-import { Doc } from '../../../../../convex/_generated/dataModel';
 
 type NotePageToolbarTitleProps = {
-  note: Doc<'notes'>;
+  prelaodedQuery: Promise<Preloaded<typeof api.notes.findNote>>;
 };
 
-export function NotePageToolbarTitle({ note }: NotePageToolbarTitleProps) {
+export function NotePageToolbarTitle({
+  prelaodedQuery,
+}: NotePageToolbarTitleProps) {
+  const note = usePreloadedQuery(use(prelaodedQuery));
   const updateNote = useMutation(api.notes.updateNote);
   const inputRef = useRef<HTMLTextAreaElement | null>(null);
+
   const [title, setTitle] = useState(note.title);
   const [isEditing, setIsEditing] = useState(false);
-  const [debouncedTitle] = useDebounce(title, 200);
   const { toggle } = useIconPickerDrawer();
   const isMobile = useMediaQuery('(max-width: 768px)');
 
-  useEffect(() => {
-    if (!isEditing) return;
-
-    updateNote({
-      id: note._id,
-      title: debouncedTitle.trim() || 'Untitled',
-    });
-  }, [debouncedTitle, isEditing, note._id, updateNote]);
+  const saveTitle = () => {
+    const trimmed = title.trim() || 'Untitled';
+    if (trimmed !== note.title) {
+      updateNote({ id: note._id, title: trimmed });
+    }
+    setTitle(trimmed);
+    setIsEditing(false);
+  };
 
   const enableInput = () => {
     setIsEditing(true);
     requestAnimationFrame(() => {
-      if (!inputRef.current) return;
-      const el = inputRef.current;
-      el.focus();
-      el.setSelectionRange(el.value.length, el.value.length);
+      inputRef.current?.focus();
+      inputRef.current?.setSelectionRange(
+        inputRef.current.value.length,
+        inputRef.current.value.length
+      );
     });
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      saveTitle();
+    }
   };
 
   return (
@@ -54,7 +63,7 @@ export function NotePageToolbarTitle({ note }: NotePageToolbarTitleProps) {
           </button>
         ) : (
           <IconPickerPopover
-            onChange={(icon) => handleSetIcon({ id: note._id, icon: icon })}
+            onChange={(icon) => handleSetIcon({ id: note._id, icon })}
             asChild
           >
             <button type='button'>
@@ -71,7 +80,8 @@ export function NotePageToolbarTitle({ note }: NotePageToolbarTitleProps) {
             ref={inputRef}
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            onBlur={() => setIsEditing(false)}
+            onBlur={saveTitle}
+            onKeyDown={handleKeyDown}
             className='w-full resize-none bg-transparent text-lg leading-tight font-bold outline-none sm:text-2xl md:text-3xl'
           />
         ) : (

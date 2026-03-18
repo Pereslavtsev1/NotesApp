@@ -43,7 +43,7 @@ export function getDaysLeft(deletedAt: number) {
 }
 
 export function buildImageUrl(fileKey: string) {
-  return `https://fuckingnotesapp.t3.storage.dev/${fileKey}`;
+  return `https://notes-app.t3.storage.dev/${fileKey}`;
 }
 
 export type ClassNameProps = {

@@ -10,7 +10,7 @@ import AppSidebarNoteButton, {
   AppSidebarNoteButtonSkeleton,
 } from './app-sidebar-note-button';
 
-const ITEMS = 1;
+const ITEMS = 10;
 
 type AppSidebarNotesSectionProps = {
   isFavorite: boolean;
