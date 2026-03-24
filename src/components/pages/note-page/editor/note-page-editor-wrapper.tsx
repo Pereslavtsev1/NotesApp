@@ -1,21 +1,16 @@
 'use client';
 import { ClassNameProps, cn } from '@/lib/utils';
-import { Preloaded, useMutation, usePreloadedQuery } from 'convex/react';
+import { useMutation } from 'convex/react';
 import dynamic from 'next/dynamic';
 import { api } from '../../../../../convex/_generated/api';
-import { use } from 'react';
+import { usePreloadedNote } from '@/hooks/use-preloaded-note';
 
 const NotePageEditor = dynamic(() => import('../../../general/editor/editor'), {
   ssr: false,
 });
 
-export default function NotePageEditorWrapper({
-  preloadedQuery,
-  className,
-}: {
-  preloadedQuery: Promise<Preloaded<typeof api.notes.findNote>>;
-} & ClassNameProps) {
-  const note = usePreloadedQuery(use(preloadedQuery));
+export default function NotePageEditorWrapper({ className }: ClassNameProps) {
+  const note = usePreloadedNote();
   const updateNote = useMutation(api.notes.updateNote);
 
   return (

@@ -58,3 +58,7 @@ export async function runWithToast<T>({
     toast.error(messages.error);
   }
 }
+export type Streamable<T> = T | Promise<T>;
+export function isPromise<T>(value: Streamable<T>): value is Promise<T> {
+  return value instanceof Promise;
+}

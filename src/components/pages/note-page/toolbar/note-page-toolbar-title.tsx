@@ -3,20 +3,15 @@
 import IconPickerPopover from '@/components/general/icon-picker/icon-picker-popover';
 import { useIconPickerDrawer } from '@/hooks/use-icon-picker-drawer';
 import { useMediaQuery } from '@/hooks/use-media-query';
+import { usePreloadedNote } from '@/hooks/use-preloaded-note';
 import { handleSetIcon } from '@/lib/actions';
-import { Preloaded, useMutation, usePreloadedQuery } from 'convex/react';
-import { use, useRef, useState } from 'react';
+import { useMutation } from 'convex/react';
+import { useRef, useState } from 'react';
 import TextareaAutosize from 'react-textarea-autosize';
 import { api } from '../../../../../convex/_generated/api';
 
-type NotePageToolbarTitleProps = {
-  prelaodedQuery: Promise<Preloaded<typeof api.notes.findNote>>;
-};
-
-export function NotePageToolbarTitle({
-  prelaodedQuery,
-}: NotePageToolbarTitleProps) {
-  const note = usePreloadedQuery(use(prelaodedQuery));
+export function NotePageToolbarTitle() {
+  const note = usePreloadedNote();
   const updateNote = useMutation(api.notes.updateNote);
   const inputRef = useRef<HTMLTextAreaElement | null>(null);
 

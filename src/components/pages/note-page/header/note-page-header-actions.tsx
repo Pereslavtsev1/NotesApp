@@ -15,15 +15,10 @@ import { Preloaded, usePreloadedQuery } from 'convex/react';
 import { MoreHorizontalIcon, Star } from 'lucide-react';
 import { api } from '../../../../../convex/_generated/api';
 import { use } from 'react';
+import { usePreloadedNote } from '@/hooks/use-preloaded-note';
 
-type NoteActionsProps = {
-  preloadedQuery: Promise<Preloaded<typeof api.notes.findNote>>;
-};
-
-export default function NotePageHeaderActions({
-  preloadedQuery,
-}: NoteActionsProps) {
-  const note = usePreloadedQuery(use(preloadedQuery));
+export default function NotePageHeaderActions() {
+  const note = usePreloadedNote();
   const menuItems = useNoteHeaderMenu({ note });
 
   const toggleFavorite = () =>

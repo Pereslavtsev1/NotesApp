@@ -6,20 +6,12 @@ import {
   BreadcrumbList,
   BreadcrumbPage,
 } from '@/components/ui/breadcrumb';
+import { usePreloadedNote } from '@/hooks/use-preloaded-note';
 
-import { Preloaded, usePreloadedQuery } from 'convex/react';
 import Link from 'next/link';
-import { api } from '../../../../../convex/_generated/api';
-import { use } from 'react';
 
-type NotePageHeaderBreadcrumbsProps = {
-  prelaodedQuery: Promise<Preloaded<typeof api.notes.findNote>>;
-};
-
-export default function NotePageHeaderBreadcrumbs({
-  prelaodedQuery,
-}: NotePageHeaderBreadcrumbsProps) {
-  const note = usePreloadedQuery(use(prelaodedQuery));
+export default function NotePageHeaderBreadcrumbs() {
+  const note = usePreloadedNote();
   return (
     <Breadcrumb>
       <BreadcrumbList>

@@ -1,17 +1,10 @@
 'use client';
+import { usePreloadedNote } from '@/hooks/use-preloaded-note';
 import { buildImageUrl, ClassNameProps, cn } from '@/lib/utils';
-import { Preloaded, usePreloadedQuery } from 'convex/react';
 import Image from 'next/image';
-import { use } from 'react';
-import { api } from '../../../../../convex/_generated/api';
 
-export default function NotePageCoverImage({
-  preloadedQuery,
-  className,
-}: {
-  preloadedQuery: Promise<Preloaded<typeof api.notes.findNote>>;
-} & ClassNameProps) {
-  const note = usePreloadedQuery(use(preloadedQuery));
+export default function NotePageCoverImage({ className }: ClassNameProps) {
+  const note = usePreloadedNote();
 
   if (!note.coverImageKey) return null;
 
