@@ -1,8 +1,5 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
-import { useState } from 'react';
-import { Id } from '../../../../convex/_generated/dataModel';
 import {
   SidebarContent,
   SidebarGroup,
@@ -13,19 +10,6 @@ import AppCreateNoteButton from './app-sidebar-create-note-button';
 import AppSidebarNotesSection from './app-sidebar-notes-section/app-sidebar-notes-section';
 
 export default function AppSidebarContent() {
-  const [expanded, setExpanded] = useState<Record<string, boolean>>({});
-  const router = useRouter();
-
-  const handleExpand = (noteId: string) => {
-    setExpanded((prev) => ({
-      ...prev,
-      [noteId]: !prev[noteId],
-    }));
-  };
-
-  const handleClick = (noteId: Id<'notes'>) => {
-    router.push(`/notes/${noteId}`);
-  };
   return (
     <SidebarContent>
       <SidebarGroup>
@@ -33,12 +17,7 @@ export default function AppSidebarContent() {
           Favorites
         </SidebarGroupLabel>
         <SidebarGroupContent>
-          <AppSidebarNotesSection
-            isFavorite={true}
-            expanded={expanded}
-            handleClick={handleClick}
-            onExpand={handleExpand}
-          />
+          <AppSidebarNotesSection isFavorite={true} />
         </SidebarGroupContent>
       </SidebarGroup>
 
@@ -49,12 +28,7 @@ export default function AppSidebarContent() {
         </SidebarGroupLabel>
 
         <SidebarGroupContent>
-          <AppSidebarNotesSection
-            isFavorite={false}
-            expanded={expanded}
-            handleClick={handleClick}
-            onExpand={handleExpand}
-          />
+          <AppSidebarNotesSection isFavorite={false} />
         </SidebarGroupContent>
       </SidebarGroup>
     </SidebarContent>
