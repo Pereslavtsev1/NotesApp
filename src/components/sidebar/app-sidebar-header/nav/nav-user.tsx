@@ -4,17 +4,13 @@ import {
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { preloadAuthQuery } from '@/lib/auth-server';
 import { ChevronsDown } from 'lucide-react';
 import { Suspense } from 'react';
-import { api } from '../../../../../convex/_generated/api';
 import NavUserDropdown from './nav-user-dropdown';
 import { NavUserItem } from './nav-user-item';
 import NavUserSkeleton from './skeletons/nav-user-item-skeleton';
 
 export default function AppSidebarNavUser() {
-  const preloadedQuery = preloadAuthQuery(api.auth.getCurrentUser);
-
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -24,7 +20,7 @@ export default function AppSidebarNavUser() {
           size='lg'
         >
           <Suspense fallback={<NavUserSkeleton />}>
-            <NavUserItem preloadedQuery={preloadedQuery} />
+            <NavUserItem />
           </Suspense>
 
           <div className='absolute right-3'>
@@ -41,7 +37,7 @@ export default function AppSidebarNavUser() {
       >
         <div className='flex-2'>
           <Suspense fallback={<NavUserSkeleton />}>
-            <NavUserDropdown preloadedQuery={preloadedQuery} />
+            <NavUserDropdown />
           </Suspense>
         </div>
       </DropdownMenuContent>

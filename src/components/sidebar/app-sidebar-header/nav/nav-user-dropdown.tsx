@@ -1,28 +1,21 @@
 'use client';
 import UserItem from '@/components/general/user-item/user-item';
 import { Button } from '@/components/ui/button';
+import { usePreloadedUser } from '@/hooks/use-preloaded-user';
 import { DropdownMenuSeparator } from '@radix-ui/react-dropdown-menu';
-import { Preloaded, usePreloadedQuery } from 'convex/react';
 import { LogOut } from 'lucide-react';
-import { use } from 'react';
-import { api } from '../../../../../convex/_generated/api';
 
-type UserDropdownDataProps = {
-  preloadedQuery: Promise<Preloaded<typeof api.auth.getCurrentUser>>;
-};
-export default function NavUserDropdown({
-  preloadedQuery,
-}: UserDropdownDataProps) {
-  const user = usePreloadedQuery(use(preloadedQuery));
+export default function NavUserDropdown() {
+  const user = usePreloadedUser();
 
   return (
     <>
       <div className='mb-2 flex items-center gap-3 rounded-md'>
-        <UserItem src={user?.pictureUrl || ''} alt={user?.name || ''} />
+        <UserItem src={user.pictureUrl!} alt={user.name!} />
 
         <div className='flex flex-col overflow-hidden'>
           <span className='truncate text-xs font-semibold text-muted-foreground'>
-            {user?.name}
+            {user.name}
           </span>
         </div>
       </div>

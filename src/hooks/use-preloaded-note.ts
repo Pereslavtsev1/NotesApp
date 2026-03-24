@@ -1,4 +1,4 @@
-import { PreloadedNoteContext } from '@/components/providers/prelaoded-note-provider';
+import { PreloadedNoteContext } from '@/components/providers/preloaded-note-provider';
 import { isPromise } from '@/lib/utils';
 import { usePreloadedQuery } from 'convex/react';
 import { use, useContext } from 'react';

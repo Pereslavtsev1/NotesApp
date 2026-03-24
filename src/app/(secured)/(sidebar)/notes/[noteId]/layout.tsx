@@ -1,9 +1,9 @@
 import CoverImageModal from '@/components/modals/cover-image-modal/cover-image-modal';
 import NotePageHeader from '@/components/pages/note-page/header/note-page-header';
-import PreloadedNoteProvider from '@/components/providers/prelaoded-note-provider';
 import { preloadAuthQuery } from '@/lib/auth-server';
 import { api } from '../../../../../../convex/_generated/api';
 import { Id } from '../../../../../../convex/_generated/dataModel';
+import PreloadedNoteProvider from '@/components/providers/preloaded-note-provider';
 
 export default async function NotePageLayout({
   children,
@@ -15,7 +15,7 @@ export default async function NotePageLayout({
   const { noteId } = await params;
   const preloadedQuery = preloadAuthQuery(api.notes.findNote, { id: noteId });
   return (
-    <PreloadedNoteProvider prelaodedQuery={preloadedQuery}>
+    <PreloadedNoteProvider preloadedQuery={preloadedQuery}>
       <NotePageHeader />
       {children}
       <CoverImageModal />

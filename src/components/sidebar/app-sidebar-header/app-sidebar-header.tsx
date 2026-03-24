@@ -12,9 +12,6 @@ export default function AppSidebarHeader() {
     <SidebarHeader className='px-0'>
       <SidebarGroup>
         <SidebarMenu>
-          <SidebarMenuItem>
-            <AppSidebarNavUser />
-          </SidebarMenuItem>
           <AppSidebarNav />
         </SidebarMenu>
       </SidebarGroup>

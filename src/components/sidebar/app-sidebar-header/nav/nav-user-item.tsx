@@ -1,18 +1,12 @@
 'use client';
 import UserItem from '@/components/general/user-item/user-item';
-import { Preloaded, usePreloadedQuery } from 'convex/react';
-import { use } from 'react';
-import { api } from '../../../../../convex/_generated/api';
+import { usePreloadedUser } from '@/hooks/use-preloaded-user';
 
-type UserItemDataProps = {
-  preloadedQuery: Promise<Preloaded<typeof api.auth.getCurrentUser>>;
-};
-export function NavUserItem({ preloadedQuery }: UserItemDataProps) {
-  const user = usePreloadedQuery(use(preloadedQuery));
-
+export function NavUserItem() {
+  const user = usePreloadedUser();
   return (
     <>
-      <UserItem src={user?.pictureUrl || ''} alt={user?.name || ''} />
+      <UserItem src={user.pictureUrl!} alt={user.name!} />
 
       <div className='flex flex-col overflow-hidden'>
         <span className='truncate text-xs text-muted-foreground'>

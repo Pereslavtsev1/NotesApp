@@ -1,26 +1,24 @@
 'use client';
 
+import { Streamable } from '@/lib/utils';
 import { Preloaded } from 'convex/react';
 import { createContext } from 'react';
 import { api } from '../../../convex/_generated/api';
-type PreloadedNoteProviderType = {
-  preloadedQuery:
-    | Promise<Preloaded<typeof api.notes.findNote>>
-    | Preloaded<typeof api.notes.findNote>;
+type PreloadedNoteContext = {
+  preloadedQuery: Streamable<Preloaded<typeof api.notes.findNote>>;
 };
 export const PreloadedNoteContext = createContext<
-  PreloadedNoteProviderType | undefined
+  PreloadedNoteContext | undefined
 >(undefined);
 
 export default function PreloadedNoteProvider({
   children,
-  prelaodedQuery,
+  preloadedQuery,
 }: {
   children: React.ReactNode;
-  prelaodedQuery: Promise<Preloaded<typeof api.notes.findNote>>;
-}) {
+} & PreloadedNoteContext) {
   return (
-    <PreloadedNoteContext value={{ preloadedQuery: prelaodedQuery }}>
+    <PreloadedNoteContext value={{ preloadedQuery }}>
       {children}
     </PreloadedNoteContext>
   );
