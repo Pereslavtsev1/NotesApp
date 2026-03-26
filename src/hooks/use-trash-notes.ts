@@ -1,7 +1,11 @@
+'use client';
+
 import { usePaginatedQuery } from 'convex/react';
+import { useEffect, useEffectEvent } from 'react';
+import { useInView } from 'react-intersection-observer';
 import { api } from '../../convex/_generated/api';
 
-const ITEMS = 20;
+const ITEMS = 10;
 
 type UseTrashNotesProps = {
   search?: string;
@@ -10,16 +14,27 @@ type UseTrashNotesProps = {
 export function useTrashNotes({ search }: UseTrashNotesProps) {
   const trimmedSearch = search?.trim();
 
-  const { results, status, loadMore, isLoading } = usePaginatedQuery(
+  const query = usePaginatedQuery(
     trimmedSearch ? api.notes.searchTrashNotes : api.notes.findTrashNotes,
     trimmedSearch ? { search: trimmedSearch } : { isDeleted: true },
     { initialNumItems: ITEMS }
   );
 
+  const { ref, inView } = useInView({
+    rootMargin: '200px',
+  });
+
+  const handleLoadMore = useEffectEvent(() => {
+    if (inView && query.status === 'CanLoadMore') {
+      query.loadMore(ITEMS);
+    }
+  });
+  useEffect(() => {
+    handleLoadMore();
+  }, [inView, query.status, query.loadMore]);
+
   return {
-    notes: results,
-    status,
-    loadMore,
-    isLoading,
+    ...query,
+    observerRef: ref,
   };
 }
