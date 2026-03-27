@@ -1,10 +1,4 @@
-import {
-  SidebarGroup,
-  SidebarHeader,
-  SidebarMenu,
-  SidebarMenuItem,
-} from '../../ui/sidebar';
-import AppSidebarNavUser from './nav/nav-user';
+import { SidebarGroup, SidebarHeader, SidebarMenu } from '../../ui/sidebar';
 import AppSidebarNav from './nav/nav';
 
 export default function AppSidebarHeader() {
