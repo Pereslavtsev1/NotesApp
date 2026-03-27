@@ -1,9 +1,8 @@
 import { Skeleton } from '@/components/ui/skeleton';
 
-export default function NotePageEditorSkeleton() {
+export default function EditorSkeleton() {
   return (
     <div className='mb-40 space-y-10'>
-      <Skeleton className='h-9 w-sm' />
       <div className='space-y-3'>
         <Skeleton className='h-4 w-full' />
         <Skeleton className='h-4 w-5/6' />

@@ -1,14 +1,14 @@
-import { getToken } from "@/lib/auth-server";
-import { redirect } from "next/navigation";
+import { isAuthenticated } from '@/lib/auth-server';
+import { redirect } from 'next/navigation';
 
 export default async function SecuredLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const token = await getToken();
-  if (!token) {
-    redirect("/login");
+  const authenticated = await isAuthenticated();
+  if (!authenticated) {
+    redirect('/login');
   }
   return <>{children}</>;
 }

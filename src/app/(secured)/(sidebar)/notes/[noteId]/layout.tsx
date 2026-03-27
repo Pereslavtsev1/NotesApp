@@ -1,12 +1,11 @@
-import IconPickerDrawer from '@/components/general/icon-picker/icon-picker-drawer';
+import CoverImageModal from '@/components/modals/cover-image-modal/cover-image-modal';
 import NotePageHeader from '@/components/pages/note-page/header/note-page-header';
-import { getToken } from '@/lib/auth-server';
-import { preloadQuery } from 'convex/nextjs';
+import PreloadedNoteProvider from '@/components/providers/preloaded-note-provider';
+import { preloadAuthQuery } from '@/lib/auth-server';
 import { api } from '../../../../../../convex/_generated/api';
 import { Id } from '../../../../../../convex/_generated/dataModel';
-import CoverImageModal from '@/components/modals/cover-image-modal/cover-image-modal';
 
-export default async function CoverImageLayout({
+export default async function NotePageLayout({
   children,
   params,
 }: Readonly<{
@@ -14,19 +13,14 @@ export default async function CoverImageLayout({
   params: Promise<{ noteId: string }>;
 }>) {
   const { noteId } = await params;
-  const token = await getToken();
-
-  const preloadedQuery = await preloadQuery(
-    api.notes.findNote,
-    { id: noteId as Id<'notes'> },
-    { token }
-  );
+  const preloadedQuery = preloadAuthQuery(api.notes.findNote, {
+    id: noteId as Id<'notes'>,
+  });
   return (
-    <>
-      <NotePageHeader preloadedQuery={preloadedQuery} />
+    <PreloadedNoteProvider preloadedQuery={preloadedQuery}>
+      <NotePageHeader />
       {children}
       <CoverImageModal />
-      <IconPickerDrawer noteId={noteId as Id<'notes'>} />
-    </>
+    </PreloadedNoteProvider>
   );
 }

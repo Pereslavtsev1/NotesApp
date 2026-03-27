@@ -4,13 +4,13 @@ import { Button } from '@/components/ui/button';
 import { useCoverImage } from '@/hooks/use-cover-image';
 import { handleSetCoverImage } from '@/lib/actions';
 import { formatFileSize } from '@/lib/utils';
-import { useMutation } from '@tanstack/react-query';
 import { X } from 'lucide-react';
 import Image from 'next/image';
 import { useParams } from 'next/navigation';
 import { Id } from '../../../../convex/_generated/dataModel';
 import { uploadFile } from './actions';
 import CoverImageDropzone from './cover-image-dropzone';
+import { useMutation } from '@tanstack/react-query';
 
 export default function CoverImageModalContent() {
   const { toggle } = useCoverImage();

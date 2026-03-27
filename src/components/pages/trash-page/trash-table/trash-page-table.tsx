@@ -29,26 +29,23 @@ import {
 } from '@tanstack/react-table';
 import { SearchIcon, Trash2Icon } from 'lucide-react';
 import { useEffect, useEffectEvent, useState } from 'react';
-import { useInView } from 'react-intersection-observer';
 import { useDebounce } from 'use-debounce';
 import TrashboxTableSkeletonRow from './skeletons/trash-table-skeleton-row';
 import { trashPageTableColumns } from './trash-page-table-columns';
-
-const ITEMS = 10;
 
 export default function TrashPageTable({ className }: ClassNameProps) {
   const [rowSelection, setRowSelection] = useState({});
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
   const [searchInput, setSearchInput] = useState('');
   const [debouncedSearch] = useDebounce(searchInput, 300);
-  const { notes, status, isLoading, loadMore } = useTrashNotes({
+  const {
+    results: notes,
+    isLoading,
+    observerRef,
+  } = useTrashNotes({
     search: debouncedSearch,
   });
   const isMobile = useMediaQuery('(max-width: 768px)');
-
-  const { ref, inView } = useInView({
-    rootMargin: '200px',
-  });
 
   const table = useReactTable({
     data: notes,
@@ -60,12 +57,6 @@ export default function TrashPageTable({ className }: ClassNameProps) {
     onRowSelectionChange: setRowSelection,
     onColumnVisibilityChange: setColumnVisibility,
   });
-
-  useEffect(() => {
-    if (inView && status === 'CanLoadMore') {
-      loadMore(ITEMS);
-    }
-  }, [inView, status, loadMore]);
 
   const toggleDaysLeftColumn = useEffectEvent(() => {
     const daysLeftColumn = table.getColumn('daysLeft');
@@ -192,10 +183,10 @@ export default function TrashPageTable({ className }: ClassNameProps) {
                 </TableRow>
               ))}
 
-              <TableRow ref={ref} />
+              <TableRow ref={observerRef} />
 
               {isLoading &&
-                Array.from({ length: ITEMS }).map((_, i) => (
+                Array.from({ length: 10 }).map((_, i) => (
                   <TrashboxTableSkeletonRow key={i} table={table} />
                 ))}
             </TableBody>

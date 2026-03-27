@@ -1,46 +1,50 @@
 'use client';
 
-import { useMutation } from 'convex/react';
-import { useEffect, useRef, useState } from 'react';
-import TextareaAutosize from 'react-textarea-autosize';
-import { useDebounce } from 'use-debounce';
-
+import IconPickerPopover from '@/components/general/icon-picker/icon-picker-popover';
 import { useIconPickerDrawer } from '@/hooks/use-icon-picker-drawer';
 import { useMediaQuery } from '@/hooks/use-media-query';
-import IconPickerPopover from '@/components/general/icon-picker/icon-picker-popover';
+import { usePreloadedNote } from '@/hooks/use-preloaded-note';
+import { handleSetIcon } from '@/lib/actions';
+import { useMutation } from 'convex/react';
+import { useRef, useState } from 'react';
+import TextareaAutosize from 'react-textarea-autosize';
 import { api } from '../../../../../convex/_generated/api';
-import { Doc } from '../../../../../convex/_generated/dataModel';
 
-type NotePageToolbarTitleProps = {
-  note: Doc<'notes'>;
-};
-
-export function NotePageToolbarTitle({ note }: NotePageToolbarTitleProps) {
+export function NotePageToolbarTitle() {
+  const note = usePreloadedNote();
   const updateNote = useMutation(api.notes.updateNote);
   const inputRef = useRef<HTMLTextAreaElement | null>(null);
+
   const [title, setTitle] = useState(note.title);
   const [isEditing, setIsEditing] = useState(false);
-  const [debouncedTitle] = useDebounce(title, 200);
   const { toggle } = useIconPickerDrawer();
   const isMobile = useMediaQuery('(max-width: 768px)');
 
-  useEffect(() => {
-    if (!isEditing) return;
-
-    updateNote({
-      id: note._id,
-      title: debouncedTitle.trim() || 'Untitled',
-    });
-  }, [debouncedTitle, isEditing, note._id, updateNote]);
+  const saveTitle = () => {
+    const trimmed = title.trim() || 'Untitled';
+    if (trimmed !== note.title) {
+      updateNote({ id: note._id, title: trimmed });
+    }
+    setTitle(trimmed);
+    setIsEditing(false);
+  };
 
   const enableInput = () => {
     setIsEditing(true);
     requestAnimationFrame(() => {
-      if (!inputRef.current) return;
-      const el = inputRef.current;
-      el.focus();
-      el.setSelectionRange(el.value.length, el.value.length);
+      inputRef.current?.focus();
+      inputRef.current?.setSelectionRange(
+        inputRef.current.value.length,
+        inputRef.current.value.length
+      );
     });
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      saveTitle();
+    }
   };
 
   return (
@@ -48,14 +52,17 @@ export function NotePageToolbarTitle({ note }: NotePageToolbarTitleProps) {
       {note.icon &&
         (isMobile ? (
           <button type='button' onClick={() => toggle()}>
-            <h1 className='text-lg font-bold leading-tight sm:text-2xl md:text-3xl'>
+            <h1 className='text-lg leading-tight font-bold sm:text-2xl md:text-3xl'>
               {note.icon}
             </h1>
           </button>
         ) : (
-          <IconPickerPopover onChange={() => {}} asChild>
+          <IconPickerPopover
+            onChange={(icon) => handleSetIcon({ id: note._id, icon })}
+            asChild
+          >
             <button type='button'>
-              <h1 className='text-lg font-bold leading-tight sm:text-2xl md:text-3xl'>
+              <h1 className='text-lg leading-tight font-bold sm:text-2xl md:text-3xl'>
                 {note.icon}
               </h1>
             </button>
@@ -68,8 +75,9 @@ export function NotePageToolbarTitle({ note }: NotePageToolbarTitleProps) {
             ref={inputRef}
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            onBlur={() => setIsEditing(false)}
-            className='w-full resize-none bg-transparent text-lg font-bold leading-tight outline-none sm:text-2xl md:text-3xl'
+            onBlur={saveTitle}
+            onKeyDown={handleKeyDown}
+            className='w-full resize-none bg-transparent text-lg leading-tight font-bold outline-none sm:text-2xl md:text-3xl'
           />
         ) : (
           <button
@@ -77,7 +85,7 @@ export function NotePageToolbarTitle({ note }: NotePageToolbarTitleProps) {
             onClick={enableInput}
             className='w-full text-left'
           >
-            <h1 className='wrap-anywhere text-lg font-bold leading-tight sm:text-2xl md:text-3xl'>
+            <h1 className='text-lg leading-tight font-bold wrap-anywhere sm:text-2xl md:text-3xl'>
               {title}
             </h1>
           </button>

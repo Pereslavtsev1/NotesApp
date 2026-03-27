@@ -1,20 +1,19 @@
 'use client';
+import IconPickerPopover from '@/components/general/icon-picker/icon-picker-popover';
 import { Button } from '@/components/ui/button';
 import { useCoverImage } from '@/hooks/use-cover-image';
+import { usePreloadedNote } from '@/hooks/use-preloaded-note';
 import {
   handleRemoveCoverImage,
   handleRemoveIcon,
   handleSetIcon,
 } from '@/lib/actions';
+import { Preloaded } from 'convex/react';
 import { ImageIcon, Smile, X } from 'lucide-react';
-import { Doc } from '../../../../../convex/_generated/dataModel';
-import IconPickerPopover from '@/components/general/icon-picker/icon-picker-popover';
+import { api } from '../../../../../convex/_generated/api';
 
-type NotePageToolbarActionsProps = {
-  note: Doc<'notes'>;
-};
-
-export function NotePageToolbarActions({ note }: NotePageToolbarActionsProps) {
+export function NotePageToolbarActions() {
+  const note = usePreloadedNote();
   const { toggle } = useCoverImage();
 
   return (
@@ -50,15 +49,15 @@ export function NotePageToolbarActions({ note }: NotePageToolbarActionsProps) {
         }
       >
         {note.coverImageKey ? (
-          <span className='flex items-center hover:text-destructive gap-x-2'>
+          <>
             <X className='size-4' />
             Remove cover
-          </span>
+          </>
         ) : (
-          <span className='flex items-center hover:text-destructive gap-x-2'>
+          <>
             <ImageIcon className='size-4' />
             Add cover
-          </span>
+          </>
         )}
       </Button>
     </div>

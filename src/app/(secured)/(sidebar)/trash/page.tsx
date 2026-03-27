@@ -1,6 +1,4 @@
-'use client';
-
-import TrashPageTable from '@/components/pages/trash-page/trash-table/trahs-page-table';
+import TrashPageTable from '@/components/pages/trash-page/trash-table/trash-page-table';
 import TrashPageWarningCard from '@/components/pages/trash-page/trash-warning-card/trash-page-warning-card';
 
 export default function TrashPage() {

@@ -1,35 +1,24 @@
 'use server';
 
-import { getToken } from '@/lib/auth-server';
-import { fetchMutation, fetchQuery } from 'convex/nextjs';
 import { api } from '../../convex/_generated/api';
 import type { Id } from '../../convex/_generated/dataModel';
+import { fetchAuthMutation, fetchAuthQuery } from './auth-server';
 
 export async function handleFindNote({ id }: { id: Id<'notes'> }) {
-  const token = await getToken();
-
-  return fetchQuery(api.notes.findNote, { id }, { token });
+  return fetchAuthQuery(api.notes.findNote, { id });
 }
 
 export async function handleDeleteNote({ id }: { id: Id<'notes'> }) {
-  const token = await getToken();
-
-  return fetchMutation(
-    api.notes.updateNote,
-    {
-      id,
-      isDeleted: true,
-      deletedAt: Date.now(),
-      recursive: true,
-    },
-    { token }
-  );
+  return fetchAuthMutation(api.notes.updateNote, {
+    id,
+    isDeleted: true,
+    deletedAt: Date.now(),
+    recursive: true,
+  });
 }
 
 export async function handleRemoveIcon({ id }: { id: Id<'notes'> }) {
-  const token = await getToken();
-
-  return fetchMutation(api.notes.removeIcon, { id }, { token });
+  return fetchAuthMutation(api.notes.removeIcon, { id });
 }
 
 export async function handleSetIcon({
@@ -39,9 +28,7 @@ export async function handleSetIcon({
   id: Id<'notes'>;
   icon: string;
 }) {
-  const token = await getToken();
-
-  return fetchMutation(api.notes.updateNote, { id, icon }, { token });
+  return fetchAuthMutation(api.notes.updateNote, { id, icon });
 }
 
 export async function handleFavoriteNote({
@@ -53,19 +40,11 @@ export async function handleFavoriteNote({
   isFavorite: boolean;
   recursive: boolean;
 }) {
-  const token = await getToken();
-
-  return fetchMutation(
-    api.notes.updateNote,
-    { id, isFavorite, recursive },
-    { token }
-  );
+  return fetchAuthMutation(api.notes.updateNote, { id, isFavorite, recursive });
 }
 
 export async function handleDuplicateNote({ id }: { id: Id<'notes'> }) {
-  const token = await getToken();
-
-  return await fetchMutation(api.notes.duplicate, { id }, { token });
+  return await fetchAuthMutation(api.notes.duplicate, { id });
 }
 
 export async function handleCreateNote({
@@ -73,8 +52,7 @@ export async function handleCreateNote({
 }: {
   title?: string;
 }) {
-  const token = await getToken();
-  return await fetchMutation(api.notes.createNote, { title }, { token });
+  return await fetchAuthMutation(api.notes.createNote, { title });
 }
 
 export async function handleAddChildrenNote({
@@ -84,22 +62,14 @@ export async function handleAddChildrenNote({
   parentNoteId: Id<'notes'>;
   title?: string;
 }) {
-  const token = await getToken();
-
-  return fetchMutation(
-    api.notes.createNote,
-    {
-      parentNote: parentNoteId,
-      title,
-    },
-    { token }
-  );
+  return fetchAuthMutation(api.notes.createNote, {
+    parentNote: parentNoteId,
+    title,
+  });
 }
 
 export async function handleRestoreNote({ id }: { id: Id<'notes'> }) {
-  const token = await getToken();
-
-  return await fetchMutation(api.notes.restoreSmart, { id }, { token });
+  return await fetchAuthMutation(api.notes.restoreSmart, { id });
 }
 
 export async function handleDeleteNotePermanently({
@@ -107,9 +77,7 @@ export async function handleDeleteNotePermanently({
 }: {
   ids: Id<'notes'>[];
 }) {
-  const token = await getToken();
-
-  return await fetchMutation(api.notes.deletePermanently, { ids }, { token });
+  return await fetchAuthMutation(api.notes.deletePermanently, { ids });
 }
 
 export async function handleSetCoverImage({
@@ -119,17 +87,9 @@ export async function handleSetCoverImage({
   id: Id<'notes'>;
   coverImageKey: string;
 }) {
-  const token = await getToken();
-
-  return await fetchMutation(
-    api.notes.updateNote,
-    { id, coverImageKey },
-    { token }
-  );
+  return await fetchAuthMutation(api.notes.updateNote, { id, coverImageKey });
 }
 
 export async function handleRemoveCoverImage({ id }: { id: Id<'notes'> }) {
-  const token = await getToken();
-
-  return await fetchMutation(api.notes.removeCoverImage, { id }, { token });
+  return await fetchAuthMutation(api.notes.removeCoverImage, { id });
 }

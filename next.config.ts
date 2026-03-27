@@ -1,13 +1,14 @@
-import type { NextConfig } from "next";
+import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
   /* config options here */
   reactCompiler: true,
+  reactStrictMode: false,
   images: {
     remotePatterns: [
       {
-        protocol: "https",
-        hostname: "fuckingnotesapp.t3.storage.dev",
+        protocol: 'https',
+        hostname: 'notes-app.t3.storage.dev',
       },
     ],
   },

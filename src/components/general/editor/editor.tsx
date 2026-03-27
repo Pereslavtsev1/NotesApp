@@ -1,8 +1,8 @@
 'use client';
-import { useIsMobile } from '@/hooks/use-mobile';
 import type { PartialBlock } from '@blocknote/core';
 import '@blocknote/core/fonts/inter.css';
 
+import { useMediaQuery } from '@/hooks/use-media-query';
 import {
   GridSuggestionMenuController,
   useCreateBlockNote,
@@ -10,18 +10,18 @@ import {
 import { BlockNoteView } from '@blocknote/shadcn';
 import '@blocknote/shadcn/style.css';
 import { useTheme } from 'next-themes';
-import '../../../../app/block-note.css';
+import '@/app/block-note.css';
 
-interface NotePageEditorProps {
-  onChange: (value: string) => void;
+type EditorProps = {
+  onChangeAction: (value: string) => void;
   initialContent?: string;
   editable?: boolean;
-}
-export default function NotePageEditor({
-  onChange,
+};
+export default function Editor({
+  onChangeAction,
   initialContent,
-}: NotePageEditorProps) {
-  const isMobile = useIsMobile();
+}: EditorProps) {
+  const isMobile = useMediaQuery('(max-width: 768px)');
   const { theme } = useTheme();
   const editor = useCreateBlockNote({
     initialContent: initialContent
@@ -33,7 +33,7 @@ export default function NotePageEditor({
       theme={theme === 'dark' ? 'dark' : 'light'}
       editor={editor}
       onChange={async () => {
-        onChange(JSON.stringify(editor.document));
+        onChangeAction(JSON.stringify(editor.document));
       }}
       emojiPicker={false}
       data-theming-css-demo
