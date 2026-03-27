@@ -2,8 +2,10 @@
 import UserItem from '@/components/general/user-item/user-item';
 import { Button } from '@/components/ui/button';
 import { usePreloadedUser } from '@/hooks/use-preloaded-user';
+import { authClient } from '@/lib/auth-client';
 import { DropdownMenuSeparator } from '@radix-ui/react-dropdown-menu';
 import { LogOut } from 'lucide-react';
+import { redirect } from 'next/navigation';
 
 export default function NavUserDropdown() {
   const user = usePreloadedUser();
@@ -25,6 +27,13 @@ export default function NavUserDropdown() {
       <Button
         variant='ghost'
         className='w-full justify-start text-xs font-semibold text-muted-foreground transition-colors duration-300 hover:text-destructive'
+        onClick={async () => {
+          const res = await authClient.signOut();
+          if (res.data?.success) {
+            redirect('/login');
+          }
+          console.log(res.error);
+        }}
       >
         <LogOut className='size-4' />
         Sign Out

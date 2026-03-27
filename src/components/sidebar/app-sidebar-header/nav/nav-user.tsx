@@ -5,9 +5,7 @@ import {
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { authClient } from '@/lib/auth-client';
 import { ChevronsDown } from 'lucide-react';
-import { redirect } from 'next/navigation';
 import { Suspense } from 'react';
 import NavUserDropdown from './nav-user-dropdown';
 import { NavUserItem } from './nav-user-item';
@@ -21,13 +19,6 @@ export default function AppSidebarNavUser() {
           className='relative flex w-full items-center justify-start gap-x-2 px-2 font-semibold text-muted-foreground'
           variant='ghost'
           size='lg'
-          onClick={async () => {
-            const res = await authClient.signOut();
-            if (res.data?.success) {
-              redirect('/login');
-            }
-            console.log(res.error);
-          }}
         >
           <Suspense fallback={<NavUserSkeleton />}>
             <NavUserItem />
