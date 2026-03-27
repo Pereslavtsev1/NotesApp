@@ -33,7 +33,7 @@ export const createAuthOptions = (ctx: GenericCtx<DataModel>) => {
         scope: ['openid', 'email', 'profile'],
       },
     },
-    plugins: [convex({ authConfig })],
+    plugins: [convex({ authConfig, jwksRotateOnTokenGenerationError: true })],
   } satisfies BetterAuthOptions;
 };
 
