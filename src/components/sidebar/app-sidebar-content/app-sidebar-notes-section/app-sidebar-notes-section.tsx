@@ -57,7 +57,7 @@ export default function AppSidebarNotesSection({
                 isFavorite={isFavorite}
                 parentNote={note._id}
                 level={level + 1}
-                skeletonCount={3}
+                skeletonCount={0}
               />
             )}
 
