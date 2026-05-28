@@ -41,23 +41,22 @@ export default function LoginForm({ className }: LoginFormProps) {
   const router = useRouter();
 
   const onSubmit = async (data: LoginFormData) => {
-    await authClient.signIn.email(
-      {
-        email: data.email,
-        password: data.password,
-      },
-      {
-        onError: (error) => {
-          console.error(error);
-          toast.error(
-            error.error.message || 'Something went wrong. Please try again.'
-          );
+    await authClient.signIn
+      .email(
+        {
+          email: data.email,
+          password: data.password,
         },
-        onSuccess: () => {
-          router.push('/login');
-        },
-      }
-    );
+        {
+          onError: (error) => {
+            console.error(error);
+            toast.error(
+              error.error.message || 'Something went wrong. Please try again.'
+            );
+          },
+        }
+      )
+      .then(() => router.push('/notes'));
   };
 
   const signInWithGoogle = async () => {

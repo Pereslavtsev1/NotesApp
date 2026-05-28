@@ -7,7 +7,7 @@ import { Suspense } from 'react';
 export default function NotePage() {
   return (
     <>
-      <Suspense>
+      <Suspense fallback=<div>loading</div>>
         <NotePageCoverImage />
       </Suspense>
 
