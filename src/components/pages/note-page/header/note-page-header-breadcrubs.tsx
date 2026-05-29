@@ -17,7 +17,7 @@ export default function NotePageHeaderBreadcrumbs() {
       <BreadcrumbList>
         <BreadcrumbItem>
           <BreadcrumbPage className='max-w-36 truncate font-semibold text-muted-foreground'>
-            <Link href={`/note/${note._id}`}>{note.title}</Link>
+            <Link href={`/notes/${note._id}`}>{note.title}</Link>
           </BreadcrumbPage>
         </BreadcrumbItem>
       </BreadcrumbList>

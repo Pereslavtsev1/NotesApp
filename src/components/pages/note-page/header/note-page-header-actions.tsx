@@ -9,13 +9,10 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { useNoteHeaderMenu } from '@/hooks/use-note-header-menu';
+import { usePreloadedNote } from '@/hooks/use-preloaded-note';
 import { handleFavoriteNote } from '@/lib/actions';
 import { cn, runWithToast } from '@/lib/utils';
-import { Preloaded, usePreloadedQuery } from 'convex/react';
 import { MoreHorizontalIcon, Star } from 'lucide-react';
-import { api } from '../../../../../convex/_generated/api';
-import { use } from 'react';
-import { usePreloadedNote } from '@/hooks/use-preloaded-note';
 
 export default function NotePageHeaderActions() {
   const note = usePreloadedNote();
